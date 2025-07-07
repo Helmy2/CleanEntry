@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CleanEntry"
 include(":app")
+include(":core")
