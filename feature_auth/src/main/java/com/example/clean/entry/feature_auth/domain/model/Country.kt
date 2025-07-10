@@ -1,4 +1,4 @@
-package com.example.clean.feature_auth.domain.model
+package com.example.clean.entry.feature_auth.domain.model
 
 /**
  * Represents a country with its essential information for the picker.

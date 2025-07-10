@@ -1,4 +1,4 @@
-package com.example.clean.feature_auth.presentation.registration
+package com.example.clean.entry.feature_auth.presentation.registration
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import com.example.clean.core.components.PhoneTextField
 import com.example.clean.core.design_system.spacing
 import com.example.clean.core.ui.ObserveEffect
 import com.example.clean.core.util.stringResource
+import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
 import com.example.clean.feature_auth.R
-import com.example.clean.feature_auth.presentation.components.TopBarWithBackNavigation
 import org.koin.compose.viewmodel.koinViewModel
 
 /**

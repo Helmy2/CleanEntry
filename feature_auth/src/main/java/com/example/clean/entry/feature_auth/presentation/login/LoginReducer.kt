@@ -1,8 +1,8 @@
-package com.example.clean.feature_auth.presentation.login
+package com.example.clean.entry.feature_auth.presentation.login
 
 import com.example.clean.core.mvi.Reducer
 import com.example.clean.core.util.StringResource
-import com.example.clean.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 
 /**
  * Defines the contract for the Login screen and also acts as the Reducer

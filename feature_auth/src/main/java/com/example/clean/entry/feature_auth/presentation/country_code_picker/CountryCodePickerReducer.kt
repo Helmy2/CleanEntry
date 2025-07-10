@@ -1,7 +1,7 @@
-package com.example.clean.feature_auth.presentation.country_code_picker
+package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
 import com.example.clean.core.mvi.Reducer
-import com.example.clean.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.domain.model.Country
 
 /**
  * Defines the contract for the CountryCodePicker screen and acts as its Reducer.

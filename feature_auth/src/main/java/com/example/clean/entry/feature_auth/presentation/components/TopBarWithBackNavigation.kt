@@ -1,4 +1,4 @@
-package com.example.clean.feature_auth.presentation.components
+package com.example.clean.entry.feature_auth.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
