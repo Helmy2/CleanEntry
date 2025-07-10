@@ -2,6 +2,7 @@ package com.example.clean.entry.feature_auth.presentation.login
 
 import com.example.clean.core.mvi.Reducer
 import com.example.clean.core.util.StringResource
+import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 
 /**
@@ -18,8 +19,9 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         val isPasswordVisible: Boolean = false,
         val isLoading: Boolean = false,
         val isLoginButtonEnabled: Boolean = false,
-        val selectedCountryCode: String = "EG", // Default to Egypt
-        val selectedCountryDialCode: String = "+20"
+        val selectedCountryCode: String = "EG",
+        val selectedCountryDialCode: String = "+20",
+        val selectedCountryFlag: String = "🇪🇬"
     ) : Reducer.ViewState
 
     sealed interface Event : Reducer.ViewEvent {
@@ -28,6 +30,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         data class PasswordChanged(val value: String) : Event
         data object TogglePasswordVisibility : Event
         data object LoginClicked : Event
+        data class CountrySelected(val result: Country) : Event // New event
 
         // Internal Events
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
@@ -52,6 +55,13 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
             }
             is Event.TogglePasswordVisibility -> {
                 previousState.copy(isPasswordVisible = !previousState.isPasswordVisible)
+            }
+            is Event.CountrySelected -> {
+                previousState.copy(
+                    selectedCountryCode = event.result.code,
+                    selectedCountryDialCode = event.result.dialCode,
+                    selectedCountryFlag = event.result.flagEmoji
+                )
             }
             is Event.LoginClicked -> {
                 previousState.copy(isLoading = true)

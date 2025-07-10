@@ -1,17 +1,18 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.example.clean.core.mvi.BaseViewModel
+import com.example.clean.core.navigation.Destination
 import com.example.clean.entry.feature_auth.domain.model.Country
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
-    val selectedCountry: Country
-) :
-    BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
-        reducer = CountryCodePickerReducer,
-        initialState = CountryCodePickerReducer.State()
-    ) {
+    val savedStateHandle : SavedStateHandle
+) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
+    reducer = CountryCodePickerReducer, initialState = CountryCodePickerReducer.State()
+) {
 
     private val allCountries = listOf(
         Country("Egypt", "+20", "EG", "🇪🇬"),
@@ -27,7 +28,8 @@ class CountryCodePickerViewModel(
 
     override suspend fun initialDataLoad() {
         setState(CountryCodePickerReducer.Event.CountriesLoaded(allCountries))
-        setState(CountryCodePickerReducer.Event.CountrySelected(selectedCountry))
+        val selectedCountryCode = savedStateHandle.toRoute<Destination.CountryCodePicker>().code
+        setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
     }
 
 

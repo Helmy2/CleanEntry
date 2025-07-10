@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 
 
 sealed interface StringResource {
-    class FromId(@StringRes val id: Int, vararg val args: Any) : StringResource
+    class FromId(@param:StringRes val id: Int, vararg val args: Any) : StringResource
     data class FromString(val value: String) : StringResource
 }
 

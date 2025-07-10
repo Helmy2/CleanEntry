@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -28,12 +30,11 @@ abstract class BaseViewModel<S : Reducer.ViewState, E : Reducer.ViewEvent, F : R
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<S> = MutableStateFlow(initialState)
-    val state = _state
+    val state: StateFlow<S> = _state
         .onStart {
             viewModelScope.launch {
                 initialDataLoad()
                 timeCapsule.addState(initialState)
-                subscribeToEvents()
             }
         }.stateIn(
             scope = viewModelScope,
@@ -42,7 +43,7 @@ abstract class BaseViewModel<S : Reducer.ViewState, E : Reducer.ViewEvent, F : R
         )
 
     private val _event: MutableSharedFlow<E> = MutableSharedFlow()
-    val event = _event.asSharedFlow()
+    val event: SharedFlow<E> = _event.asSharedFlow()
 
     private val _effect: Channel<F> = Channel()
     val effect = _effect.receiveAsFlow()
@@ -51,23 +52,6 @@ abstract class BaseViewModel<S : Reducer.ViewState, E : Reducer.ViewEvent, F : R
         _state.tryEmit(storedState)
     }
 
-    /**
-     * This is the entry point for the View to send events to the ViewModel.
-     */
-    fun processEvent(event: E) {
-        viewModelScope.launch { _event.emit(event) }
-    }
-
-    /**
-     * Subscribes to the event flow and calls [handleEvent] for each incoming event.
-     */
-    private fun subscribeToEvents() {
-        viewModelScope.launch {
-            event.collect {
-                handleEvent(it)
-            }
-        }
-    }
 
     open suspend fun initialDataLoad() {}
 
@@ -77,7 +61,7 @@ abstract class BaseViewModel<S : Reducer.ViewState, E : Reducer.ViewEvent, F : R
      *
      * @param event The event to handle.
      */
-    protected abstract fun handleEvent(event: E)
+    abstract fun handleEvent(event: E)
 
     /**
      * Sends the current state and an event to the reducer to calculate the new state and effect.
