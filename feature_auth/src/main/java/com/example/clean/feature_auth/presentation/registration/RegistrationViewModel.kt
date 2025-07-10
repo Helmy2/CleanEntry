@@ -6,10 +6,10 @@ import com.example.clean.feature_auth.domain.usecase.ValidateEmailUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidateSurnameUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel(
-    // Dependencies provided by Koin
     private val validateFirstNameUseCase: ValidateFirstNameUseCase,
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
@@ -41,16 +41,15 @@ class RegistrationViewModel(
             is RegistrationReducer.Event.Submit -> {
                 submitRegistration()
             }
-            else -> {
-                // Other events are handled directly by the reducer.
-            }
+            else -> setState(event)
         }
     }
 
     private fun submitRegistration() {
         setState(RegistrationReducer.Event.Submit)
         viewModelScope.launch {
-            kotlinx.coroutines.delay(2000)
+            // TODO: Implement registration
+            delay(2000)
             setState(RegistrationReducer.Event.RegistrationFinished)
         }
     }

@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.clean.core.design_system.CleanEntryTheme
-import com.example.clean.feature_auth.presentation.registration.RegistrationRoute
+import com.example.clean.feature_auth.presentation.login.LoginRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,10 +21,10 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier.padding(it)
                     ) {
-                        RegistrationRoute(
-                            onBackClick = {},
-                            onRegistrationSuccess = {},
+                        LoginRoute(
                             onNavigateToCountryPicker = {},
+                            onLoginSuccess = {},
+                            onCreateAccountClick = {}
                         )
                     }
                 }

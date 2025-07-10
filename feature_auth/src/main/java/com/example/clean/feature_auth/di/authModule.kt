@@ -5,6 +5,7 @@ import com.example.clean.feature_auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidateSurnameUseCase
+import com.example.clean.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.feature_auth.presentation.registration.RegistrationViewModel
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import org.koin.android.ext.koin.androidContext
@@ -26,4 +27,5 @@ val authModule = module {
     factoryOf(::ValidatePasswordUseCase)
 
     viewModelOf(::RegistrationViewModel)
+    viewModelOf(::LoginViewModel)
 }
