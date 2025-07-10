@@ -39,7 +39,8 @@ fun PasswordTextField(
     isVisible: Boolean,
     onVisibilityToggle: () -> Unit,
     isError: Boolean = false,
-    supportingText: String? = null
+    supportingText: String? = null,
+    placeholderText: String
 ) {
     AppTextField(
         value = value,
@@ -50,6 +51,7 @@ fun PasswordTextField(
         supportingText = supportingText,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        placeholderText = placeholderText,
         trailingIcon = {
             val image = if (isVisible)
                 Icons.Filled.Visibility
@@ -75,8 +77,8 @@ fun PasswordTextFieldPreview() {
         labelText = "Password",
         isVisible = true,
         onVisibilityToggle = {},
-        isError = false,
-        supportingText = "Enter your password"
+        placeholderText = "Enter your password",
+        supportingText = "Enter your password",
     )
 }
 
@@ -90,6 +92,7 @@ fun PasswordTextFieldErrorPreview() {
         isVisible = true,
         onVisibilityToggle = {},
         isError = true,
-        supportingText = "Error message"
+        placeholderText = "Enter your password",
+        supportingText = "Error message",
     )
 }
