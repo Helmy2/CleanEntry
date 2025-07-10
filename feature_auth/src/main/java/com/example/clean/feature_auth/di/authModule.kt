@@ -5,6 +5,7 @@ import com.example.clean.feature_auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.feature_auth.domain.usecase.ValidateSurnameUseCase
+import com.example.clean.feature_auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.feature_auth.presentation.registration.RegistrationViewModel
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
@@ -28,4 +29,5 @@ val authModule = module {
 
     viewModelOf(::RegistrationViewModel)
     viewModelOf(::LoginViewModel)
+    viewModelOf(::CountryCodePickerViewModel)
 }

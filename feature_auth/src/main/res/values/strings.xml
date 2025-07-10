@@ -16,4 +16,7 @@
     <string name="create_account">Create Account</string>
     <string name="login">Login</string>
     <string name="please_fill_the_details_and_log_in">Please fill the details and Log in</string>
+    <string name="selected">Selected</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="select_country">Select Country</string>
 </resources>

@@ -3,20 +3,12 @@ package com.example.clean.feature_auth.presentation.registration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clean.core.components.AppButton
 import com.example.clean.core.components.AppTextField
@@ -33,6 +24,7 @@ import com.example.clean.core.design_system.spacing
 import com.example.clean.core.ui.ObserveEffect
 import com.example.clean.core.util.stringResource
 import com.example.clean.feature_auth.R
+import com.example.clean.feature_auth.presentation.components.TopBarWithBackNavigation
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -74,7 +66,8 @@ fun RegistrationScreen(
 ) {
     Scaffold(
         topBar = {
-            RegistrationTopBar(
+            TopBarWithBackNavigation(
+                title = stringResource(R.string.sign_up),
                 onBackClick = onBackClick,
                 modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
@@ -157,32 +150,5 @@ fun RegistrationScreen(
                 isLoading = state.isLoading,
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RegistrationTopBar(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = onBackClick,
-            content = {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = stringResource(R.string.back)
-                )
-            },
-        )
-        Text(
-            text = "Sign Up",
-            style = MaterialTheme.typography.titleLarge
-        )
     }
 }
