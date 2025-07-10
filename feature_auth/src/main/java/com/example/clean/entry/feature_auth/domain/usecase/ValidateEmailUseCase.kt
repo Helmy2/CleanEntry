@@ -1,8 +1,8 @@
-package com.example.clean.feature_auth.domain.usecase
+package com.example.clean.entry.feature_auth.domain.usecase
 
 import android.util.Patterns
 import com.example.clean.core.util.StringResource
-import com.example.clean.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 
 /**
  * A use case that validates a user's email address.

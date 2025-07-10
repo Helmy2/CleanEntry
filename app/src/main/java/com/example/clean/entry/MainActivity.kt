@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.clean.core.design_system.CleanEntryTheme
-import com.example.clean.feature_auth.domain.model.Country
-import com.example.clean.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
+import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 

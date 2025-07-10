@@ -1,4 +1,4 @@
-package com.example.clean.feature_auth.presentation.country_code_picker
+package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clean.core.design_system.spacing
 import com.example.clean.core.ui.ObserveEffect
+import com.example.clean.entry.feature_auth.presentation.components.CountryRow
+import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
 import com.example.clean.feature_auth.R
-import com.example.clean.feature_auth.presentation.components.CountryRow
-import com.example.clean.feature_auth.presentation.components.TopBarWithBackNavigation
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

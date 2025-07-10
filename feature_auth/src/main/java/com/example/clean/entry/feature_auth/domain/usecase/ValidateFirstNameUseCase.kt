@@ -1,7 +1,7 @@
-package com.example.clean.feature_auth.domain.usecase
+package com.example.clean.entry.feature_auth.domain.usecase
 
 import com.example.clean.core.util.StringResource
-import com.example.clean.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 
 
 /**

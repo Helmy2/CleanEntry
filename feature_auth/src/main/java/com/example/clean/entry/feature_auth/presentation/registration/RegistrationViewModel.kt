@@ -1,11 +1,11 @@
-package com.example.clean.feature_auth.presentation.registration
+package com.example.clean.entry.feature_auth.presentation.registration
 
 import androidx.lifecycle.viewModelScope
 import com.example.clean.core.mvi.BaseViewModel
-import com.example.clean.feature_auth.domain.usecase.ValidateEmailUseCase
-import com.example.clean.feature_auth.domain.usecase.ValidateFirstNameUseCase
-import com.example.clean.feature_auth.domain.usecase.ValidatePhoneUseCase
-import com.example.clean.feature_auth.domain.usecase.ValidateSurnameUseCase
+import com.example.clean.entry.feature_auth.domain.usecase.ValidateEmailUseCase
+import com.example.clean.entry.feature_auth.domain.usecase.ValidateFirstNameUseCase
+import com.example.clean.entry.feature_auth.domain.usecase.ValidatePhoneUseCase
+import com.example.clean.entry.feature_auth.domain.usecase.ValidateSurnameUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
