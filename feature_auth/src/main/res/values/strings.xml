@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phone_label">Phone*</string>
+    <string name="email_label">Email*</string>
+    <string name="surname_label">Surname*</string>
+    <string name="name_label">Name*</string>
+    <string name="phone_placeholder">5xxxxxxx</string>
+    <string name="name_placeholder">Input text here</string>
+    <string name="surname_placeholder">Input text here</string>
+    <string name="email_placeholder">Input text here</string>
+
+    <string name="continue_label">Continue</string>
+    <string name="back">Back</string>
+</resources>

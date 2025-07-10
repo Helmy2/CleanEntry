@@ -1,5 +1,6 @@
 package com.example.clean.core.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -34,44 +35,55 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     labelText: String,
+    placeholderText: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
-    leadingIcon : @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
     supportingText: String? = null
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
-        label = { Text(labelText) },
-        shape = OutlinedTextFieldDefaults.shape,
-        keyboardOptions = keyboardOptions,
-        visualTransformation = visualTransformation,
-        trailingIcon = trailingIcon,
-        leadingIcon = leadingIcon,
-        isError = isError,
-        supportingText = {
-            if (supportingText != null) {
+    Column {
+        Text(labelText)
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.small,
+            keyboardOptions = keyboardOptions,
+            visualTransformation = visualTransformation,
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon,
+            isError = isError,
+            placeholder = {
                 Text(
-                    text = supportingText,
+                    text = placeholderText,
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = 0.6f
-                    )
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
-            }
-        },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            errorBorderColor = MaterialTheme.colorScheme.error,
-        ),
-        singleLine = true
-    )
+            },
+            supportingText =
+                if (supportingText != null) {
+                    {
+                        Text(
+                            text = supportingText,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface.copy(
+                                alpha = 0.6f
+                            )
+                        )
+                    }
+                } else null,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                errorBorderColor = MaterialTheme.colorScheme.error,
+            ),
+            singleLine = true
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -81,6 +93,7 @@ fun AppTextFieldPreview() {
         value = "Input Text",
         onValueChange = {},
         labelText = "Label",
+        placeholderText = "Placeholder",
         supportingText = "This is a supporting text."
     )
 }

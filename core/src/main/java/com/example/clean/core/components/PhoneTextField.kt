@@ -39,6 +39,7 @@ import com.example.clean.core.design_system.spacing
 @Composable
 fun PhoneTextField(
     labelText: String,
+    placeholderText: String,
     value: String,
     onValueChange: (String) -> Unit,
     onCountryCodeClick: () -> Unit,
@@ -46,7 +47,8 @@ fun PhoneTextField(
     countryFlag: String,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
-    supportingText: String? = null
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+    supportingText: String? = null,
 ) {
     AppTextField(
         value = value,
@@ -55,7 +57,8 @@ fun PhoneTextField(
         labelText = labelText,
         isError = isError,
         supportingText = supportingText,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        keyboardOptions = keyboardOptions,
+        placeholderText = placeholderText,
         leadingIcon = {
             Row(
                 modifier = Modifier.clickable(onClick = onCountryCodeClick),
@@ -97,7 +100,8 @@ fun PhoneTextFieldPreview() {
         onValueChange = {},
         onCountryCodeClick = {},
         countryCode = "+1",
-        countryFlag = "🇺🇸"
+        countryFlag = "🇺🇸",
+        placeholderText = "Enter your phone number",
     )
 }
 

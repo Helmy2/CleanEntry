@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "CleanEntry"
 include(":app")
 include(":core")
+include(":feature_auth")
