@@ -2,6 +2,7 @@ package com.example.clean.entry.feature_auth.presentation.registration
 
 import com.example.clean.core.mvi.Reducer
 import com.example.clean.core.util.StringResource
+import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 
 /**
@@ -22,7 +23,8 @@ object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationRedu
         val isContinueButtonEnabled: Boolean = false,
         val isLoading: Boolean = false,
         val selectedCountryCode: String = "EG",
-        val selectedCountryDialCode: String = "+20"
+        val selectedCountryDialCode: String = "+20",
+        val selectedCountryFlag: String = "🇪🇬"
     ) : Reducer.ViewState
 
     sealed interface Event : Reducer.ViewEvent {
@@ -32,6 +34,7 @@ object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationRedu
         data class EmailChanged(val value: String) : Event
         data class PhoneChanged(val value: String) : Event
         data object Submit : Event
+        data class CountrySelected(val result: Country) : Event // New event
 
         // Internal Events
         data class FirstNameUpdated(val value: String, val result: ValidationResult) : Event
@@ -61,6 +64,13 @@ object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationRedu
             }
             is Event.PhoneUpdated -> {
                 previousState.copy(phone = event.value, phoneError = event.result.errorMessage)
+            }
+            is Event.CountrySelected -> {
+                previousState.copy(
+                    selectedCountryCode = event.result.code,
+                    selectedCountryDialCode = event.result.dialCode,
+                    selectedCountryFlag = event.result.flagEmoji
+                )
             }
             is Event.PhoneChanged -> {
                 previousState.copy(phone = event.value)

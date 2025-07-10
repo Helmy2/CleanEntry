@@ -4,15 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.example.clean.core.design_system.CleanEntryTheme
-import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
+import com.example.clean.entry.navigation.AppNavHost
+import com.example.clean.core.navigation.Destination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,25 +18,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanEntryTheme {
-                Scaffold {
-                    Box(
+                Scaffold (
+                ) {
+                    val navController = rememberNavController()
+                    AppNavHost(
+                        navController = navController,
+                        startDestination = Destination.AuthGraph,
                         modifier = Modifier.padding(it)
-                    ) {
-                        CountryCodePickerRoute(
-                            onCountrySelected = { dialCode, code -> },
-                            onNavigateBack = {},
-                            viewModel = koinViewModel {
-                                parametersOf(
-                                    Country(
-                                        dialCode = "EG",
-                                        code = "EG",
-                                        flagEmoji = "🇪🇬",
-                                        name = "Egypt"
-                                    )
-                                )
-                            }
-                        )
-                    }
+                    )
                 }
             }
         }

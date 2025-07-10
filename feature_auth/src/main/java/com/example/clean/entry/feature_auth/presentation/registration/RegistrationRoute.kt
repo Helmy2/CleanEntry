@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import com.example.clean.core.components.PhoneTextField
 import com.example.clean.core.design_system.spacing
 import com.example.clean.core.ui.ObserveEffect
 import com.example.clean.core.util.stringResource
+import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
 import com.example.clean.feature_auth.R
 import org.koin.compose.viewmodel.koinViewModel
@@ -35,7 +37,9 @@ import org.koin.compose.viewmodel.koinViewModel
 fun RegistrationRoute(
     viewModel: RegistrationViewModel = koinViewModel(),
     onBackClick: () -> Unit,
-    onNavigateToCountryPicker: () -> Unit,
+    countryResult: Country?,
+    clearCountryResult: () -> Unit,
+    onNavigateToCountryPicker: (Country) -> Unit,
     onRegistrationSuccess: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -48,11 +52,24 @@ fun RegistrationRoute(
         }
     }
 
+    LaunchedEffect(countryResult) {
+        if (countryResult != null) {
+            viewModel.handleEvent(RegistrationReducer.Event.CountrySelected(countryResult))
+            clearCountryResult()
+        }
+    }
+
     RegistrationScreen(
-        state = state,
-        onEvent = viewModel::processEvent,
-        onCountryCodeClick = onNavigateToCountryPicker,
-        onBackClick = onBackClick
+        state = state, onEvent = viewModel::handleEvent, onCountryCodeClick = {
+            onNavigateToCountryPicker(
+                Country(
+                    dialCode = state.selectedCountryDialCode,
+                    code = state.selectedCountryCode,
+                    flagEmoji = state.selectedCountryFlag,
+                    name = ""
+                )
+            )
+        }, onBackClick = onBackClick
     )
 }
 
@@ -71,8 +88,7 @@ fun RegistrationScreen(
                 onBackClick = onBackClick,
                 modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
-        }
-    ) { padding ->
+        }) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -95,8 +111,7 @@ fun RegistrationScreen(
                 isError = state.firstNameError != null,
                 supportingText = state.firstNameError?.let { stringResource(it) },
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
             )
 
@@ -108,8 +123,7 @@ fun RegistrationScreen(
                 isError = state.surnameError != null,
                 supportingText = state.surnameError?.let { stringResource(it) },
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                 )
             )
 
@@ -121,8 +135,7 @@ fun RegistrationScreen(
                 supportingText = state.emailError?.let { stringResource(it) },
                 placeholderText = stringResource(R.string.email_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
+                    keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
                 )
             )
 
@@ -130,14 +143,13 @@ fun RegistrationScreen(
                 value = state.phone,
                 onValueChange = { onEvent(RegistrationReducer.Event.PhoneChanged(it)) },
                 onCountryCodeClick = onCountryCodeClick,
-                countryCode = "+20",
-                countryFlag = "🇪🇬",
+                countryCode = state.selectedCountryDialCode,
+                countryFlag = state.selectedCountryFlag,
                 isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
-                placeholderText = androidx.compose.ui.res.stringResource(R.string.phone_placeholder),
+                placeholderText = stringResource(R.string.phone_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Done
+                    keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
                 )
             )
 
