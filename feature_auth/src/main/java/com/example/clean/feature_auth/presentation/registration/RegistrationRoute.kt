@@ -64,14 +64,7 @@ fun RegistrationRoute(
     )
 }
 
-/**
- * The stateless "Screen" for the Registration UI.
- * This composable is only responsible for displaying the UI based on the provided state.
- *
- * @param state The current state of the screen.
- * @param onEvent The callback to send events to the ViewModel.
- * @param onCountryCodeClick The callback to trigger when the country code selector is clicked.
- */
+
 @Composable
 fun RegistrationScreen(
     state: RegistrationReducer.State,
@@ -81,13 +74,20 @@ fun RegistrationScreen(
 ) {
     Scaffold(
         topBar = {
-            RegistrationTopBar(onBackClick = onBackClick)
+            RegistrationTopBar(
+                onBackClick = onBackClick,
+                modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            )
         }
-    ) {padding ->
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(
+                    start = MaterialTheme.spacing.medium,
+                    end = MaterialTheme.spacing.medium,
+                    bottom = MaterialTheme.spacing.medium
+                )
                 .padding(padding)
                 .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +101,7 @@ fun RegistrationScreen(
                 placeholderText = stringResource(R.string.name_placeholder),
                 isError = state.firstNameError != null,
                 supportingText = state.firstNameError?.let { stringResource(it) },
-                keyboardOptions =  KeyboardOptions.Default.copy(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 )
@@ -114,7 +114,7 @@ fun RegistrationScreen(
                 placeholderText = stringResource(R.string.surname_placeholder),
                 isError = state.surnameError != null,
                 supportingText = state.surnameError?.let { stringResource(it) },
-                keyboardOptions =  KeyboardOptions.Default.copy(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 )
@@ -127,7 +127,7 @@ fun RegistrationScreen(
                 isError = state.emailError != null,
                 supportingText = state.emailError?.let { stringResource(it) },
                 placeholderText = stringResource(R.string.email_placeholder),
-                keyboardOptions =  KeyboardOptions.Default.copy(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 )
@@ -141,9 +141,8 @@ fun RegistrationScreen(
                 countryFlag = "🇪🇬",
                 isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
-                labelText = stringResource(R.string.phone_label),
                 placeholderText = androidx.compose.ui.res.stringResource(R.string.phone_placeholder),
-                keyboardOptions =  KeyboardOptions.Default.copy(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Done
                 )

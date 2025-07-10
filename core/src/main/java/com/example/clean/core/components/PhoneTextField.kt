@@ -38,7 +38,6 @@ import com.example.clean.core.design_system.spacing
  */
 @Composable
 fun PhoneTextField(
-    labelText: String,
     placeholderText: String,
     value: String,
     onValueChange: (String) -> Unit,
@@ -54,7 +53,6 @@ fun PhoneTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        labelText = labelText,
         isError = isError,
         supportingText = supportingText,
         keyboardOptions = keyboardOptions,
@@ -95,7 +93,6 @@ fun PhoneTextField(
 @Composable
 fun PhoneTextFieldPreview() {
     PhoneTextField(
-        labelText = "Phone Number",
         value = "123456789",
         onValueChange = {},
         onCountryCodeClick = {},

@@ -34,7 +34,7 @@ fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    labelText: String,
+    labelText: String? = null,
     placeholderText: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     isError: Boolean = false,
@@ -44,7 +44,8 @@ fun AppTextField(
     supportingText: String? = null
 ) {
     Column {
-        Text(labelText)
+        if (labelText != null)
+            Text(labelText)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,

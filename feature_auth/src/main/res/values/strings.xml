@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="phone_label">Phone*</string>
     <string name="email_label">Email*</string>
     <string name="surname_label">Surname*</string>
     <string name="name_label">Name*</string>
@@ -8,7 +7,13 @@
     <string name="name_placeholder">Input text here</string>
     <string name="surname_placeholder">Input text here</string>
     <string name="email_placeholder">Input text here</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">Password</string>
 
     <string name="continue_label">Continue</string>
     <string name="back">Back</string>
+    <string name="you_don_t_have_an_account">"You don't have an account? "</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
+    <string name="please_fill_the_details_and_log_in">Please fill the details and Log in</string>
 </resources>
