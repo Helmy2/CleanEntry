@@ -8,12 +8,12 @@
     <string name="surname_placeholder">Input text here</string>
     <string name="email_placeholder">Input text here</string>
     <string name="password_label">Password</string>
-    <string name="password_placeholder">Password</string>
+    <string name="password_placeholder">Enter your password</string>
 
     <string name="continue_label">Continue</string>
     <string name="back">Back</string>
     <string name="you_don_t_have_an_account">"You don't have an account? "</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Create account</string>
     <string name="login">Login</string>
     <string name="please_fill_the_details_and_log_in">Please fill the details and Log in</string>
     <string name="selected">Selected</string>

@@ -14,7 +14,6 @@ android {
         minSdk = 28
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -38,6 +37,14 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
+        )
+    }
 }
 
 dependencies {
@@ -45,5 +52,19 @@ dependencies {
     implementation(libs.libphonenumber.android)
 
     testImplementation(kotlin("test"))
-    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+
+    androidTestImplementation(kotlin("test"))
+//    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
