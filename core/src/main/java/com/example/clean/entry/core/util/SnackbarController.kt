@@ -1,5 +1,6 @@
-package com.example.clean.entry.util
+package com.example.clean.entry.core.util
 
+import com.example.clean.entry.core.domain.model.StringResource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 

@@ -1,9 +1,9 @@
 package com.example.clean.entry.feature_auth.presentation.registration
 
 import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.feature_auth.domain.model.ValidationResult
-import com.example.clean.entry.mvi.Reducer
-import com.example.clean.entry.util.StringResource
+import com.example.clean.entry.core.domain.model.ValidationResult
+import com.example.clean.entry.core.mvi.Reducer
+import com.example.clean.entry.core.domain.model.StringResource
 
 /**
  * Defines the contract for the Registration screen and also acts as the Reducer

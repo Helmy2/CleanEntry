@@ -1,4 +1,4 @@
-package com.example.clean.entry.design_system
+package com.example.clean.entry.core.design_system
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

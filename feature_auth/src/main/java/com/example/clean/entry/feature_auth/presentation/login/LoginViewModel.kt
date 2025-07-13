@@ -1,7 +1,7 @@
 package com.example.clean.entry.feature_auth.presentation.login
 
 import androidx.lifecycle.viewModelScope
-import com.example.clean.entry.mvi.BaseViewModel
+import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePhoneUseCase
 import kotlinx.coroutines.delay

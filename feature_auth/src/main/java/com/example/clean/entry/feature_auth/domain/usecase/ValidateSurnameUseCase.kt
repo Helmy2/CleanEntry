@@ -1,7 +1,7 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import com.example.clean.entry.feature_auth.domain.model.ValidationResult
-import com.example.clean.entry.util.StringResource
+import com.example.clean.entry.core.domain.model.ValidationResult
+import com.example.clean.entry.core.domain.model.StringResource
 
 /**
  * A use case that validates a user's surname.

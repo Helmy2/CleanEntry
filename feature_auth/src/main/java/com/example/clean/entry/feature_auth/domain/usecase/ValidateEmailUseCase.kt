@@ -1,8 +1,8 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
 import android.util.Patterns
-import com.example.clean.entry.feature_auth.domain.model.ValidationResult
-import com.example.clean.entry.util.StringResource
+import com.example.clean.entry.core.domain.model.StringResource
+import com.example.clean.entry.core.domain.model.ValidationResult
 import java.util.regex.Pattern
 
 /**

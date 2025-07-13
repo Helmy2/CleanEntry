@@ -1,4 +1,4 @@
-package com.example.clean.entry.mvi
+package com.example.clean.entry.core.mvi
 
 /**
  * Defines a contract for a time-travel debugger.

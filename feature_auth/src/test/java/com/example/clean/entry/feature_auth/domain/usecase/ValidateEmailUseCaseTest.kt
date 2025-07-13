@@ -1,6 +1,6 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import com.example.clean.entry.util.StringResource
+import com.example.clean.entry.core.domain.model.StringResource
 import io.mockk.every
 import io.mockk.mockk
 import java.util.regex.Matcher

@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.navigation.AuthDestination
-import com.example.clean.entry.mvi.BaseViewModel
+import com.example.clean.entry.core.mvi.BaseViewModel
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(FlowPreview::class)
