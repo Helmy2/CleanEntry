@@ -1,4 +1,4 @@
-package com.example.clean.entry.util
+package com.example.clean.entry.core.domain.model
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable

@@ -1,6 +1,6 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import com.example.clean.entry.util.StringResource
+import com.example.clean.entry.core.domain.model.StringResource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

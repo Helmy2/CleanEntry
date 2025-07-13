@@ -1,4 +1,4 @@
-package com.example.clean.entry.components
+package com.example.clean.entry.core.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons

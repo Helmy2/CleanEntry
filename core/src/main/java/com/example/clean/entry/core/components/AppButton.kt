@@ -1,4 +1,4 @@
-package com.example.clean.entry.components
+package com.example.clean.entry.core.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
