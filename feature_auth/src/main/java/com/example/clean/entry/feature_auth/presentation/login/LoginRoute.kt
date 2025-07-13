@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clean.entry.components.AppButton
@@ -124,6 +127,9 @@ fun LoginScreen(
                 isError = state.phoneError == null,
                 supportingText = state.phoneError?.let { stringResource(it) },
                 placeholderText = stringResource(R.string.phone_placeholder),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next
+                )
             )
 
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
@@ -136,7 +142,10 @@ fun LoginScreen(
                 onVisibilityToggle = { onEvent(LoginReducer.Event.TogglePasswordVisibility) },
                 isError = state.passwordError != null,
                 supportingText = state.passwordError?.let { stringResource(it) },
-                placeholderText = stringResource(R.string.password_placeholder)
+                placeholderText = stringResource(R.string.password_placeholder),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
+                )
             )
 
             Spacer(modifier = Modifier.weight(1f))

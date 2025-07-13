@@ -21,9 +21,9 @@ import org.koin.dsl.module
 val authModule = module {
     single { PhoneNumberUtil.createInstance(androidContext()) }
 
+    factory{ ValidateEmailUseCase() }
     factoryOf(::ValidateFirstNameUseCase)
     factoryOf(::ValidateSurnameUseCase)
-    factoryOf(::ValidateEmailUseCase)
     factoryOf(::ValidatePhoneUseCase)
     factoryOf(::ValidatePasswordUseCase)
 
