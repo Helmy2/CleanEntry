@@ -9,8 +9,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.clean.entry.design_system.CleanEntryTheme
+import com.example.clean.entry.navigation.AppDestination
 import com.example.clean.entry.navigation.AppNavHost
-import com.example.clean.entry.navigation.Destination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,12 +18,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanEntryTheme {
-                Scaffold (
+                Scaffold(
                 ) {
                     val navController = rememberNavController()
                     AppNavHost(
                         navController = navController,
-                        startDestination = Destination.AuthGraph,
+                        startDestination = AppDestination.AuthGraph,
                         modifier = Modifier.padding(it)
                     )
                 }

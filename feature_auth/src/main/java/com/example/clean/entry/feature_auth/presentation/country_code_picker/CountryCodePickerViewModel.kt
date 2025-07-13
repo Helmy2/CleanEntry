@@ -2,9 +2,9 @@ package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.example.clean.entry.mvi.BaseViewModel
-import com.example.clean.entry.navigation.Destination
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.navigation.AuthDestination
+import com.example.clean.entry.mvi.BaseViewModel
 import kotlinx.coroutines.FlowPreview
 
 @OptIn(FlowPreview::class)
@@ -28,7 +28,7 @@ class CountryCodePickerViewModel(
 
     override suspend fun initialDataLoad() {
         setState(CountryCodePickerReducer.Event.CountriesLoaded(allCountries))
-        val selectedCountryCode = savedStateHandle.toRoute<Destination.CountryCodePicker>().code
+        val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
         setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
     }
 
