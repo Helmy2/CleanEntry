@@ -1,7 +1,7 @@
 package com.example.clean.entry.feature_auth.presentation.registration
 
 import androidx.lifecycle.viewModelScope
-import com.example.clean.core.mvi.BaseViewModel
+import com.example.clean.entry.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateEmailUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePhoneUseCase

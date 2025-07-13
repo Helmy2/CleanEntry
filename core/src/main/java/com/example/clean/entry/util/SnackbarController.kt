@@ -1,4 +1,4 @@
-package com.example.clean.core.util
+package com.example.clean.entry.util
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

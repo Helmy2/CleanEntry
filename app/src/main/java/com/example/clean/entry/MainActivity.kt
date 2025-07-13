@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.clean.core.design_system.CleanEntryTheme
+import com.example.clean.entry.design_system.CleanEntryTheme
 import com.example.clean.entry.navigation.AppNavHost
-import com.example.clean.core.navigation.Destination
+import com.example.clean.entry.navigation.Destination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.example.clean.core.design_system.spacing
+import com.example.clean.entry.design_system.spacing
 import com.example.clean.feature_auth.R
 
 @Composable

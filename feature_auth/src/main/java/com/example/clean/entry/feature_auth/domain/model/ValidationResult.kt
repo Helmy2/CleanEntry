@@ -1,6 +1,6 @@
 package com.example.clean.entry.feature_auth.domain.model
 
-import com.example.clean.core.util.StringResource
+import com.example.clean.entry.util.StringResource
 
 /**
  * A helper data class to encapsulate the result of a validation.

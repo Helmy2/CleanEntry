@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.clean.core.navigation.Destination
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
 import com.example.clean.entry.feature_auth.presentation.login.LoginRoute

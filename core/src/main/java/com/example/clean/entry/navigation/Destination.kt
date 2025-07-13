@@ -1,4 +1,4 @@
-package com.example.clean.core.navigation
+package com.example.clean.entry.navigation
 
 import kotlinx.serialization.Serializable
 

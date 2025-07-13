@@ -1,7 +1,7 @@
 package com.example.clean.entry.feature_auth.presentation.registration
 
-import com.example.clean.core.mvi.Reducer
-import com.example.clean.core.util.StringResource
+import com.example.clean.entry.mvi.Reducer
+import com.example.clean.entry.util.StringResource
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
 

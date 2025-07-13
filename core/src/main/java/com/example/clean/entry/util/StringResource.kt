@@ -1,4 +1,4 @@
-package com.example.clean.core.util
+package com.example.clean.entry.util
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
