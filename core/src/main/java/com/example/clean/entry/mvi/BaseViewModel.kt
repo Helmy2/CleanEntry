@@ -1,4 +1,4 @@
-package com.example.clean.core.mvi
+package com.example.clean.entry.mvi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

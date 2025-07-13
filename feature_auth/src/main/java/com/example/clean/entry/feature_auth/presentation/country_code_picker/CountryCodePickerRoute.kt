@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.clean.core.design_system.spacing
-import com.example.clean.core.ui.ObserveEffect
+import com.example.clean.entry.design_system.spacing
+import com.example.clean.entry.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.CountryRow
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation

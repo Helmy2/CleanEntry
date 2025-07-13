@@ -43,4 +43,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(libs.libphonenumber.android)
+
+    testImplementation(libs.junit.jupiter)
+    testImplementation(kotlin("test"))
 }

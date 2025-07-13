@@ -1,7 +1,7 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import com.example.clean.core.util.StringResource
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.util.StringResource
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import io.michaelrocks.libphonenumber.android.Phonenumber
 

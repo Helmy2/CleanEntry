@@ -1,4 +1,4 @@
-package com.example.clean.core.mvi
+package com.example.clean.entry.mvi
 
 /**
  * A Reducer is a pure function that takes the previous state and an event,

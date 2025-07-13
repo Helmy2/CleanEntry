@@ -1,4 +1,4 @@
-package com.example.clean.core.design_system
+package com.example.clean.entry.design_system
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

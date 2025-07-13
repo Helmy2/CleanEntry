@@ -1,4 +1,4 @@
-package com.example.clean.core.components
+package com.example.clean.entry.components
 
 
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.clean.core.R
-import com.example.clean.core.design_system.spacing
+import com.example.clean.entry.design_system.spacing
 
 /**
  * A specialized text field for phone number input.
