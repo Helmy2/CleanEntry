@@ -1,9 +1,9 @@
 package com.example.clean.entry.feature_auth.presentation.login
 
-import com.example.clean.entry.mvi.Reducer
-import com.example.clean.entry.util.StringResource
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.mvi.Reducer
+import com.example.clean.entry.util.StringResource
 
 /**
  * Defines the contract for the Login screen and also acts as the Reducer
@@ -18,11 +18,14 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         val passwordError: StringResource? = null,
         val isPasswordVisible: Boolean = false,
         val isLoading: Boolean = false,
-        val isLoginButtonEnabled: Boolean = false,
         val selectedCountryCode: String = "EG",
         val selectedCountryDialCode: String = "+20",
         val selectedCountryFlag: String = "🇪🇬"
-    ) : Reducer.ViewState
+    ) : Reducer.ViewState {
+        val isLoginButtonEnabled
+            get() = phone.isNotBlank() && phoneError == null &&
+                    password.isNotBlank() && passwordError == null
+    }
 
     sealed interface Event : Reducer.ViewEvent {
         // UI Events
@@ -46,35 +49,42 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         previousState: State,
         event: Event
     ): Pair<State, Effect?> {
-        val newState = when (event) {
+        return when (event) {
             is Event.PhoneUpdated -> {
-                previousState.copy(phone = event.value, phoneError = event.result.errorMessage)
+                previousState.copy(
+                    phone = event.value,
+                    phoneError = event.result.errorMessage
+                ) to null
             }
+
             is Event.PasswordUpdated -> {
-                previousState.copy(password = event.value, passwordError = event.result.errorMessage)
+                previousState.copy(
+                    password = event.value,
+                    passwordError = event.result.errorMessage
+                ) to null
             }
+
             is Event.TogglePasswordVisibility -> {
-                previousState.copy(isPasswordVisible = !previousState.isPasswordVisible)
+                previousState.copy(isPasswordVisible = !previousState.isPasswordVisible) to null
             }
+
             is Event.CountrySelected -> {
                 previousState.copy(
                     selectedCountryCode = event.result.code,
                     selectedCountryDialCode = event.result.dialCode,
                     selectedCountryFlag = event.result.flagEmoji
-                )
+                ) to null
             }
+
             is Event.LoginClicked -> {
-                previousState.copy(isLoading = true)
+                previousState.copy(isLoading = true) to null
             }
+
             is Event.LoginFinished -> {
-                previousState.copy(isLoading = false)
+                previousState.copy(isLoading = false) to Effect.LoginSuccess
             }
-            else -> previousState
+
+            else -> previousState to null
         }
-
-        val isFormValid = newState.phone.isNotBlank() && newState.phoneError == null &&
-                newState.password.isNotBlank() && newState.passwordError == null
-
-        return newState.copy(isLoginButtonEnabled = isFormValid) to null
     }
 }

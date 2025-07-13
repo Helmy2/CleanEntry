@@ -1,15 +1,16 @@
 package com.example.clean.entry.feature_auth.presentation.registration
 
-import com.example.clean.entry.mvi.Reducer
-import com.example.clean.entry.util.StringResource
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.ValidationResult
+import com.example.clean.entry.mvi.Reducer
+import com.example.clean.entry.util.StringResource
 
 /**
  * Defines the contract for the Registration screen and also acts as the Reducer
  * for its state transformations.
  */
-object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
+object RegistrationReducer :
+    Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
 
     data class State(
         val firstName: String = "",
@@ -20,12 +21,14 @@ object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationRedu
         val emailError: StringResource? = null,
         val phone: String = "",
         val phoneError: StringResource? = null,
-        val isContinueButtonEnabled: Boolean = false,
         val isLoading: Boolean = false,
         val selectedCountryCode: String = "EG",
         val selectedCountryDialCode: String = "+20",
         val selectedCountryFlag: String = "🇪🇬"
-    ) : Reducer.ViewState
+    ) : Reducer.ViewState {
+        val isContinueButtonEnabled
+            get() = firstName.isNotBlank() && firstNameError == null && surname.isNotBlank() && surnameError == null && email.isNotBlank() && emailError == null && phone.isNotBlank() && phoneError == null
+    }
 
     sealed interface Event : Reducer.ViewEvent {
         // UI Events
@@ -49,46 +52,55 @@ object RegistrationReducer : Reducer<RegistrationReducer.State, RegistrationRedu
     }
 
     override fun reduce(
-        previousState: State,
-        event: Event
+        previousState: State, event: Event
     ): Pair<State, Effect?> {
-        val newState = when (event) {
+        return when (event) {
             is Event.FirstNameUpdated -> {
-                previousState.copy(firstName = event.value, firstNameError = event.result.errorMessage)
+                previousState.copy(
+                    firstName = event.value, firstNameError = event.result.errorMessage
+                ) to null
             }
+
             is Event.SurnameUpdated -> {
-                previousState.copy(surname = event.value, surnameError = event.result.errorMessage)
+                previousState.copy(
+                    surname = event.value, surnameError = event.result.errorMessage
+                ) to null
             }
+
             is Event.EmailUpdated -> {
-                previousState.copy(email = event.value, emailError = event.result.errorMessage)
+                previousState.copy(
+                    email = event.value, emailError = event.result.errorMessage
+                ) to null
             }
+
             is Event.PhoneUpdated -> {
-                previousState.copy(phone = event.value, phoneError = event.result.errorMessage)
+                previousState.copy(
+                    phone = event.value, phoneError = event.result.errorMessage
+                ) to null
             }
+
             is Event.CountrySelected -> {
                 previousState.copy(
                     selectedCountryCode = event.result.code,
                     selectedCountryDialCode = event.result.dialCode,
                     selectedCountryFlag = event.result.flagEmoji
-                )
+                ) to null
             }
+
             is Event.PhoneChanged -> {
-                previousState.copy(phone = event.value)
+                previousState.copy(phone = event.value) to null
             }
+
             is Event.Submit -> {
-                previousState.copy(isLoading = true)
+                previousState.copy(isLoading = true) to null
             }
+
             is Event.RegistrationFinished -> {
-                previousState.copy(isLoading = false)
+                previousState.copy(isLoading = false) to Effect.RegistrationSuccess
             }
-            else -> previousState
+
+            else -> previousState to null
         }
 
-        val isFormValid = newState.firstName.isNotBlank() && newState.firstNameError == null &&
-                newState.surname.isNotBlank() && newState.surnameError == null &&
-                newState.email.isNotBlank() && newState.emailError == null &&
-                newState.phone.isNotBlank() && newState.phoneError == null
-
-        return newState.copy(isContinueButtonEnabled = isFormValid) to null
     }
 }
