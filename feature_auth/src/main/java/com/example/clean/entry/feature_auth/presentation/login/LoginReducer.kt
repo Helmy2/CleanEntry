@@ -24,7 +24,8 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
     ) : Reducer.ViewState {
         val isLoginButtonEnabled
             get() = phone.isNotBlank() && phoneError == null &&
-                    password.isNotBlank() && passwordError == null
+                    password.isNotBlank() && passwordError == null &&
+                    !isLoading
     }
 
     sealed interface Event : Reducer.ViewEvent {

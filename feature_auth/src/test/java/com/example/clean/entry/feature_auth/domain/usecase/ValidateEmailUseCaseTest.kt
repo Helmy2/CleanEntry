@@ -26,9 +26,8 @@ class ValidateEmailUseCaseTest {
         validateEmailUseCase = ValidateEmailUseCase(mockEmailPattern)
     }
 
-
     @Test
-    fun `invoke with empty email returns failed result - Email cannot be empty`() {
+    fun `given empty email when invoke then returns failed result and not empty message`() {
         val email = ""
 
         val result = validateEmailUseCase(email)
@@ -41,7 +40,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with blank email (spaces only) returns failed result - Email cannot be empty`() {
+    fun `given blank email when invoke then returns failed result and not empty message`() {
         val email = "   "
 
         val result = validateEmailUseCase(email)
@@ -54,7 +53,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email format (pattern matches) returns successful result`() {
+    fun `given valid email and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -66,7 +65,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with invalid email format (pattern does not match) returns failed result - That's not a valid email`() {
+    fun `given invalid email and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "invalidemail"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -81,7 +80,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email missing at symbol (pattern does not match) returns failed result`() {
+    fun `given email missing at symbol and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "testexample.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -93,7 +92,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email missing domain (pattern does not match) returns failed result`() {
+    fun `given email missing domain and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -105,7 +104,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email missing top-level domain (pattern does not match) returns failed result`() {
+    fun `given email missing top level domain and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@example"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -117,7 +116,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email missing username (pattern does not match) returns failed result`() {
+    fun `given email missing username and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -129,7 +128,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email containing spaces (pattern does not match) returns failed result`() {
+    fun `given email containing spaces and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test @example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -141,7 +140,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email containing multiple at symbols (pattern does not match) returns failed result`() {
+    fun `given email containing multiple at symbols and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -153,7 +152,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email containing numbers (pattern matches) returns successful result`() {
+    fun `given valid email containing numbers and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test123@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -165,7 +164,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email containing hyphen in local part (pattern matches) returns successful result`() {
+    fun `given valid email containing hyphen in local part and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test-user@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -177,7 +176,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email containing hyphen in domain (pattern matches) returns successful result`() {
+    fun `given valid email containing hyphen in domain and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test@example-domain.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -189,7 +188,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email containing dot in local part (pattern matches) returns successful result`() {
+    fun `given valid email containing dot in local part and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test.user@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -201,7 +200,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid email plus addressing (pattern matches) returns successful result`() {
+    fun `given valid email with plus addressing and pattern matches when invoke then returns successful result and null error message`() {
         val email = "test+alias@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -213,7 +212,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with very long but valid email (pattern matches) returns successful result`() {
+    fun `given very long valid email and pattern matches when invoke then returns successful result and null error message`() {
         val email = "very.long.email.address.that.is.still.valid.according.to.standards@example.co.uk"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns true
@@ -225,7 +224,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email containing special characters not allowed (pattern does not match) returns failed result`() {
+    fun `given email containing special characters not allowed and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test!user@example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -237,7 +236,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email domain starting with dot (pattern does not match) returns failed result`() {
+    fun `given email domain starting with dot and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@.example.com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -249,7 +248,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email domain ending with dot (pattern does not match) returns failed result`() {
+    fun `given email domain ending with dot and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@example.com."
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false
@@ -261,7 +260,7 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `invoke with email domain with consecutive dots (pattern does not match) returns failed result`() {
+    fun `given email domain with consecutive dots and pattern does not match when invoke then returns failed result and invalid email message`() {
         val email = "test@example..com"
         every { mockEmailPattern.matcher(email) } returns mockEmailMatcher
         every { mockEmailMatcher.matches() } returns false

@@ -18,7 +18,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with empty surname returns failed result`() {
+    fun `given empty surname when invoke then returns failed result and not empty message`() {
         val surname = ""
         val result = validateSurnameUseCase(surname)
 
@@ -30,7 +30,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with blank surname (spaces only) returns failed result`() {
+    fun `given blank surname with spaces only when invoke then returns failed result and not empty message`() {
         val surname = "   "
         val result = validateSurnameUseCase(surname)
 
@@ -42,7 +42,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname of 1 character returns failed result`() {
+    fun `given surname of one character when invoke then returns failed result and min length message`() {
         val surname = "A"
         val result = validateSurnameUseCase(surname)
 
@@ -54,7 +54,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname of 2 characters returns successful result`() {
+    fun `given surname of two characters when invoke then returns successful result and null error message`() {
         val surname = "Ab"
         val result = validateSurnameUseCase(surname)
 
@@ -63,7 +63,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname longer than 2 characters returns successful result`() {
+    fun `given surname longer than two characters when invoke then returns successful result and null error message`() {
         val surname = "Doe"
         val result = validateSurnameUseCase(surname)
 
@@ -72,8 +72,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname containing numbers and valid length returns successful result`() {
-        // Assuming business rules allow numbers in surnames for this use case
+    fun `given surname containing numbers and valid length when invoke then returns successful result and null error message`() {
         val surname = "Do3"
         val result = validateSurnameUseCase(surname)
 
@@ -82,8 +81,7 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname containing special characters and valid length returns successful result`() {
-        // Assuming business rules allow certain special characters
+    fun `given surname containing special chars and valid length when invoke then returns successful result and null error message`() {
         val surname = "O'Neil"
         val result = validateSurnameUseCase(surname)
 
@@ -92,10 +90,9 @@ class ValidateSurnameUseCaseTest {
     }
 
     @Test
-    fun `invoke with surname with leading trailing spaces but valid inner length (after trim by isBlank) returns failed for length`() {
-        // isBlank() handles the empty check, so if " D " becomes "D", length is 1.
+    fun `given surname with leading trailing spaces and trimmed to invalid length when invoke then returns failed result and min length message`() {
         val surname = " D "
-        val result = validateSurnameUseCase(surname.trim()) // Simulating what isBlank() would allow through to length check
+        val result = validateSurnameUseCase(surname.trim())
 
         assertFalse(result.isSuccessful)
         assertEquals(
