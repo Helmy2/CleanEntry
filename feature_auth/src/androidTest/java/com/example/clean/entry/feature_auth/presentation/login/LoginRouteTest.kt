@@ -3,7 +3,6 @@ package com.example.clean.entry.feature_auth.presentation.login
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -31,7 +30,7 @@ class LoginScreenTest {
     private val mockOnCreateAccountClick: () -> Unit = mockk(relaxed = true)
 
     @Test
-    fun loginScreen_whenPhoneAndPasswordProvided_continueButtonIsEnabled() {
+    fun givenPhoneAndPasswordProvided_whenScreenLoads_thenContinueButtonIsEnabled() {
         val state = LoginReducer.State(phone = "1234567890", password = "password123")
         assertTrue(state.isLoginButtonEnabled)
 
@@ -49,7 +48,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_whenLoading_continueButtonShowsLoadingAndIsDisabled() {
+    fun givenStateIsLoading_whenScreenLoads_thenContinueButtonShowsLoadingAndIsDisabled() {
         val state =
             LoginReducer.State(phone = "1234567890", password = "password123", isLoading = true)
 
@@ -68,7 +67,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_phoneInput_triggersPhoneChangedEvent() {
+    fun givenInitialState_whenPhoneInputChanged_thenPhoneChangedEventTriggered() {
         val initialState = LoginReducer.State()
         composeTestRule.setContent {
             CleanEntryTheme {
@@ -87,7 +86,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_clickContinueButton_triggersLoginClickedEvent() {
+    fun givenValidState_whenContinueButtonClicked_thenLoginClickedEventTriggered() {
         val state = LoginReducer.State(phone = "1234567890", password = "password123")
         composeTestRule.setContent {
             CleanEntryTheme {
@@ -105,7 +104,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_clickCreateAccount_triggersCreateAccountCallback() {
+    fun givenInitialState_whenCreateAccountClicked_thenCreateAccountCallbackTriggered() {
         val initialState = LoginReducer.State()
         composeTestRule.setContent {
             CleanEntryTheme {
@@ -123,7 +122,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_clickCountryCode_triggersCountryCodeClickCallback() {
+    fun givenInitialState_whenCountryCodeClicked_thenCountryCodeClickCallbackTriggered() {
         val initialState = LoginReducer.State()
         composeTestRule.setContent {
             CleanEntryTheme {
@@ -141,7 +140,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_phoneError_displaysErrorMessage() {
+    fun givenStateWithPhoneError_whenScreenLoads_thenErrorMessageIsDisplayed() {
         val errorMessage = "Invalid phone number"
         val state = LoginReducer.State(phoneError = StringResource.FromString(errorMessage))
         composeTestRule.setContent {
@@ -158,7 +157,7 @@ class LoginScreenTest {
     }
 
     @Test
-    fun loginScreen_passwordError_displaysErrorMessage() {
+    fun givenStateWithPasswordError_whenScreenLoads_thenErrorMessageIsDisplayed() {
         val errorMessage = "Password too short"
         val state = LoginReducer.State(passwordError = StringResource.FromString(errorMessage))
         composeTestRule.setContent {
@@ -174,4 +173,3 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
     }
 }
-

@@ -26,7 +26,7 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with blank phone returns failed result`() {
+    fun `given blank phone when invoke then returns failed result and not empty message`() {
         val phone = ""
         val regionCode = "US"
         val result = validatePhoneUseCase(phone, regionCode)
@@ -39,7 +39,7 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid phone and region returns successful result`() {
+    fun `given valid phone and region when invoke then returns successful result and null error message`() {
         val phone = "1234567890"
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
@@ -54,7 +54,7 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with invalid phone for region returns failed result`() {
+    fun `given invalid phone for region when invoke then returns failed result and invalid for region message`() {
         val phone = "123"
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
@@ -72,7 +72,7 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with phone that causes parsing exception returns failed result`() {
+    fun `given phone causing parse exception when invoke then returns failed result and invalid format message`() {
         val phone = "invalidFormat"
         val regionCode = "US"
 
@@ -91,7 +91,7 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with valid phone and different region returns successful result`() {
+    fun `given valid phone and different region when invoke then returns successful result and null error message`() {
         val phone = "0791234567"
         val regionCode = "GB"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
@@ -106,13 +106,13 @@ class ValidatePhoneUseCaseTest {
     }
 
     @Test
-    fun `invoke with phone valid for one region but invalid for parse region returns failed result`() {
+    fun `given phone valid for one region but invalid for parse region when invoke then returns failed result and invalid for region message`() {
         val phone = "0791234567"
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
 
         every { mockPhoneNumberUtil.parse(phone, regionCode) } returns mockPhoneNumberProto
-        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns false // Key assumption
+        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns false
 
         val result = validatePhoneUseCase(phone, regionCode)
 

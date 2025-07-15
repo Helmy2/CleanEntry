@@ -5,11 +5,12 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ValidateFirstNameUseCaseTest {
 
-    private lateinit var validateFirstNameUseCase:ValidateFirstNameUseCase
+    private lateinit var validateFirstNameUseCase: ValidateFirstNameUseCase
 
     @BeforeTest
     fun setUp() {
@@ -17,7 +18,7 @@ class ValidateFirstNameUseCaseTest {
     }
 
     @Test
-    fun `invoke with empty string returns unsuccessful result`() {
+    fun `given empty string when invoke then returns unsuccessful result and not empty message`() {
         val result = validateFirstNameUseCase("")
         assertFalse(result.isSuccessful)
         assertEquals(
@@ -27,14 +28,14 @@ class ValidateFirstNameUseCaseTest {
     }
 
     @Test
-    fun `invoke with string containing only spaces returns unsuccessful result`() {
+    fun `given string containing only spaces when invoke then returns unsuccessful result and not empty message`() {
         val result = validateFirstNameUseCase("   ")
         assertFalse(result.isSuccessful)
         assertEquals(StringResource.FromString("Name cannot be empty."), result.errorMessage)
     }
 
     @Test
-    fun `invoke with single character string returns unsuccessful result`() {
+    fun `given single character string when invoke then returns unsuccessful result and min length message`() {
         val result = validateFirstNameUseCase("a")
         assertFalse(result.isSuccessful)
         assertEquals(
@@ -44,45 +45,44 @@ class ValidateFirstNameUseCaseTest {
     }
 
     @Test
-    fun `invoke with two character string returns successful result`() {
+    fun `given two character string when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("ab")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
 
     @Test
-    fun `invoke with string longer than two characters returns successful result`() {
+    fun `given string longer than two characters when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("abc")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
 
     @Test
-    fun `invoke with string containing leading trailing spaces and valid length returns successful result`() {
+    fun `given string with leading trailing spaces and valid length when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("  ab  ")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
 
     @Test
-    fun `invoke with string containing numbers and valid length returns successful result`() {
+    fun `given string containing numbers and valid length when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("ab12")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
 
     @Test
-    fun `invoke with string containing special characters and valid length returns successful result`() {
+    fun `given string containing special characters and valid length when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("ab!@")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
 
     @Test
-    fun `ValidateFirstNameUseCase invoke with string containing mixed case characters and valid length`() {
+    fun `given string containing mixed case characters and valid length when invoke then returns successful result and null error message`() {
         val result = validateFirstNameUseCase("aBcD")
         assertTrue(result.isSuccessful)
-        assertEquals(null, result.errorMessage)
+        assertNull(result.errorMessage)
     }
-
 }

@@ -18,8 +18,8 @@ class ValidatePasswordUseCaseTest {
     }
 
     @Test
-    fun `invoke with password shorter than 6 characters returns failed result`() {
-        val password = "12345" // 5 characters
+    fun `given password shorter than 6 chars when invoke then returns failed result and min length message`() {
+        val password = "12345"
         val result = validatePasswordUseCase(password)
 
         assertFalse(result.isSuccessful)
@@ -30,8 +30,8 @@ class ValidatePasswordUseCaseTest {
     }
 
     @Test
-    fun `invoke with password exactly 6 characters returns successful result`() {
-        val password = "123456" // 6 characters
+    fun `given password exactly 6 chars when invoke then returns successful result and null error message`() {
+        val password = "123456"
         val result = validatePasswordUseCase(password)
 
         assertTrue(result.isSuccessful)
@@ -39,8 +39,8 @@ class ValidatePasswordUseCaseTest {
     }
 
     @Test
-    fun `invoke with password longer than 6 characters returns successful result`() {
-        val password = "1234567" // 7 characters
+    fun `given password longer than 6 chars when invoke then returns successful result and null error message`() {
+        val password = "1234567"
         val result = validatePasswordUseCase(password)
 
         assertTrue(result.isSuccessful)
@@ -48,8 +48,8 @@ class ValidatePasswordUseCaseTest {
     }
 
     @Test
-    fun `invoke with empty password returns failed result`() {
-        val password = "" // 0 characters
+    fun `given empty password when invoke then returns failed result and min length message`() {
+        val password = ""
         val result = validatePasswordUseCase(password)
 
         assertFalse(result.isSuccessful)
@@ -60,17 +60,17 @@ class ValidatePasswordUseCaseTest {
     }
 
     @Test
-    fun `invoke with password containing spaces and valid length returns successful result`() {
-        val password = "pass word" // 9 characters
+    fun `given password with spaces and valid length when invoke then returns successful result and null error message`() {
+        val password = "pass word"
         val result = validatePasswordUseCase(password)
 
-        assertTrue(result.isSuccessful) // Assuming spaces count towards length
+        assertTrue(result.isSuccessful)
         assertNull(result.errorMessage)
     }
 
     @Test
-    fun `invoke with password containing special characters and valid length returns successful result`() {
-        val password = "p@sswOrd!" // 9 characters
+    fun `given password with special chars and valid length when invoke then returns successful result and null error message`() {
+        val password = "p@sswOrd!"
         val result = validatePasswordUseCase(password)
 
         assertTrue(result.isSuccessful)
