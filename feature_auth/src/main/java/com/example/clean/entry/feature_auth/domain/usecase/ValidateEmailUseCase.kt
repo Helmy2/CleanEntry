@@ -1,17 +1,18 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import android.util.Patterns
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
-import java.util.regex.Pattern
+
 
 /**
  * A use case that validates a user's email address.
  * According to business rules, the email must not be empty and must be in a valid format.
  */
-class ValidateEmailUseCase(
-    val emailPattern: Pattern = Patterns.EMAIL_ADDRESS
-) {
+class ValidateEmailUseCase {
+
+    private val emailRegex = Regex(
+        """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+"""
+    )
 
     /**
      * Executes the use case.
@@ -25,7 +26,7 @@ class ValidateEmailUseCase(
                 errorMessage = StringResource.FromString("Email cannot be empty.")
             )
         }
-        if (!emailPattern.matcher(email).matches()) {
+        if (!emailRegex.matches(email)) {
             return ValidationResult(
                 isSuccessful = false,
                 errorMessage = StringResource.FromString("That's not a valid email.")
