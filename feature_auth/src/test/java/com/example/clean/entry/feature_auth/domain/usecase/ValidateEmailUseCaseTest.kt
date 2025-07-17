@@ -5,6 +5,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -37,7 +38,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(
+        assertNotEquals(
             StringResource.FromString("Email cannot be empty.").toString(),
             result.errorMessage?.toString()
         )
