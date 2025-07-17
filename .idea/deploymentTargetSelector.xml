@@ -19,9 +19,6 @@
       <SelectionState runConfigName="feature_auth">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_defaultState_displaysCorrectly()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>
