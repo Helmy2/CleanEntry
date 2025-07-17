@@ -15,9 +15,9 @@ The project features a complete user authentication flow, including:
 
 ## 📖 Documentation
 
-- [**Case Study: A Deep Dive**](https://www.google.com/search?q=./CASE_STUDY.md "null"): A detailed explanation of the project's architecture and patterns.
+- [**Case Study: A Deep Dive**](Case_Study.md): A detailed explanation of the project's architecture and patterns.
 
-- [**Technologies & Rationale**](https://www.google.com/search?q=./TECHNOLOGIES.md "null"): An overview of why each key technology and library was chosen for this project.
+- [**Technologies & Rationale**](Technologies.md): An overview of why each key technology and library was chosen for this project.
 
 
 ## 📸 Screenshots
