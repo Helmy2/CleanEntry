@@ -6,9 +6,6 @@ import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePhoneUseCase
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -18,6 +15,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -37,8 +38,8 @@ class LoginViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
 
-        mockValidatePhoneUseCase = mockk()
-        mockValidatePasswordUseCase = mockk()
+        mockValidatePhoneUseCase = mock()
+        mockValidatePasswordUseCase = mock()
 
         loginViewModel = LoginViewModel(
             validatePhoneUseCase = mockValidatePhoneUseCase,
@@ -57,7 +58,7 @@ class LoginViewModelTest {
         val testRegion = loginViewModel.state.value.selectedCountryCode
         val mockValidationResult = ValidationResult(isSuccessful = true)
 
-        coEvery { mockValidatePhoneUseCase(testPhone, testRegion) } returns mockValidationResult
+        whenever(mockValidatePhoneUseCase(testPhone, testRegion)) doReturn mockValidationResult
 
         loginViewModel.state.test {
             assertEquals(LoginReducer.State(), awaitItem())
@@ -71,7 +72,7 @@ class LoginViewModelTest {
             cancelAndConsumeRemainingEvents()
         }
 
-        coVerify { mockValidatePhoneUseCase(testPhone, testRegion) }
+        verify(mockValidatePhoneUseCase).invoke(testPhone, testRegion)
     }
 
     @Test
@@ -84,7 +85,7 @@ class LoginViewModelTest {
             errorMessage = StringResource.FromString(errorMsg)
         )
 
-        coEvery { mockValidatePhoneUseCase(testPhone, testRegion) } returns mockValidationResult
+        whenever(mockValidatePhoneUseCase(testPhone, testRegion)) doReturn mockValidationResult
 
         loginViewModel.state.test {
             assertEquals(LoginReducer.State(), awaitItem())
@@ -94,12 +95,12 @@ class LoginViewModelTest {
             val updatedState = awaitItem()
             assertEquals(testPhone, updatedState.phone)
             assertNotNull(updatedState.phoneError)
-            assertEquals(errorMsg, updatedState.phoneError.asString(mockk(relaxed = true)))
+            assertEquals(errorMsg, updatedState.phoneError.asString(mock()))
             assertFalse(updatedState.isLoginButtonEnabled)
 
             cancelAndConsumeRemainingEvents()
         }
-        coVerify { mockValidatePhoneUseCase(testPhone, testRegion) }
+        verify(mockValidatePhoneUseCase).invoke(testPhone, testRegion)
     }
 
 
@@ -108,7 +109,7 @@ class LoginViewModelTest {
         val testPassword = "password123"
         val mockValidationResult = ValidationResult(isSuccessful = true)
 
-        coEvery { mockValidatePasswordUseCase(testPassword) } returns mockValidationResult
+        whenever(mockValidatePasswordUseCase(testPassword)) doReturn mockValidationResult
 
         loginViewModel.state.test {
             assertEquals(LoginReducer.State(), awaitItem())
@@ -122,7 +123,7 @@ class LoginViewModelTest {
 
             cancelAndConsumeRemainingEvents()
         }
-        coVerify { mockValidatePasswordUseCase(testPassword) }
+        verify(mockValidatePasswordUseCase).invoke(testPassword)
     }
 
     @Test
@@ -134,7 +135,7 @@ class LoginViewModelTest {
             errorMessage = StringResource.FromString(errorMsg)
         )
 
-        coEvery { mockValidatePasswordUseCase(testPassword) } returns mockValidationResult
+        whenever(mockValidatePasswordUseCase(testPassword)) doReturn mockValidationResult
 
         loginViewModel.state.test {
             assertEquals(LoginReducer.State(), awaitItem())
@@ -144,13 +145,13 @@ class LoginViewModelTest {
             val updatedState = awaitItem()
             assertEquals(testPassword, updatedState.password)
             assertNotNull(updatedState.passwordError)
-            assertEquals(errorMsg, updatedState.passwordError.asString(mockk(relaxed = true)))
+            assertEquals(errorMsg, updatedState.passwordError.asString(mock()))
             assertFalse(updatedState.isLoginButtonEnabled)
 
             cancelAndConsumeRemainingEvents()
         }
 
-        coVerify { mockValidatePasswordUseCase(testPassword) }
+        verify(mockValidatePasswordUseCase).invoke(testPassword)
     }
 
 
@@ -160,8 +161,8 @@ class LoginViewModelTest {
         val validPassword = "password123"
         val phoneRegion = loginViewModel.state.value.selectedCountryCode
 
-        coEvery { mockValidatePhoneUseCase(validPhone, phoneRegion) } returns ValidationResult(isSuccessful = true)
-        coEvery { mockValidatePasswordUseCase(validPassword) } returns ValidationResult(isSuccessful = true)
+        whenever(mockValidatePhoneUseCase(validPhone, phoneRegion)) doReturn ValidationResult(isSuccessful = true)
+        whenever(mockValidatePasswordUseCase(validPassword)) doReturn ValidationResult(isSuccessful = true)
 
         loginViewModel.handleEvent(LoginReducer.Event.PhoneChanged(validPhone))
         loginViewModel.handleEvent(LoginReducer.Event.PasswordChanged(validPassword))

@@ -5,8 +5,8 @@ import com.example.clean.entry.core.domain.model.StringResource
 import io.michaelrocks.libphonenumber.android.NumberParseException
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import io.michaelrocks.libphonenumber.android.Phonenumber
-import io.mockk.every
-import io.mockk.mockk
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,7 +21,7 @@ class ValidatePhoneUseCaseTest {
 
     @BeforeTest
     fun setUp() {
-        mockPhoneNumberUtil = mockk()
+        mockPhoneNumberUtil = mock()
         validatePhoneUseCase = ValidatePhoneUseCase(mockPhoneNumberUtil)
     }
 
@@ -44,8 +44,8 @@ class ValidatePhoneUseCaseTest {
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
 
-        every { mockPhoneNumberUtil.parse(phone, regionCode) } returns mockPhoneNumberProto
-        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns true
+        whenever(mockPhoneNumberUtil.parse(phone, regionCode)).thenReturn(mockPhoneNumberProto)
+        whenever(mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto)).thenReturn(true)
 
         val result = validatePhoneUseCase(phone, regionCode)
 
@@ -59,8 +59,8 @@ class ValidatePhoneUseCaseTest {
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
 
-        every { mockPhoneNumberUtil.parse(phone, regionCode) } returns mockPhoneNumberProto
-        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns false
+        whenever(mockPhoneNumberUtil.parse(phone, regionCode)).thenReturn(mockPhoneNumberProto)
+        whenever(mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto)).thenReturn(false)
 
         val result = validatePhoneUseCase(phone, regionCode)
 
@@ -76,10 +76,11 @@ class ValidatePhoneUseCaseTest {
         val phone = "invalidFormat"
         val regionCode = "US"
 
-        every { mockPhoneNumberUtil.parse(phone, regionCode) } throws NumberParseException(
-            NumberParseException.ErrorType.NOT_A_NUMBER,
-            "Test Error"
-        )
+        whenever(mockPhoneNumberUtil.parse(phone, regionCode)).thenThrow(
+            NumberParseException(
+                NumberParseException.ErrorType.NOT_A_NUMBER,
+                "Test Error"
+            ))
 
         val result = validatePhoneUseCase(phone, regionCode)
 
@@ -96,8 +97,8 @@ class ValidatePhoneUseCaseTest {
         val regionCode = "GB"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
 
-        every { mockPhoneNumberUtil.parse(phone, regionCode) } returns mockPhoneNumberProto
-        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns true
+        whenever(mockPhoneNumberUtil.parse(phone, regionCode)).thenReturn(mockPhoneNumberProto)
+        whenever(mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto)).thenReturn(true)
 
         val result = validatePhoneUseCase(phone, regionCode)
 
@@ -111,8 +112,8 @@ class ValidatePhoneUseCaseTest {
         val regionCode = "US"
         val mockPhoneNumberProto = Phonenumber.PhoneNumber()
 
-        every { mockPhoneNumberUtil.parse(phone, regionCode) } returns mockPhoneNumberProto
-        every { mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto) } returns false
+        whenever(mockPhoneNumberUtil.parse(phone, regionCode)).thenReturn(mockPhoneNumberProto)
+        whenever(mockPhoneNumberUtil.isValidNumber(mockPhoneNumberProto)).thenReturn(false)
 
         val result = validatePhoneUseCase(phone, regionCode)
 
