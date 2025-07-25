@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.apollo)
 }
 
 android {
@@ -56,9 +57,10 @@ dependencies {
     testImplementation(libs.mockk.agent)
 
     androidTestImplementation(kotlin("test"))
-//    androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.agent)
+
+    implementation(libs.apollo.runtime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -69,4 +71,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.example.clean.entry.feature_auth")
+    }
 }
