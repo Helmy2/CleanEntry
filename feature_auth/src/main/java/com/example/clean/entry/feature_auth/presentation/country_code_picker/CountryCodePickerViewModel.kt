@@ -8,6 +8,7 @@ import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
@@ -19,7 +20,7 @@ class CountryCodePickerViewModel(
 ) {
 
     override suspend fun initialDataLoad() {
-        countryRepository.getCountries().fold(
+        countryRepository.getCountries().first().fold(
             onSuccess = { countries ->
                 setState(CountryCodePickerReducer.Event.LoadCountriesSuccess(countries))
             },
