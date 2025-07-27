@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource
 ) : CountryRepository {
-    override fun getCountries(): Flow<Result<List<Country>>> {
+    override suspend fun getCountries(): Result<List<Country>> {
         return remoteDataSource.getCountries()
     }
 }

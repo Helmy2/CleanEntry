@@ -1,15 +1,13 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
@@ -21,13 +19,13 @@ class CountryCodePickerViewModel(
 ) {
 
     override suspend fun initialDataLoad() {
-        countryRepository.getCountries().first().fold(
+        countryRepository.getCountries().fold(
             onSuccess = { countries ->
-                setState(CountryCodePickerReducer.Event.CountriesLoaded(countries))
+                setState(CountryCodePickerReducer.Event.LoadCountriesSuccess(countries))
             },
             onFailure = {
-                // TODO show error
-                Log.d("TAG", ": $it")
+                val errorMessage = StringResource.FromString("Failed to load countries. Please try again.")
+                setState(CountryCodePickerReducer.Event.LoadCountriesFailed(errorMessage))
             }
         )
         val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
@@ -37,6 +35,10 @@ class CountryCodePickerViewModel(
 
     override fun handleEvent(event: CountryCodePickerReducer.Event) {
         when (event) {
+            is CountryCodePickerReducer.Event.LoadCountries -> viewModelScope.launch {
+                setState(event)
+                initialDataLoad()
+            }
             else -> setState(event)
         }
     }
