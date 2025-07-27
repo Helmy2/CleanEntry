@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.apollo)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -61,6 +62,9 @@ dependencies {
     androidTestImplementation(libs.mockk.agent)
 
     implementation(libs.apollo.runtime)
+    implementation(libs.androidx.room.ktx)
+
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
