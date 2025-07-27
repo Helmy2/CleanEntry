@@ -64,6 +64,10 @@ dependencies {
     implementation(libs.apollo.runtime)
     implementation(libs.androidx.room.ktx)
 
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
+
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)

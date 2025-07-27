@@ -3,12 +3,17 @@ package com.example.clean.entry.feature_auth.presentation.country_code_picker
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import androidx.paging.PagingData
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import com.example.clean.entry.core.mvi.BaseViewModel
+import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
@@ -20,17 +25,17 @@ class CountryCodePickerViewModel(
 ) {
 
     override suspend fun initialDataLoad() {
-        countryRepository.getCountries().first().fold(
-            onSuccess = { countries ->
-                setState(CountryCodePickerReducer.Event.LoadCountriesSuccess(countries))
-            },
-            onFailure = {
-                val errorMessage = StringResource.FromString("Failed to load countries. Please try again.")
-                setState(CountryCodePickerReducer.Event.LoadCountriesFailed(errorMessage))
-            }
-        )
         val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
         setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
+
+        countryRepository.getCountries()
+            .catch {
+                val errorMessage =
+                    StringResource.FromString("Failed to load countries. Please try again.")
+                setState(CountryCodePickerReducer.Event.LoadCountriesFailed(errorMessage))
+            }.let {
+                setState(CountryCodePickerReducer.Event.LoadCountriesSuccess(it))
+            }
     }
 
 
@@ -40,6 +45,7 @@ class CountryCodePickerViewModel(
                 setState(event)
                 initialDataLoad()
             }
+
             else -> setState(event)
         }
     }

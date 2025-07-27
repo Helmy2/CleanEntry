@@ -1,8 +1,8 @@
 package com.example.clean.entry.feature_auth.data.source.local
 
+import androidx.paging.PagingSource
 import com.example.clean.entry.feature_auth.data.source.local.dao.CountryDao
 import com.example.clean.entry.feature_auth.data.source.local.entity.CountryEntity
-import kotlinx.coroutines.flow.Flow
 
 /**
  * The local data source for managing country data in the Room database.
@@ -14,8 +14,8 @@ class CountryLocalDataSource(private val countryDao: CountryDao) {
     /**
      * Retrieves all countries from the database as a Flow.
      */
-    fun getCountries(): Flow<List<CountryEntity>> {
-        return countryDao.getAllCountries()
+    fun getCountries(): PagingSource<Int, CountryEntity> {
+        return countryDao.getCountries()
     }
 
     /**
