@@ -1,19 +1,24 @@
 package com.example.clean.entry.feature_auth.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.clean.entry.core.util.runCatchingOnIO
 import com.example.clean.entry.feature_auth.data.source.local.CountryLocalDataSource
-import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import com.example.clean.entry.feature_auth.data.source.remote.CountryRemoteDataSource
 import com.example.clean.entry.feature_auth.data.toCountry
 import com.example.clean.entry.feature_auth.data.toEntity
+import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+
+private const val PAGE_SIZE = 10
 
 /**
  * The concrete implementation of the CountryRepository.
@@ -24,11 +29,25 @@ class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource,
     private val localDataSource: CountryLocalDataSource
 ) : CountryRepository {
-    override suspend fun getCountries(): Flow<Result<List<Country>>> = flow {
-        val cachedCountries = localDataSource.getCountries().map { entities ->
-            entities.map { it.toCountry() }
+    override fun getCountries(): Flow<PagingData<Country>> = channelFlow {
+        val cachedCountries = Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { localDataSource.getCountries() }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                // Add a delay to simulate network latency
+                // This is just for demo purposes
+                // In a real app, you should handle this differently
+                // TODO: Remove this
+                delay(100)
+                it.toCountry()
+            }
         }
-        emit(Result.success(cachedCountries.first()))
+
+        trySend(cachedCountries.first())
 
         runCatchingOnIO {
             remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
@@ -37,7 +56,7 @@ class CountryRepositoryImpl(
         }
 
         cachedCountries.collectLatest {
-            emit(Result.success(it))
+            trySend(it)
         }
     }
 }

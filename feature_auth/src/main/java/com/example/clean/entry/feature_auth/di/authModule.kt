@@ -31,8 +31,7 @@ val authModule = module {
         Room.databaseBuilder(
             androidContext(),
             AppDatabase::class.java, "countries.db"
-        )
-            .createFromAsset("database/countries.db")
+        ).createFromAsset("database/countries.db")
             .build()
     }
     factory { get<AppDatabase>().countryDao() }

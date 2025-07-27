@@ -1,5 +1,6 @@
 package com.example.clean.entry.feature_auth.data.source.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -24,11 +25,13 @@ interface CountryDao {
     suspend fun insertAll(countries: List<CountryEntity>)
 
     /**
-     * Retrieves all countries from the database as a Flow.
-     * The Flow will automatically emit a new list whenever the data changes.
+     * Retrieves a PagingSource that loads pages of countries from the database.
+     * This is used by the Paging library to efficiently load data for the UI.
+     * The query now includes filtering for the search functionality.
      *
-     * @return A Flow emitting a list of all CountryEntity objects.
+     * @param query The search query to filter country names.
+     * @return A PagingSource for the Paging library.
      */
     @Query("SELECT * FROM countries ORDER BY name ASC")
-    fun getAllCountries(): Flow<List<CountryEntity>>
+    fun getCountries(): PagingSource<Int, CountryEntity>
 }
