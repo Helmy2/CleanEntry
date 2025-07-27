@@ -18,15 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.clean.entry.core.design_system.spacing
+import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.feature_auth.R
 
 @Composable
 fun CountryRow(
-    countryFlag: String,
-    countryCode: String,
-    countryName: String,
+    country: Country,
     isSelected: Boolean,
-    onClick: () -> Unit,
+    onClick: (Country) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -34,23 +33,23 @@ fun CountryRow(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
+                .clickable(onClick = { onClick(country) })
                 .padding(MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = countryFlag,
+                text = country.flagEmoji,
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
             Text(
-                text = countryCode,
+                text = country.code,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
             Text(
-                text = countryName,
+                text = country.name,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )

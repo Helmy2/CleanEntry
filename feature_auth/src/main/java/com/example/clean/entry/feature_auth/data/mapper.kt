@@ -9,9 +9,9 @@ import com.example.clean.entry.feature_auth.domain.model.Country
  */
 fun CountriesQuery.Country.toCountry(): Country {
     return Country(
-        name = this.name,
-        dialCode = "+${this.phone}",
-        code = this.code ?: "",
-        flagEmoji = this.emoji
+        name = name,
+        dialCode = "+${phone}",
+        code = code,
+        flagEmoji = emoji
     )
 }
