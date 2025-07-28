@@ -24,4 +24,8 @@ class CountryLocalDataSource(private val countryDao: CountryDao) {
     suspend fun insertCountries(countries: List<CountryEntity>) {
         countryDao.insertAll(countries)
     }
+
+    suspend fun getCountry(code: String): CountryEntity? {
+        return countryDao.getCountry(code)
+    }
 }

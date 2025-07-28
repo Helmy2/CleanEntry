@@ -25,13 +25,19 @@ interface CountryDao {
     suspend fun insertAll(countries: List<CountryEntity>)
 
     /**
-     * Retrieves a PagingSource that loads pages of countries from the database.
-     * This is used by the Paging library to efficiently load data for the UI.
-     * The query now includes filtering for the search functionality.
+     * Retrieves all countries from the database as a Flow.
      *
-     * @param query The search query to filter country names.
-     * @return A PagingSource for the Paging library.
+     * @return A Flow of CountryEntity objects representing the countries.
      */
     @Query("SELECT * FROM countries ORDER BY name ASC")
     fun getCountries(): PagingSource<Int, CountryEntity>
+
+    /**
+     * Retrieves a single country from the database based on its code.
+     *
+     * @param code The code of the country to retrieve.
+     * @return The CountryEntity object representing the country, or null if not found.
+     */
+    @Query("SELECT * FROM countries WHERE code = :code")
+    suspend fun getCountry(code: String): CountryEntity?
 }
