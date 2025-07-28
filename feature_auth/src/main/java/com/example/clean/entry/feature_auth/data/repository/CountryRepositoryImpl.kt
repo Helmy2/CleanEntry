@@ -42,7 +42,7 @@ class CountryRepositoryImpl(
                 // This is just for demo purposes
                 // In a real app, you should handle this differently
                 // TODO: Remove this
-                delay(100)
+                delay(10)
                 it.toCountry()
             }
         }
@@ -57,6 +57,12 @@ class CountryRepositoryImpl(
 
         cachedCountries.collectLatest {
             trySend(it)
+        }
+    }
+
+    override suspend fun getCountry(code: String): Result<Country> {
+        return runCatchingOnIO {
+            localDataSource.getCountry(code)?.toCountry() ?: throw Exception("Country not found")
         }
     }
 }

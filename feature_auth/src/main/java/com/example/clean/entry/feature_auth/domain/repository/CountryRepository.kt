@@ -10,4 +10,5 @@ import kotlinx.coroutines.flow.Flow
  */
 interface CountryRepository {
     fun getCountries(): Flow<PagingData<Country>>
+    suspend fun getCountry(code: String): Result<Country>
 }

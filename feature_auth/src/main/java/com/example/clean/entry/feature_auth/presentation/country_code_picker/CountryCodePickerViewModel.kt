@@ -3,17 +3,12 @@ package com.example.clean.entry.feature_auth.presentation.country_code_picker
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import androidx.paging.PagingData
 import com.example.clean.entry.core.domain.model.StringResource
-import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import com.example.clean.entry.core.mvi.BaseViewModel
-import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
+import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
@@ -44,6 +39,14 @@ class CountryCodePickerViewModel(
             is CountryCodePickerReducer.Event.LoadCountries -> viewModelScope.launch {
                 setState(event)
                 initialDataLoad()
+            }
+
+            is CountryCodePickerReducer.Event.CountrySelectedCode -> viewModelScope.launch {
+                countryRepository.getCountry(event.code).onSuccess {
+                    setState(
+                        CountryCodePickerReducer.Event.NavigateBackWithResult(it)
+                    )
+                }
             }
 
             else -> setState(event)
