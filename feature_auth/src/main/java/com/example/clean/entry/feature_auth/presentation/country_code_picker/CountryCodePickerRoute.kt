@@ -33,6 +33,7 @@ import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.CountryRow
+import com.example.clean.entry.feature_auth.presentation.components.CountryRowShimmer
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerReducer.Event.LoadCountries
 import com.example.clean.feature_auth.R
 import org.koin.compose.viewmodel.koinViewModel
@@ -77,7 +78,6 @@ fun CountryCodePickerScreen(
 
     Scaffold(
         topBar = {
-
             OutlinedTextField(
                 value = state.searchQuery,
                 onValueChange = {
@@ -150,18 +150,21 @@ fun CountryCodePickerScreen(
                                                 it.code
                                             )
                                         )
-                                    }
+                                    }, modifier = Modifier.padding(
+                                        top = MaterialTheme.spacing.small,
+                                        bottom = MaterialTheme.spacing.small
+                                    )
                                 )
                             }
                         }
 
                         if (countries.loadState.refresh == LoadState.Loading || countries.loadState.append == LoadState.Loading) {
-                            item {
-                                CircularProgressIndicator(
-                                    modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .wrapContentWidth(Alignment.CenterHorizontally)
+                            items(10) {
+                                CountryRowShimmer(
+                                    modifier = Modifier.padding(
+                                        top = MaterialTheme.spacing.small,
+                                        bottom = MaterialTheme.spacing.small
+                                    )
                                 )
                             }
                         }
