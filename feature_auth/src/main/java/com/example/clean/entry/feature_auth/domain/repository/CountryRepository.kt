@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.Flow
  * This lives in the domain layer and has no knowledge of the data source.
  */
 interface CountryRepository {
-    fun getCountries(): Flow<PagingData<Country>>
+    fun getCountries(query: String): Flow<PagingData<Country>>
     suspend fun getCountry(code: String): Result<Country>
 }

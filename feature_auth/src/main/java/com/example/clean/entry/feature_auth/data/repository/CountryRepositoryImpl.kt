@@ -29,13 +29,13 @@ class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource,
     private val localDataSource: CountryLocalDataSource
 ) : CountryRepository {
-    override fun getCountries(): Flow<PagingData<Country>> = channelFlow {
+    override fun getCountries(query: String): Flow<PagingData<Country>> = channelFlow {
         val cachedCountries = Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { localDataSource.getCountries() }
+            pagingSourceFactory = { localDataSource.getCountries(query) }
         ).flow.map { pagingData ->
             pagingData.map {
                 // Add a delay to simulate network latency

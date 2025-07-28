@@ -14,8 +14,8 @@ class CountryLocalDataSource(private val countryDao: CountryDao) {
     /**
      * Retrieves all countries from the database as a Flow.
      */
-    fun getCountries(): PagingSource<Int, CountryEntity> {
-        return countryDao.getCountries()
+    fun getCountries(query: String): PagingSource<Int, CountryEntity> {
+        return countryDao.getCountries(query)
     }
 
     /**

@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.clean.entry.feature_auth.data.source.local.entity.CountryEntity
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object (DAO) for the countries table.
@@ -29,8 +28,8 @@ interface CountryDao {
      *
      * @return A Flow of CountryEntity objects representing the countries.
      */
-    @Query("SELECT * FROM countries ORDER BY name ASC")
-    fun getCountries(): PagingSource<Int, CountryEntity>
+    @Query("SELECT * FROM countries WHERE name LIKE '%' || :query || '%' ORDER BY name ASC")
+    fun getCountries(query: String): PagingSource<Int, CountryEntity>
 
     /**
      * Retrieves a single country from the database based on its code.
