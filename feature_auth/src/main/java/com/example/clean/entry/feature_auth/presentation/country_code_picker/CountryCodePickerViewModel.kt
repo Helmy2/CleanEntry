@@ -25,7 +25,7 @@ class CountryCodePickerViewModel(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val countryFlow = state
+    private val countryFlow = state
         .debounce(300L)
         .map { it.searchQuery }
         .flatMapLatest { query ->
@@ -41,7 +41,7 @@ class CountryCodePickerViewModel(
     override suspend fun initialDataLoad() {
         val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
         setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
-        setState(CountryCodePickerReducer.Event.LoadCountriesSuccess(countryFlow))
+        setState(CountryCodePickerReducer.Event.CountryPagingDataFlow(countryFlow))
     }
 
 

@@ -1,14 +1,12 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
 import androidx.paging.PagingData
-import androidx.paging.filter
 import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.Reducer
 import com.example.clean.entry.feature_auth.domain.model.Country
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 
 /**
  * Defines the contract for the CountryCodePicker screen and acts as its Reducer.
@@ -20,20 +18,13 @@ object CountryCodePickerReducer :
         val searchQuery: String = "",
         val selectedCountryCode: String? = null,
         val status: Status = Status.Loading,
-        private val countryFlow: Flow<PagingData<Country>> = flowOf(),
-    ) : Reducer.ViewState {
-        val filteredCountryFlow: Flow<PagingData<Country>>
-            get() = countryFlow.map { country ->
-                    country.filter {
-                        it.name.contains(searchQuery, true)
-                    }
-                }
-    }
+        val countryFlow: Flow<PagingData<Country>> = flowOf(),
+    ) : Reducer.ViewState
 
     sealed interface Event : Reducer.ViewEvent {
         data object LoadCountries : Event
         data class CountrySelectedCode(val code: String) : Event
-        data class LoadCountriesSuccess(val countryFlow: Flow<PagingData<Country>>) : Event
+        data class CountryPagingDataFlow(val countryFlow: Flow<PagingData<Country>>) : Event
         data class LoadCountriesFailed(val errorMessage: StringResource) : Event
         data class SearchQueryChanged(val query: String) : Event
         data class NavigateBackWithResult(val country: Country) : Event
@@ -48,7 +39,7 @@ object CountryCodePickerReducer :
         event: Event
     ): Pair<State, Effect?> {
         return when (event) {
-            is Event.LoadCountriesSuccess -> {
+            is Event.CountryPagingDataFlow -> {
                 previousState.copy(
                     status = Status.Idle,
                     countryFlow = event.countryFlow
