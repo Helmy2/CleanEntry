@@ -1,40 +1,65 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.feature_auth.navigation.AuthDestination
+import androidx.paging.cachedIn
+import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
+import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
+import com.example.clean.entry.feature_auth.navigation.AuthDestination
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
-    val savedStateHandle : SavedStateHandle
+    val countryRepository: CountryRepository,
+    val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
     reducer = CountryCodePickerReducer, initialState = CountryCodePickerReducer.State()
 ) {
 
-    private val allCountries = listOf(
-        Country("Egypt", "+20", "EG", "🇪🇬"),
-        Country("Saudi Arabia", "+966", "SA", "🇸🇦"),
-        Country("United Kingdom", "+44", "GB", "🇬🇧"),
-        Country("Canada", "+1", "CA", "🇨🇦"),
-        Country("France", "+33", "FR", "🇫🇷"),
-        Country("Spain", "+34", "ES", "🇪🇸"),
-        Country("Italy", "+39", "IT", "🇮🇹"),
-        Country("United States", "+1", "US", "🇺🇸")
-    )
-
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val countryFlow = state
+        .debounce(300L)
+        .map { it.searchQuery }
+        .flatMapLatest { query ->
+            countryRepository.getCountries(query)
+        }
+        .catch {
+            val errorMessage =
+                StringResource.FromString("Failed to load countries. Please try again.")
+            setState(CountryCodePickerReducer.Event.LoadCountriesFailed(errorMessage))
+        }
+        .cachedIn(viewModelScope)
 
     override suspend fun initialDataLoad() {
-        setState(CountryCodePickerReducer.Event.CountriesLoaded(allCountries))
         val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
         setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
+        setState(CountryCodePickerReducer.Event.CountryPagingDataFlow(countryFlow))
     }
 
 
     override fun handleEvent(event: CountryCodePickerReducer.Event) {
         when (event) {
+            is CountryCodePickerReducer.Event.LoadCountries -> viewModelScope.launch {
+                setState(event)
+                initialDataLoad()
+            }
+
+            is CountryCodePickerReducer.Event.CountrySelectedCode -> viewModelScope.launch {
+                countryRepository.getCountry(event.code).onSuccess {
+                    setState(
+                        CountryCodePickerReducer.Event.NavigateBackWithResult(it)
+                    )
+                }
+            }
+
             else -> setState(event)
         }
     }

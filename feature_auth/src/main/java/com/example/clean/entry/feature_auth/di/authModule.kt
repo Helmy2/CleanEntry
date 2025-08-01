@@ -1,5 +1,12 @@
 package com.example.clean.entry.feature_auth.di
 
+import androidx.room.Room
+import com.apollographql.apollo.ApolloClient
+import com.example.clean.entry.feature_auth.data.repository.CountryRepositoryImpl
+import com.example.clean.entry.feature_auth.data.source.local.AppDatabase
+import com.example.clean.entry.feature_auth.data.source.local.CountryLocalDataSource
+import com.example.clean.entry.feature_auth.data.source.remote.CountryRemoteDataSource
+import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateEmailUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePasswordUseCase
@@ -10,6 +17,7 @@ import com.example.clean.entry.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationViewModel
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -19,14 +27,36 @@ import org.koin.dsl.module
  * This provides all the necessary dependencies for auth-related classes.
  */
 val authModule = module {
-    single { PhoneNumberUtil.createInstance(androidContext()) }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java, "countries.db"
+        ).createFromAsset("database/countries.db")
+            .build()
+    }
+    factory { get<AppDatabase>().countryDao() }
 
-    factory{ ValidateEmailUseCase() }
+
+    single {
+        ApolloClient.Builder()
+            .serverUrl("https://countries.trevorblades.com/graphql")
+            .build()
+    }
+
+    factoryOf(::CountryLocalDataSource)
+    factoryOf(::CountryRemoteDataSource)
+
+    factoryOf(::CountryRepositoryImpl) { bind<CountryRepository>() }
+
+    // --- DOMAIN LAYER ---
+    single { PhoneNumberUtil.createInstance(androidContext()) }
+    factoryOf(::ValidateEmailUseCase)
     factoryOf(::ValidateFirstNameUseCase)
     factoryOf(::ValidateSurnameUseCase)
     factoryOf(::ValidatePhoneUseCase)
     factoryOf(::ValidatePasswordUseCase)
 
+    // --- PRESENTATION LAYER ---
     viewModelOf(::RegistrationViewModel)
     viewModelOf(::LoginViewModel)
     viewModelOf(::CountryCodePickerViewModel)
