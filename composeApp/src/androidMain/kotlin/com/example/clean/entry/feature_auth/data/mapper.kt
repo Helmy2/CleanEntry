@@ -1,6 +1,6 @@
 package com.example.clean.entry.feature_auth.data
 
-import com.example.clean.entry.feature_auth.CountriesQuery
+import com.example.clean.entry.CountriesQuery
 import com.example.clean.entry.feature_auth.data.source.local.entity.CountryEntity
 import com.example.clean.entry.feature_auth.domain.model.Country
 

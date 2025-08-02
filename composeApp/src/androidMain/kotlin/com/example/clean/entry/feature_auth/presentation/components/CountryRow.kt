@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.clean.core.components.shimmer
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.feature_auth.R
+import com.example.clean.entry.R
 
 @Composable
 fun CountryRow(

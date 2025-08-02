@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.clean.entry.R
 import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.PhoneTextField
@@ -26,7 +27,6 @@ import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.core.domain.model.stringResource
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
-import com.example.clean.feature_auth.R
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
