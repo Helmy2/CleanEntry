@@ -20,6 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "CleanEntry"
-include(":app")
+include(":composeApp")
 include(":core")
 include(":feature_auth")
