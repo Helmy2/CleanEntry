@@ -2,7 +2,7 @@ package com.example.clean.entry.feature_auth.data.source.remote
 
 import com.apollographql.apollo.ApolloClient
 import com.example.clean.entry.core.util.runCatchingOnIO
-import com.example.clean.entry.feature_auth.CountriesQuery
+import com.example.clean.entry.CountriesQuery
 import com.example.clean.entry.feature_auth.data.toCountry
 import com.example.clean.entry.feature_auth.domain.model.Country
 

@@ -30,7 +30,7 @@ import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.CountryRow
 import com.example.clean.entry.feature_auth.presentation.components.CountryRowShimmer
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerReducer.Event.LoadCountries
-import com.example.clean.feature_auth.R
+import com.example.clean.entry.R
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

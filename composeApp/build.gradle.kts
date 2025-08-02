@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -7,6 +10,9 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.apollo)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -32,8 +38,14 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
             implementation(project(":core"))
-            implementation(project(":feature_auth"))
+            implementation(libs.libphonenumber.android)
+            implementation(libs.apollo.runtime)
+            implementation(libs.androidx.room.ktx)
+            implementation(libs.androidx.room.paging)
+            implementation(libs.androidx.paging.runtime.ktx)
+            implementation(libs.androidx.paging.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -76,6 +88,13 @@ android {
 }
 
 dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+
     debugImplementation(compose.uiTooling)
 }
 
+apollo {
+    service("service") {
+        packageName.set("com.example.clean.entry")
+    }
+}
