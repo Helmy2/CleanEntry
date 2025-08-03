@@ -8,12 +8,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.clean.core.R
+import cleanentry.core.generated.resources.Res
+import cleanentry.core.generated.resources.hide_password
+import cleanentry.core.generated.resources.show_password
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * A specialized AppTextField for password input.
@@ -58,8 +60,8 @@ fun PasswordTextField(
                 Icons.Filled.Visibility
             else Icons.Filled.VisibilityOff
 
-            val description = if (isVisible) stringResource(R.string.hide_password) else stringResource(
-                R.string.show_password
+            val description = if (isVisible) stringResource(Res.string.hide_password) else stringResource(
+                Res.string.show_password
             )
 
             IconButton(onClick = onVisibilityToggle) {
@@ -69,7 +71,7 @@ fun PasswordTextField(
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun PasswordTextFieldPreview() {
     PasswordTextField(
@@ -83,7 +85,7 @@ fun PasswordTextFieldPreview() {
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun PasswordTextFieldErrorPreview() {
     PasswordTextField(

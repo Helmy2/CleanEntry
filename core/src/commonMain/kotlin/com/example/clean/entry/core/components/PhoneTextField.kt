@@ -14,11 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.clean.core.R
+import cleanentry.core.generated.resources.Res
+import cleanentry.core.generated.resources.select_country_code
 import com.example.clean.entry.core.design_system.spacing
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * A specialized text field for phone number input.
@@ -82,14 +83,14 @@ fun PhoneTextField(
 
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = stringResource(R.string.select_country_code)
+                    contentDescription = stringResource(Res.string.select_country_code)
                 )
             }
         }
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun PhoneTextFieldPreview() {
     PhoneTextField(

@@ -1,12 +1,11 @@
 package com.example.clean.entry.core.domain.model
 
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 
 
 sealed interface StringResource {
-    class FromId(@param:StringRes val id: Int, vararg val args: Any) : StringResource
+    class FromId(val id: org.jetbrains.compose.resources.StringResource, vararg val args: Any) : StringResource
     data class FromString(val value: String) : StringResource
 }
 
