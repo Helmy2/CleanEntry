@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.clean.core.components.shimmer
+import com.example.clean.entry.core.components.shimmer
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.R

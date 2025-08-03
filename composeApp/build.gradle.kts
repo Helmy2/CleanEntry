@@ -1,6 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
-import org.gradle.kotlin.dsl.kotlin
-import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -46,16 +43,21 @@ kotlin {
             implementation(libs.androidx.room.paging)
             implementation(libs.androidx.paging.runtime.ktx)
             implementation(libs.androidx.paging.compose)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.navigation.composee)
         }
     }
 }

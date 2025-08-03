@@ -1,0 +1,16 @@
+package com.example.clean.entry.core.design_system
+
+import androidx.compose.material3.ColorScheme
+import androidx.compose.runtime.Composable
+
+@Composable
+actual fun getColorScheme(
+    darkTheme: Boolean,
+    dynamicColor: Boolean
+): ColorScheme {
+    return if (darkTheme) {
+        LightColorScheme
+    } else {
+        DarkColorScheme
+    }
+}
