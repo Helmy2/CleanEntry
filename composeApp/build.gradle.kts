@@ -36,18 +36,14 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(project(":core"))
             implementation(libs.libphonenumber.android)
-            implementation(libs.apollo.runtime)
-            implementation(libs.androidx.room.ktx)
-            implementation(libs.androidx.room.paging)
+            implementation(libs.koin.android)
+
             implementation(libs.androidx.paging.runtime.ktx)
             implementation(libs.androidx.paging.compose)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.android)
         }
         commonMain.dependencies {
+            implementation(project(":core"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -58,6 +54,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.navigation.composee)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+
+            implementation(libs.apollo.runtime)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.paging)
         }
     }
 }
