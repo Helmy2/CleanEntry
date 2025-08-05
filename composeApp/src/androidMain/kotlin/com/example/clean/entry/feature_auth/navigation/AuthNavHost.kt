@@ -5,7 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.domain.model.CountryData
+import com.example.clean.entry.feature_auth.domain.model.toCountry
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
 import com.example.clean.entry.feature_auth.presentation.login.LoginRoute
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationRoute
@@ -23,16 +24,16 @@ fun AuthNavHost(modifier: Modifier = Modifier, onSuccess: () -> Unit) {
         modifier = modifier,
     ) {
         composable<AuthDestination.Login> { backStackEntry ->
-            val countryResult = backStackEntry.savedStateHandle.get<Country>(COUNTRY_RESULT_KEY)
+            val countryResult = backStackEntry.savedStateHandle.get<CountryData>(COUNTRY_RESULT_KEY)
             LoginRoute(
                 onCreateAccountClick = { navController.navigate(AuthDestination.Registration) },
                 onNavigateToCountryPicker = {
                     navController.navigate(AuthDestination.CountryCodePicker(it.code))
                 },
                 onLoginSuccess = onSuccess,
-                countryResult = countryResult,
+                countryResult = countryResult?.toCountry(),
                 clearCountryResult = {
-                    backStackEntry.savedStateHandle.remove<Country>(
+                    backStackEntry.savedStateHandle.remove<CountryData>(
                         COUNTRY_RESULT_KEY
                     )
                 },
@@ -40,9 +41,9 @@ fun AuthNavHost(modifier: Modifier = Modifier, onSuccess: () -> Unit) {
         }
 
         composable<AuthDestination.Registration> { backStackEntry ->
-            val countryResult = backStackEntry.savedStateHandle.get<Country>(COUNTRY_RESULT_KEY)
-            RegistrationRoute(countryResult = countryResult, clearCountryResult = {
-                backStackEntry.savedStateHandle.remove<Country>(
+            val countryResult = backStackEntry.savedStateHandle.get<CountryData>(COUNTRY_RESULT_KEY)
+            RegistrationRoute(countryResult = countryResult?.toCountry(), clearCountryResult = {
+                backStackEntry.savedStateHandle.remove<CountryData>(
                     COUNTRY_RESULT_KEY
                 )
             }, onNavigateToCountryPicker = {

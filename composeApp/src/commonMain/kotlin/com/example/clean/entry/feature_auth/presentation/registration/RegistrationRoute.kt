@@ -14,11 +14,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.clean.entry.R
+import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.continue_label
+import cleanentry.composeapp.generated.resources.email_label
+import cleanentry.composeapp.generated.resources.email_placeholder
+import cleanentry.composeapp.generated.resources.name_label
+import cleanentry.composeapp.generated.resources.name_placeholder
+import cleanentry.composeapp.generated.resources.phone_placeholder
+import cleanentry.composeapp.generated.resources.sign_up
+import cleanentry.composeapp.generated.resources.surname_label
+import cleanentry.composeapp.generated.resources.surname_placeholder
 import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.PhoneTextField
@@ -27,6 +35,7 @@ import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.core.domain.model.stringResource
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -84,7 +93,7 @@ fun RegistrationScreen(
     Scaffold(
         topBar = {
             TopBarWithBackNavigation(
-                title = stringResource(R.string.sign_up),
+                title = stringResource(Res.string.sign_up),
                 onBackClick = onBackClick,
                 modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
@@ -106,8 +115,8 @@ fun RegistrationScreen(
             AppTextField(
                 value = state.firstName,
                 onValueChange = { onEvent(RegistrationReducer.Event.FirstNameChanged(it)) },
-                labelText = stringResource(R.string.name_label),
-                placeholderText = stringResource(R.string.name_placeholder),
+                labelText = stringResource(Res.string.name_label),
+                placeholderText = stringResource(Res.string.name_placeholder),
                 isError = state.firstNameError != null,
                 supportingText = state.firstNameError?.let { stringResource(it) },
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -118,8 +127,8 @@ fun RegistrationScreen(
             AppTextField(
                 value = state.surname,
                 onValueChange = { onEvent(RegistrationReducer.Event.SurnameChanged(it)) },
-                labelText = stringResource(R.string.surname_label),
-                placeholderText = stringResource(R.string.surname_placeholder),
+                labelText = stringResource(Res.string.surname_label),
+                placeholderText = stringResource(Res.string.surname_placeholder),
                 isError = state.surnameError != null,
                 supportingText = state.surnameError?.let { stringResource(it) },
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -130,10 +139,10 @@ fun RegistrationScreen(
             AppTextField(
                 value = state.email,
                 onValueChange = { onEvent(RegistrationReducer.Event.EmailChanged(it)) },
-                labelText = stringResource(R.string.email_label),
+                labelText = stringResource(Res.string.email_label),
                 isError = state.emailError != null,
                 supportingText = state.emailError?.let { stringResource(it) },
-                placeholderText = stringResource(R.string.email_placeholder),
+                placeholderText = stringResource(Res.string.email_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
                 )
@@ -147,7 +156,7 @@ fun RegistrationScreen(
                 countryFlag = state.selectedCountryFlag,
                 isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
-                placeholderText = stringResource(R.string.phone_placeholder),
+                placeholderText = stringResource(Res.string.phone_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
                 )
@@ -156,7 +165,7 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             AppButton(
-                text = stringResource(R.string.continue_label),
+                text = stringResource(Res.string.continue_label),
                 onClick = { onEvent(RegistrationReducer.Event.Submit) },
                 enabled = state.isContinueButtonEnabled,
                 isLoading = state.isLoading,

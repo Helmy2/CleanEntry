@@ -13,9 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.clean.entry.R
+import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.back
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +35,7 @@ fun TopBarWithBackNavigation(
             content = {
                 Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = stringResource(R.string.back)
+                    contentDescription = stringResource(Res.string.back)
                 )
             },
         )
