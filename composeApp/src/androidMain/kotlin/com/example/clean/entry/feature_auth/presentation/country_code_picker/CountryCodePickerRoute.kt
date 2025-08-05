@@ -17,33 +17,36 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.back
+import cleanentry.composeapp.generated.resources.search
 import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.domain.model.CountryData
 import com.example.clean.entry.feature_auth.presentation.components.CountryRow
 import com.example.clean.entry.feature_auth.presentation.components.CountryRowShimmer
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerReducer.Event.LoadCountries
-import com.example.clean.entry.R
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CountryCodePickerRoute(
     viewModel: CountryCodePickerViewModel = koinViewModel(),
-    setResult: (Country) -> Unit,
+    setResult: (CountryData) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     ObserveEffect(viewModel.effect) { effect ->
         when (effect) {
             is CountryCodePickerReducer.Effect.NavigateBackWithResult -> {
-                val result = Country(
+                val result = CountryData(
                     dialCode = effect.country.dialCode,
                     code = effect.country.code,
                     flagEmoji = effect.country.flagEmoji,
@@ -80,13 +83,13 @@ fun CountryCodePickerScreen(
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(R.string.search)
+                        contentDescription = stringResource(Res.string.search)
                     )
                 },
                 singleLine = true,
                 placeholder = {
                     Text(
-                        text = stringResource(R.string.search),
+                        text = stringResource(Res.string.search),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 },
@@ -102,7 +105,7 @@ fun CountryCodePickerScreen(
                         content = {
                             Icon(
                                 imageVector = Icons.Default.ArrowBackIosNew,
-                                contentDescription = stringResource(R.string.back)
+                                contentDescription = stringResource(Res.string.back)
                             )
                         },
                     )

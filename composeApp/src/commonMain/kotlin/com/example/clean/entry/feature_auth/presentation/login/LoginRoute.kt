@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,19 +18,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.continue_label
+import cleanentry.composeapp.generated.resources.create_account
+import cleanentry.composeapp.generated.resources.login
+import cleanentry.composeapp.generated.resources.password_label
+import cleanentry.composeapp.generated.resources.password_placeholder
+import cleanentry.composeapp.generated.resources.phone_placeholder
+import cleanentry.composeapp.generated.resources.please_fill_the_details_and_log_in
+import cleanentry.composeapp.generated.resources.you_don_t_have_an_account
 import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.core.domain.model.stringResource
+import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.R
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -93,7 +99,7 @@ fun LoginScreen(
     Scaffold(
         topBar = {
             Text(
-                text = stringResource(R.string.login),
+                text = stringResource(Res.string.login),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -113,7 +119,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.please_fill_the_details_and_log_in),
+                text = stringResource(Res.string.please_fill_the_details_and_log_in),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.Start)
             )
@@ -129,7 +135,7 @@ fun LoginScreen(
                 countryFlag = state.selectedCountryFlag,
                 isError = state.phoneError == null,
                 supportingText = state.phoneError?.let { stringResource(it) },
-                placeholderText = stringResource(R.string.phone_placeholder),
+                placeholderText = stringResource(Res.string.phone_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next
                 )
@@ -140,12 +146,12 @@ fun LoginScreen(
             PasswordTextField(
                 value = state.password,
                 onValueChange = { onEvent(LoginReducer.Event.PasswordChanged(it)) },
-                labelText = stringResource(R.string.password_label),
+                labelText = stringResource(Res.string.password_label),
                 isVisible = state.isPasswordVisible,
                 onVisibilityToggle = { onEvent(LoginReducer.Event.TogglePasswordVisibility) },
                 isError = state.passwordError != null,
                 supportingText = state.passwordError?.let { stringResource(it) },
-                placeholderText = stringResource(R.string.password_placeholder),
+                placeholderText = stringResource(Res.string.password_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
                 )
@@ -154,7 +160,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             AppButton(
-                text = stringResource(R.string.continue_label),
+                text = stringResource(Res.string.continue_label),
                 onClick = { onEvent(LoginReducer.Event.LoginClicked) },
                 enabled = state.isLoginButtonEnabled,
                 isLoading = state.isLoading,
@@ -169,11 +175,11 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = stringResource(R.string.you_don_t_have_an_account),
+                    text = stringResource(Res.string.you_don_t_have_an_account),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(R.string.create_account),
+                    text = stringResource(Res.string.create_account),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable(onClick = onCreateAccountClick)

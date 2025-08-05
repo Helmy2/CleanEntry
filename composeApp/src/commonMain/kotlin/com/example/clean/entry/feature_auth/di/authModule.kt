@@ -11,7 +11,6 @@ import com.example.clean.entry.feature_auth.domain.usecase.ValidateFirstNameUseC
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateSurnameUseCase
-import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationViewModel
 import org.koin.core.module.Module
@@ -53,5 +52,4 @@ val authModule = module {
     // --- PRESENTATION LAYER ---
     viewModelOf(::RegistrationViewModel)
     viewModelOf(::LoginViewModel)
-    viewModelOf(::CountryCodePickerViewModel)
 }

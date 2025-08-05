@@ -20,12 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.selected
 import com.example.clean.entry.core.components.shimmer
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.R
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CountryRow(
@@ -62,7 +63,7 @@ fun CountryRow(
             if (isSelected) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
-                    contentDescription = stringResource(R.string.selected),
+                    contentDescription = stringResource(Res.string.selected),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

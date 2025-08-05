@@ -61,6 +61,7 @@ kotlin {
             implementation(libs.apollo.runtime)
 
             implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
             implementation(libs.androidx.room.paging)
         }
     }
