@@ -1,10 +1,8 @@
 package com.example.clean.entry.feature_auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.domain.model.StringResource
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
-import io.michaelrocks.libphonenumber.android.Phonenumber
-
+import com.example.clean.entry.core.domain.model.ValidationResult
+import com.example.clean.entry.feature_auth.util.PhoneNumberUtil
 
 /**
  * A use case that validates a phone number using Google's libphonenumber.
@@ -27,8 +25,7 @@ class ValidatePhoneUseCase(private val phoneNumberUtil: PhoneNumberUtil) {
             )
         }
         return try {
-            val phoneNumberProto: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phone, regionCode)
-            val isValid = phoneNumberUtil.isValidNumber(phoneNumberProto)
+            val isValid = phoneNumberUtil.isValidNumber(phone, regionCode)
             if (isValid) {
                 ValidationResult(isSuccessful = true)
             } else {

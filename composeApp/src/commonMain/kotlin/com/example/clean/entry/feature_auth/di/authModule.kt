@@ -1,6 +1,5 @@
 package com.example.clean.entry.feature_auth.di
 
-import androidx.room.Room
 import com.apollographql.apollo.ApolloClient
 import com.example.clean.entry.feature_auth.data.repository.CountryRepositoryImpl
 import com.example.clean.entry.feature_auth.data.source.local.AppDatabase
@@ -15,25 +14,21 @@ import com.example.clean.entry.feature_auth.domain.usecase.ValidateSurnameUseCas
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationViewModel
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
-import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+
+expect val authPlatformModule: Module
 
 /**
  * Koin module for the authentication feature.
  * This provides all the necessary dependencies for auth-related classes.
  */
 val authModule = module {
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java, "countries.db"
-        ).createFromAsset("database/countries.db")
-            .build()
-    }
+    includes(authPlatformModule)
+
     factory { get<AppDatabase>().countryDao() }
 
 
@@ -49,7 +44,6 @@ val authModule = module {
     factoryOf(::CountryRepositoryImpl) { bind<CountryRepository>() }
 
     // --- DOMAIN LAYER ---
-    single { PhoneNumberUtil.createInstance(androidContext()) }
     factoryOf(::ValidateEmailUseCase)
     factoryOf(::ValidateFirstNameUseCase)
     factoryOf(::ValidateSurnameUseCase)
