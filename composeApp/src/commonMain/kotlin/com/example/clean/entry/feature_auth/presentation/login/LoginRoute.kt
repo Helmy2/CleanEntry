@@ -38,6 +38,7 @@ import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.stringResource
 import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.presentation.components.NativeAppButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -159,7 +160,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            AppButton(
+            NativeAppButton(
                 text = stringResource(Res.string.continue_label),
                 onClick = { onEvent(LoginReducer.Event.LoginClicked) },
                 enabled = state.isLoginButtonEnabled,

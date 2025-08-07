@@ -1,10 +1,18 @@
 package com.example.clean.entry.feature_auth.presentation.login
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.window.ComposeUIViewController
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.util.NativeViewFactory
 import platform.UIKit.UIViewController
 
+val LocalNativeViewFactory = staticCompositionLocalOf<NativeViewFactory> {
+    error("No view factory provided.")
+}
+
 fun LoginViewController(
+    nativeViewFactory: NativeViewFactory,
     viewModel: LoginViewModel,
     onNavigateToCountryPicker: (Country) -> Unit,
     onLoginSuccess: () -> Unit,
@@ -13,6 +21,7 @@ fun LoginViewController(
     clearCountryResult: () -> Unit,
 ): UIViewController {
     return ComposeUIViewController {
+        CompositionLocalProvider(LocalNativeViewFactory provides nativeViewFactory) {
         LoginRoute(
             viewModel = viewModel,
             onNavigateToCountryPicker = onNavigateToCountryPicker,
@@ -20,6 +29,6 @@ fun LoginViewController(
             onCreateAccountClick = onCreateAccountClick,
             countryResult = countryResult,
             clearCountryResult = clearCountryResult
-        )
+        )}
     }
 }
