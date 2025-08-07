@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.apollo) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.skie) apply false
 
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false

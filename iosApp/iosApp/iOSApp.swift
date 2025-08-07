@@ -6,6 +6,7 @@ struct iOSApp: App {
     
     init() {
         InitKoinKt.doInitKoin()
+        PhoneNumberUtil_iosKt.phoneNumberValidatorProvider = IosPhoneNumberValidatorProvider()
     }
     
     var body: some Scene {
