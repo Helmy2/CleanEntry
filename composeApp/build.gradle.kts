@@ -29,6 +29,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            freeCompilerArgs += "-Xbinary=bundleId=com.example.clean.entry"
         }
     }
     
@@ -36,10 +37,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-
             implementation(libs.libphonenumber.android)
             implementation(libs.koin.android)
-
             implementation(libs.androidx.paging.runtime.ktx)
             implementation(libs.androidx.paging.compose)
         }
@@ -64,6 +63,11 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.androidx.room.paging)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.turbine)
+            implementation(libs.coroutines.test)
         }
     }
 }
