@@ -19,7 +19,7 @@
       </SwiftPackageManagerProjectSettings>
     </option>
   </component>
-  <component name="SwiftPackageManagerWorkspace">
+  <component name="SwiftPackageManagerWorkspace" PROJECT_DIR="$PROJECT_DIR$/iosApp">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
 </project>
