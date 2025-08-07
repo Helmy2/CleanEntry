@@ -15,6 +15,7 @@ struct LoginView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIViewController {
         return LoginViewControllerKt.LoginViewController(
+            nativeViewFactory: IOSNativeViewFactory.shared,
             viewModel: viewModel,
             onNavigateToCountryPicker: onNavigateToCountryPicker,
             onLoginSuccess: onLoginSuccess,
