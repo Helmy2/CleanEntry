@@ -29,18 +29,41 @@ class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource,
     private val localDataSource: CountryLocalDataSource
 ) : CountryRepository {
-    override fun getCountries(query: String): Flow<PagingData<Country>> = channelFlow {
+    override fun getPagingCountries(query: String): Flow<PagingData<Country>> = channelFlow {
         val cachedCountries = Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { localDataSource.getCountries(query) }
+            pagingSourceFactory = { localDataSource.getPagingCountries(query) }
         ).flow.map { pagingData ->
             pagingData.map {
                 // Add a delay to simulate network latency
                 // This is just for demo purposes
                 // In a real app, you should handle this differently
+                // TODO: Remove this
+                delay(5)
+                it.toCountry()
+            }
+        }
+
+        trySend(cachedCountries.first())
+
+        runCatchingOnIO {
+            remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
+                localDataSource.insertCountries(freshCountries.map { it.toEntity() })
+            }
+        }
+
+        cachedCountries.collectLatest {
+            trySend(it)
+        }
+    }
+
+    override fun getCountries(query: String): Flow<List<Country>> = channelFlow {
+        val cachedCountries = localDataSource.getCountries(query)
+            .map { it ->
+                it.map {
                 // TODO: Remove this
                 delay(10)
                 it.toCountry()

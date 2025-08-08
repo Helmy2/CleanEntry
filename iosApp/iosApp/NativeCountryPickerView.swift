@@ -4,41 +4,54 @@ import ComposeApp
 
 /**
  * The main view for the native SwiftUI country picker.
- * It now uses the reusable CountryPickerRow.
+ * It is now driven by the CountryPickerViewModelHelper.
  */
 struct NativeCountryPickerView: View {
-    // The currently selected country code, passed from the helper.
-    var selectedCountryCode: String
-    
-    // The callback to the helper's onCountrySelected function.
+
+    // 1. The helper is now an @StateObject, owned by this view.
+    @StateObject private var helper: CountryPickerViewModelHelper
+    private var selectedCountryCode: String
+
+    // The callback to the parent coordinator.
     var onCountrySelected: (Country) -> Void
     
     @Environment(\.presentationMode) var presentationMode
-    
-    // A hardcoded list for the example. This would come from the shared ViewModel.
-    let allCountries = [
-        Country(name: "Egypt", dialCode: "+20", code: "EG", flagEmoji: "🇪🇬"),
-        Country(name: "Saudi Arabia", dialCode: "+966", code: "SA", flagEmoji: "🇸🇦"),
-        Country(name: "United States", dialCode: "+1", code: "US", flagEmoji: "🇺🇸")
-    ]
+
+    // Custom initializer to receive the repository
+    init(selectedCountryCode: String, onCountrySelected: @escaping (Country) -> Void) {
+        // We create the StateObject with the repository dependency
+        _helper = StateObject(wrappedValue: CountryPickerViewModelHelper())
+        self.onCountrySelected = onCountrySelected
+        self.selectedCountryCode = selectedCountryCode
+    }
 
     var body: some View {
-        List {
-            ForEach(allCountries, id: \.code) { country in
-                CountryPickerRow(
-                    country: country,
-                    isSelected: country.code == selectedCountryCode,
-                    action: {
-                        onCountrySelected(country)
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                )
+        VStack {
+            // Search bar
+            TextField("Search...", text: $helper.searchQuery)
+                .padding()
+                .textFieldStyle(.roundedBorder)
+
+            // List of countries
+            List {
+                ForEach(helper.countries, id: \.code) { country in
+                    CountryPickerRow(
+                        country: country,
+                        isSelected: country.code == selectedCountryCode,
+                        action: {
+                            onCountrySelected(country)
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    )
+                }
             }
         }
         .navigationTitle("Select Country")
+        .onAppear {
+            helper.startObserving()
+        }
     }
 }
-
 
 /**
  * A reusable SwiftUI view that displays a single row in the country picker list.
