@@ -29,7 +29,7 @@ class CountryCodePickerViewModel(
         .debounce(300L)
         .map { it.searchQuery }
         .flatMapLatest { query ->
-            countryRepository.getCountries(query)
+            countryRepository.getPagingCountries(query)
         }
         .catch {
             val errorMessage =

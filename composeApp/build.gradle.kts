@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.apollo)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     alias(libs.plugins.skie)
 }
 
@@ -98,9 +99,12 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.androidx.room.compiler)
-
+    ksp(libs.androidx.room.compiler)
     debugImplementation(compose.uiTooling)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 apollo {
