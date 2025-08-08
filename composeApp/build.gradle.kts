@@ -59,9 +59,9 @@ kotlin {
 
             implementation(libs.apollo.runtime)
 
-            implementation(libs.androidx.room.runtime)
+            implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
-            implementation(libs.androidx.room.paging)
+            implementation(libs.room.paging)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -99,7 +99,12 @@ android {
 }
 
 dependencies {
-    ksp(libs.androidx.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
     debugImplementation(compose.uiTooling)
 }
 

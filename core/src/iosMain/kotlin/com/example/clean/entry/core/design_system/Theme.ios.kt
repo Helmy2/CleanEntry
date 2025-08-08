@@ -9,8 +9,8 @@ actual fun getColorScheme(
     dynamicColor: Boolean
 ): ColorScheme {
     return if (darkTheme) {
-        LightColorScheme
-    } else {
         DarkColorScheme
+    } else {
+        LightColorScheme
     }
 }
