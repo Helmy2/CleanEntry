@@ -3,7 +3,7 @@ import SwiftUI
 
 
 class LoginViewModelHelper: ObservableObject {
-    let loginViewModel = ViewModelHelper().loginViewModel
+    let loginViewModel = iOSApp.dependenciesHelper.loginViewModel
 
     @Published
     private(set) var selectedCountryCode: String = ""
