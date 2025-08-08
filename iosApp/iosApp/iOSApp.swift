@@ -3,6 +3,8 @@ import ComposeApp
 
 @main
 struct iOSApp: App {
+
+    static var dependenciesHelper = DependenciesHelper()
     
     init() {
         InitKoinKt.doInitKoin()

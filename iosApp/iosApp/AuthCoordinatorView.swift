@@ -4,7 +4,7 @@ import ComposeApp
 
 enum AuthNavigationPath: Hashable {
     case registration
-    case countryPicker
+    case countryPicker(countryCode: String)
 }
 
 /**
@@ -12,17 +12,22 @@ enum AuthNavigationPath: Hashable {
  * It is the single source of truth, owning the LoginViewModelHelper.
  */
 struct AuthCoordinatorView: View {
-    
-    @StateObject private var loginViewModel = LoginViewModelHelper()
+
+    @StateObject private var loginHelper = LoginViewModelHelper()
+    @StateObject private var registrationHelper = RegistrationViewModelHelper()
     
     @State private var path = NavigationPath()
     
     var body: some View {
         NavigationStack(path: $path) {
             LoginView(
-                viewModel: loginViewModel.loginViewModel,
+                viewModel: loginHelper.loginViewModel,
                 onNavigateToCountryPicker: { Country in
-                    path.append(AuthNavigationPath.countryPicker)
+                    path
+                        .append(
+                            AuthNavigationPath
+                                .countryPicker(countryCode: Country!.code)
+                        )
                 },
                 onLoginSuccess: {
                     print("Login successful! Navigate to main app...")
@@ -35,20 +40,41 @@ struct AuthCoordinatorView: View {
                 }
             )
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: AuthNavigationPath.self) { destination in
+            .navigationDestination(
+                for: AuthNavigationPath.self
+            ) { destination in
                 switch destination {
                 case .registration:
-                    Text("Registration Screen")
-                case .countryPicker:
+                    RegistrationView(viewModel: registrationHelper
+                        .registrationViewModel,
+                                     onBackClick: {
+                                         path.removeLast()
+                                     }, clearCountryResult: {
+
+                    },
+                                     onNavigateToCountryPicker: { Country in
+                                         path.append(
+                                             AuthNavigationPath.countryPicker(countryCode: Country!.code))
+                                     }, onRegistrationSuccess: {
+                        print("Registration successful! Navigate to main app...")
+                    }
+                    )
+                    .navigationBarBackButtonHidden(true)
+                case .countryPicker(let countryCode):
                     NativeCountryPickerView(
-                        selectedCountryCode: loginViewModel.selectedCountryCode,
-                        onCountrySelected: loginViewModel.onCountrySelected
+                        selectedCountryCode: countryCode,
+                        onCountrySelected: { country in
+                            loginHelper.onCountrySelected(country: country)
+                            registrationHelper
+                                .onCountrySelected(country: country)
+                        }
                     )
                 }
             }
         }
         .task {
-            await loginViewModel.activate()
+            await loginHelper.activate()
+            await registrationHelper.activate()
         }
     }
 }
