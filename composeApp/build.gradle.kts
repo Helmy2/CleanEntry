@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.skie)
+    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -19,6 +20,8 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
+
+    jvm()
     
     listOf(
         iosX64(),
@@ -68,6 +71,10 @@ kotlin {
             implementation(libs.turbine)
             implementation(libs.coroutines.test)
         }
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+        }
     }
 }
 
@@ -101,6 +108,8 @@ android {
 dependencies {
     add("kspAndroid", libs.room.compiler)
     add("kspAndroid", libs.room.compiler)
+
+    add("kspJvm", libs.room.compiler)
 
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)

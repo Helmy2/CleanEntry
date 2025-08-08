@@ -6,7 +6,6 @@ struct RegistrationView: UIViewControllerRepresentable {
     var viewModel: RegistrationViewModel
     var onBackClick: () -> Void
     var countryResult: Country?
-    var clearCountryResult: () -> Void
     var onNavigateToCountryPicker: (Country?) -> Void
     var onRegistrationSuccess: () -> Void
 
@@ -16,7 +15,6 @@ struct RegistrationView: UIViewControllerRepresentable {
             viewModel: viewModel,
             onBackClick: onBackClick,
             countryResult: countryResult,
-            clearCountryResult: clearCountryResult,
             onNavigateToCountryPicker: onNavigateToCountryPicker,
             onRegistrationSuccess: onRegistrationSuccess
         )

@@ -31,8 +31,8 @@ import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.core.domain.model.stringResource
+import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
 import org.jetbrains.compose.resources.stringResource
@@ -47,7 +47,6 @@ fun RegistrationRoute(
     viewModel: RegistrationViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     countryResult: Country?,
-    clearCountryResult: () -> Unit,
     onNavigateToCountryPicker: (Country) -> Unit,
     onRegistrationSuccess: () -> Unit
 ) {
@@ -64,7 +63,6 @@ fun RegistrationRoute(
     LaunchedEffect(countryResult) {
         if (countryResult != null) {
             viewModel.handleEvent(RegistrationReducer.Event.CountrySelected(countryResult))
-            clearCountryResult()
         }
     }
 

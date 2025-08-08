@@ -28,6 +28,8 @@ kotlin {
         }
     }
 
+    jvm()
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -43,6 +45,10 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+        }
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
         }
     }
 }

@@ -14,7 +14,6 @@ fun RegistrationViewController(
     viewModel: RegistrationViewModel,
     onBackClick: () -> Unit,
     countryResult: Country?,
-    clearCountryResult: () -> Unit,
     onNavigateToCountryPicker: (Country) -> Unit,
     onRegistrationSuccess: () -> Unit
 ): UIViewController {
@@ -27,7 +26,6 @@ fun RegistrationViewController(
                     onBackClick = onBackClick,
                     onRegistrationSuccess = onRegistrationSuccess,
                     countryResult = countryResult,
-                    clearCountryResult = clearCountryResult
                 )
             }
         }

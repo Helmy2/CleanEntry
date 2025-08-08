@@ -15,9 +15,9 @@ struct AuthCoordinatorView: View {
 
     @StateObject private var loginHelper = LoginViewModelHelper()
     @StateObject private var registrationHelper = RegistrationViewModelHelper()
-    
+
     @State private var path = NavigationPath()
-    
+
     var body: some View {
         NavigationStack(path: $path) {
             LoginView(
@@ -34,9 +34,6 @@ struct AuthCoordinatorView: View {
                 },
                 onCreateAccountClick: {
                     path.append(AuthNavigationPath.registration)
-                },
-                onClearCountryResult : {
-
                 }
             )
             .navigationBarTitleDisplayMode(.inline)
@@ -49,9 +46,7 @@ struct AuthCoordinatorView: View {
                         .registrationViewModel,
                                      onBackClick: {
                                          path.removeLast()
-                                     }, clearCountryResult: {
-
-                    },
+                                     },
                                      onNavigateToCountryPicker: { Country in
                                          path.append(
                                              AuthNavigationPath.countryPicker(countryCode: Country!.code))
