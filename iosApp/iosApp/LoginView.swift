@@ -9,7 +9,6 @@ struct LoginView: UIViewControllerRepresentable {
     var onNavigateToCountryPicker: (Country?) -> Void
     var onLoginSuccess: () -> Void
     var onCreateAccountClick: () -> Void
-    var onClearCountryResult:() -> Void
     var countryResult: Country?
 
     
@@ -20,8 +19,7 @@ struct LoginView: UIViewControllerRepresentable {
             onNavigateToCountryPicker: onNavigateToCountryPicker,
             onLoginSuccess: onLoginSuccess,
             onCreateAccountClick: onCreateAccountClick,
-            countryResult: countryResult,
-            clearCountryResult: onClearCountryResult
+            countryResult: countryResult
         )
     }
     public func updateUIViewController(_ uiViewController: UIViewController, context: Context){

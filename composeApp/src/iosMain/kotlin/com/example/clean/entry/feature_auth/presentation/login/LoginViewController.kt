@@ -19,7 +19,6 @@ fun LoginViewController(
     onLoginSuccess: () -> Unit,
     onCreateAccountClick: () -> Unit,
     countryResult: Country?,
-    clearCountryResult: () -> Unit,
 ): UIViewController {
     return ComposeUIViewController {
         CleanEntryTheme {
@@ -30,7 +29,6 @@ fun LoginViewController(
                     onLoginSuccess = onLoginSuccess,
                     onCreateAccountClick = onCreateAccountClick,
                     countryResult = countryResult,
-                    clearCountryResult = clearCountryResult
                 )
             }
         }

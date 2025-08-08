@@ -31,7 +31,6 @@ import cleanentry.composeapp.generated.resources.password_placeholder
 import cleanentry.composeapp.generated.resources.phone_placeholder
 import cleanentry.composeapp.generated.resources.please_fill_the_details_and_log_in
 import cleanentry.composeapp.generated.resources.you_don_t_have_an_account
-import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
@@ -52,8 +51,7 @@ fun LoginRoute(
     onNavigateToCountryPicker: (Country) -> Unit,
     onLoginSuccess: () -> Unit,
     onCreateAccountClick: () -> Unit,
-    countryResult: Country?,
-    clearCountryResult: () -> Unit,
+    countryResult: Country?
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -68,7 +66,6 @@ fun LoginRoute(
     LaunchedEffect(countryResult) {
         if (countryResult != null) {
             viewModel.handleEvent(LoginReducer.Event.CountrySelected(countryResult))
-            clearCountryResult()
         }
     }
 
