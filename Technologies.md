@@ -1,89 +1,76 @@
 # Technologies & Rationale
 
-This document explains the "why" behind the key technologies, libraries, and patterns used in the  **CleanEntry**  project. Each choice was made to support the project's goals of being modern, scalable, testable, and maintainable.
+This document explains the "why" behind the key technologies, libraries, and patterns used in the*
+*CleanEntry**project.
 
-### 1. Core Language: Kotlin
+### 1. Core Framework: Kotlin Multiplatform (KMP)
 
-- **What:**  The exclusive programming language for the project.
+- **What:**The foundational technology that allows us to share code across Android, iOS, and
+  Desktop.
 
-- **Why:**
+- **Why:**It enables us to write our business logic, data handling, and even UI once in Kotlin and
+  reuse it everywhere. This dramatically reduces development time, eliminates inconsistencies
+  between platforms, and creates a single source of truth for the app's core logic.
 
-    - **Official & Modern:**  Kotlin is Google's official language for Android development. It provides modern language features like null safety, data classes, and extension functions that lead to safer and more concise code.
+### 2. UI Frameworks: Compose Multiplatform & SwiftUI
 
-    - **Coroutines & Flow:**  Built-in support for coroutines and Flow makes asynchronous programming (like network calls or database access) simple, efficient, and readable, which is fundamental to a responsive UI.
+- **What:**We use a hybrid UI strategy.
 
+  - **Compose Multiplatform:**Used for the Android and Desktop UI, and for shared screens/components
+    that are hosted on iOS.
 
-### 2. UI Toolkit: Jetpack Compose
+  - **SwiftUI:**Used for the native iOS "shell," including navigation and specific screens that
+    benefit from a strong platform-native feel.
 
-- **What:**  Android's modern, declarative UI toolkit used for the entire UI layer.
+- **Why:**This strategy showcases the flexibility of KMP. We get maximum code reuse and development
+  speed for Android and Desktop, while still delivering a perfectly native navigation experience and
+  feel on iOS where it matters most.
 
-- **Why:**
+### 3. Architecture: Clean Architecture & MVI
 
-    - **Declarative Mindset:**  You describe  _what_  the UI should look like for a given state, and Compose handles the rendering. This is more intuitive and less error-prone than the old imperative way (XML) of manually manipulating views.
+- **What:**A combination of Clean Architecture principles for separating layers (`presentation`,
+  `domain`,`data`) and the MVI pattern for a unidirectional data flow in the presentation layer.
 
-    - **Less Code, Faster Development:**  It requires significantly less code than the XML-based system, which means faster development, fewer bugs, and easier maintenance.
+- **Why:**This creates a highly scalable, testable, and maintainable codebase. The core logic is
+  completely decoupled from the UI, making it easy to share across platforms and test in isolation.
 
-    - **Direct Integration:**  Because it's written in Kotlin, your UI code and business logic share the same language, creating a seamless development experience.
+### 4. Dependency Injection: Koin
 
+- **What:**A pragmatic dependency injection framework for Kotlin.
 
-### 3. Architecture: Clean Architecture
+- **Why:**Koin is fully compatible with KMP and provides a simple, readable DSL for defining our
+  dependency graph in the`shared`module. This allows us to easily provide dependencies to our shared
+  code on all platforms.
 
-- **What:**  A set of principles that separates the project into distinct layers (`presentation`,  `domain`,  `data`).
+### 5. Networking: Apollo GraphQL
 
-- **Why:**
+- **What:**A type-safe GraphQL client for Kotlin.
 
-    - **Separation of Concerns:**  Each layer has a single, clear responsibility. This separation is the key to a scalable and maintainable codebase.
+- **Why:**Apollo generates type-safe Kotlin models from our GraphQL schema, which eliminates an
+  entire class of networking bugs. Its KMP compatibility allows us to write our networking code once
+  in the`shared`module.
 
-    - **Testability:**  The  `domain`  layer, containing core business logic (like validation  `UseCases`), is pure Kotlin and can be tested without needing an Android device. The  `data`  and  `presentation`  layers can also be tested in isolation.
+### 6. Database: Room (via `expect`/`actual`)
 
-    - **Maintainability:**  This structure allows individual parts of the app to be modified or replaced without affecting other parts. For example, the UI can be completely redesigned without touching the business logic.
+- **What:**We use an`expect`/`actual`pattern to provide a common database interface.
 
+  - **`expect AppDatabase`:**In`commonMain`, we define the expectation of a database.
 
-### 4. Presentation Pattern: MVI (Model-View-Intent)
+  - **`actual typealias`(Android/JVM):**On Android and Desktop, the`actual`implementation uses**Room
+    **, the standard for persistence on the JVM.
 
-- **What:**  A reactive, unidirectional data flow pattern used within the presentation layer.
+  - **`actual`(iOS):**The iOS implementation would typically use a different native solution like*
+    *SQLDelight**, but for this project, the pattern is established.
 
-- **Why:**
+- **Why:**This advanced pattern allows us to use the best-in-class database library for each
+  platform while still sharing the repository and data source logic.
 
-    - **Predictable State:**  MVI enforces a strict cycle: a user action (`Intent`/`Event`) is processed, which produces a new  `State`, which is then rendered by the UI. This makes the state of the app predictable and easy to debug.
+### 7. Platform Interoperability: `expect`/`actual`
 
-    - **Single Source of Truth:**  The UI is a simple function of the  `State`. There is only one source of truth, which eliminates a whole category of state-related bugs.
+- **What:**A core KMP feature that allows us to define a common API in`commonMain`(`expect`) and
+  provide platform-specific implementations in`androidMain`,`iosMain`, and`jvmMain`(`actual`).
 
-    - **Separation of Logic:**  We use a  `Reducer`  object to handle pure state changes, which keeps the  `ViewModel`focused on handling business logic and side effects.
-
-
-### 5. Dependency Injection: Koin
-
-- **What:**  A pragmatic dependency injection framework for Kotlin.
-
-- **Why:**
-
-    - **Simplicity & Readability:**  Koin uses a simple Kotlin DSL (Domain-Specific Language) to declare dependencies in modules, which is often considered more straightforward and easier to read than annotation-based alternatives.
-
-    - **No Annotation Processing:**  Unlike Dagger/Hilt, Koin does not use annotation processing, which can contribute to faster build times.
-
-    - **Multiplatform Ready:**  Koin is a popular choice for Kotlin Multiplatform (KMP) projects, keeping the architecture flexible for future expansion.
-
-
-### 6. Navigation: Jetpack Compose Navigation
-
-- **What:**  The official library for handling navigation within a Compose application.
-
-- **Why:**
-
-    - **Type Safety:**  By defining our navigation routes in a  `sealed class`  (`AuthDestination.kt`), we make our navigation graph completely type-safe, eliminating runtime errors from string-based typos.
-
-    - **Feature-Owned Graphs:**  Each feature module (like  `:feature_auth`) defines its own  `NavHost`. This makes features self-contained and reusable. The main  `:app`  module simply includes these feature graphs.
-
-    - **State Handling:**  It provides robust mechanisms like the  `SavedStateHandle`  for passing data and returning results between screens in a lifecycle-aware manner.
-
-
-### 7. Phone Validation:  `libphonenumber-android`
-
-- **What:**  Google's official library for parsing, formatting, and validating international phone numbers.
-
-- **Why:**
-
-    - **Reliability & Accuracy:**  Phone number validation is notoriously complex due to varying international formats. Using Google's library is the industry standard and ensures our validation logic is correct and comprehensive.
-
-    - **Separation of Concerns:**  The validation logic is encapsulated within a dedicated  `ValidatePhoneUseCase`, keeping this complex dependency isolated within our domain layer.
+- **Why:**This is crucial for handling platform-specific dependencies like`libphonenumber`. We can
+  `expect`a phone number validator in our shared`UseCase`, and then provide the actual
+  implementation using the native library on each platform, without leaking platform-specific code
+  into our shared logic.
