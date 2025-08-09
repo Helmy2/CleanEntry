@@ -1,48 +1,30 @@
 # A Deep Dive Case Study
 
-This document provides a comprehensive overview of the architectural decisions, patterns, and best practices used in the **CleanEntry** project. It is intended to be a learning resource for Android developers interested in modern, scalable application development.
+This document provides a comprehensive overview of the architectural decisions, patterns, and best
+practices used in the CleanEntry project. It is intended to be a learning resource for developers
+interested in modern, scalable application development with Kotlin Multiplatform.
 
 ## 1. 🏛️ Core Architecture: Clean Architecture
 
-The project is built upon the principles of **Clean Architecture**. This architectural style separates the software into layers, with a strict dependency rule: outer layers can depend on inner layers, but inner layers know nothing about the outer layers.
+The project is built upon the principles of**Clean Architecture**. This style is applied within the
+`shared`KMP module (`composeApp`), separating the software into layers with a strict dependency
+rule: outer layers can depend on inner layers, but inner layers know nothing about the outer layers.
 
 - **Why Clean Architecture?**
 
-    - **Independence of Frameworks:** The core business logic is not dependent on the Android framework, making it highly portable.
+  - **Platform Independence:**The core business logic in`commonMain`is not dependent on the Android,
+    iOS, or JVM frameworks, making it truly portable.
 
-    - **Testability:** Each layer can be tested in isolation. The domain layer, containing the most critical business rules, can be tested with simple, fast unit tests.
+  - **Testability:**Each layer can be tested in isolation. The domain layer, containing the most
+    critical business rules, can be tested with simple, fast unit tests that run on any machine.
 
-    - **Independence of UI:** The UI can be changed easily without affecting the rest of the system.
-
-    - **Maintainability:** The clear separation of concerns makes the codebase easier to understand, scale, and maintain over time.
-
-
-### Module Structure
-
-To enforce this separation, the project is organized into distinct Gradle modules:
-
-```
-📁 CleanEntry/
-├── 📁 app/
-│   └── (Main application module)
-│
-├── 📁 core/
-│   └── (Shared code, design system, utilities)
-│
-└── 📁 feature_auth/
-    └── (Self-contained authentication feature)
-```
-
-- **:app** - The entry point of the application. It ties all the feature modules together and handles top-level concerns like the main navigation graph.
-
-- **:core** - A foundational library module. It contains code that is shared across multiple features, such as the Design System components, MVI base classes, and common utilities. It is completely independent of any specific feature.
-
-- **:feature_auth** - A self-contained feature module. It holds all the code related to the authentication flow (Login, Registration, Country Code Picker). This module could, in theory, be reused in another application.
-
+  - **Maintainability:**The clear separation of concerns makes the codebase easier to understand,
+    scale, and maintain across all platforms.
 
 ## 2. 🔄 Presentation Layer Pattern: MVI (Model-View-Intent)
 
-The presentation layer uses the MVI pattern to create a predictable and robust UI.
+The presentation layer uses a combination of a shared MVI pattern and a platform-specific UI
+strategy to deliver a native experience on each platform.
 
 - **Why MVI?**
 
@@ -65,6 +47,24 @@ The presentation layer uses the MVI pattern to create a predictable and robust U
 
     - The **`Screen`** is the stateless component. It only knows how to display the UI based on the state it's given and how to emit events back to the `Route`. This makes it highly reusable and easy to test with Jetpack Compose Previews.
 
+### UI Strategy
+
+- **Android & Desktop (Shared UI):**The Android and Desktop apps are built entirely with**Compose
+  Multiplatform**. The UI is written once in the`shared`module (`composeApp`) and runs natively on
+  both platforms.
+
+- **iOS (Hybrid UI):**The iOS app uses a hybrid approach.
+
+  - **Native SwiftUI:**The main navigation (`NavigationStack`) and specific screens that benefit
+    from a strong platform feel (like the`CountryCodePicker`) are built with native SwiftUI.
+
+  - **Shared Compose UI:**More standard, form-based screens (like`Login`and`Registration`) are
+    written once in Jetpack Compose in the`shared`module and hosted within the native SwiftUI app
+    using`UIViewControllerRepresentable`.
+
+- **Why this strategy?**This approach demonstrates the flexibility of KMP. We can achieve maximum
+  code reuse for Android and Desktop, while still delivering a perfectly native navigation
+  experience and feel on iOS where it matters most.
 
 ## 3. 🎨 Design System
 
@@ -89,29 +89,32 @@ A centralized Design System, located in the `:core` module, ensures visual consi
 
 ## 4. 🗺️ Navigation
 
-Navigation is a critical part of the user experience and is designed to be both type-safe and feature-independent.
+Navigation is handled natively on each platform but is driven by logic from the shared`ViewModels`.
 
-- **Feature-Owned Navigation**: The `feature_auth` module defines its own navigation graph (`AuthNavHost.kt`) and destinations (`AuthDestination.kt`). This makes the entire feature self-contained and reusable. The main `:app` module simply includes this feature-specific graph into the top-level navigation.
+- **iOS:**The`iosApp`uses a SwiftUI`NavigationStack`managed by a coordinator (
+  `AuthCoordinatorView`). Navigation events are triggered by callbacks passed to the shared Compose
+  UI or by observing state from the shared`ViewModels`.
 
-- **Type-Safe Destinations**: We use a `sealed class` to define all navigation routes. This eliminates raw string routes, preventing common runtime crashes from typos and making navigation logic easier to refactor.
+- **Android & Desktop:**The`androidApp`and`desktop`targets use Jetpack Compose Navigation with a
+  type-safe graph defined in`AuthNavHost.kt`.
 
-- **Returning Results**: To pass data back from one screen to another (e.g., from the `CountryCodePickerScreen`), we use the `NavController`'s `SavedStateHandle`. The destination screen sets a result in the `SavedStateHandle` of the _previous_ screen, which then observes this handle to receive the data. This is the modern, lifecycle-aware, and recommended way to handle screen results in Jetpack Compose.
+This approach ensures that navigation feels completely native on each platform while the decision of
+_when_to navigate remains part of the shared business logic.
 
+## 5. 🧪 Quality Assurance
 
-## 5. 🧪 Testing Strategy
+### Testing Strategy
 
-A robust testing strategy ensures the app is reliable and maintainable.
+The project includes a suite of unit tests to ensure the logic is correct and prevent regressions.
 
-- **Domain Layer**: UseCases are tested with pure JUnit tests to verify all business logic. This layer should have the highest test coverage.
+- **Domain Layer**: UseCases are tested with pure JUnit tests in`commonTest`to verify the business
+  logic.
 
-- **Presentation Layer**:
+- **Presentation Layer**: Reducers are tested to ensure state transitions are correct. ViewModels
+  are tested using MockK and Turbine.
 
-    - **Reducers** are tested to ensure all possible state transitions are correct. Since they are pure functions, these tests are simple and fast.
+### Continuous Integration (CI)
 
-    - **ViewModels** are tested using libraries like **MockK** (for mocking dependencies like UseCases) and **Turbine** (for testing `StateFlow` emissions). These tests verify that the ViewModel correctly handles events and produces the expected state changes and side effects.
-
-- **UI Layer**:
-
-    - Stateless **`Screen`** composables are tested with Compose UI tests. We can provide mock `State` objects to verify that the UI renders correctly in all possible states (loading, error, success, etc.).
-
-    - End-to-end user flows are tested to ensure the integration between the UI, ViewModel, and other components works as expected.
+The project includes a CI pipeline using GitHub Actions. The workflow automatically runs all unit
+tests on every pull request to the`dev`branch, ensuring code quality and stability.o ensure the
+integration between the UI, ViewModel, and other components works as expected.
