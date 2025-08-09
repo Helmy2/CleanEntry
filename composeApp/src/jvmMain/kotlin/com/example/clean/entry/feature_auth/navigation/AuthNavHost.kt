@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerRoute
 import com.example.clean.entry.feature_auth.presentation.login.LoginRoute
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationRoute
 
@@ -16,7 +18,7 @@ import com.example.clean.entry.feature_auth.presentation.registration.Registrati
 @Composable
 fun AuthNavHost(modifier: Modifier = Modifier, onSuccess: () -> Unit) {
     val navController = rememberNavController()
-    val country by remember {
+    var country by remember {
         mutableStateOf(
             Country(
                 name = "Egypt", dialCode = "+20", code = "EG", flagEmoji = "🇪🇬"
@@ -51,7 +53,15 @@ fun AuthNavHost(modifier: Modifier = Modifier, onSuccess: () -> Unit) {
         }
 
         composable<AuthDestination.CountryCodePicker> {
-
+            CountryCodePickerRoute(
+                countryResult = country,
+                onNavigateBack = {
+                    it?.let {
+                        country = it
+                    }
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }
