@@ -27,13 +27,13 @@ import cleanentry.composeapp.generated.resources.phone_placeholder
 import cleanentry.composeapp.generated.resources.sign_up
 import cleanentry.composeapp.generated.resources.surname_label
 import cleanentry.composeapp.generated.resources.surname_placeholder
-import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.stringResource
 import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
+import com.example.clean.entry.feature_auth.presentation.components.NativeAppButton
 import com.example.clean.entry.feature_auth.presentation.components.TopBarWithBackNavigation
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -162,7 +162,7 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            AppButton(
+            NativeAppButton(
                 text = stringResource(Res.string.continue_label),
                 onClick = { onEvent(RegistrationReducer.Event.Submit) },
                 enabled = state.isContinueButtonEnabled,

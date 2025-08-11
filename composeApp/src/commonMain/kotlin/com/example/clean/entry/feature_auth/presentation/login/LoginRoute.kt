@@ -131,7 +131,7 @@ fun LoginScreen(
                 onCountryCodeClick = onCountryCodeClick,
                 countryCode = state.selectedCountryDialCode,
                 countryFlag = state.selectedCountryFlag,
-                isError = state.phoneError == null,
+                isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
                 placeholderText = stringResource(Res.string.phone_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(

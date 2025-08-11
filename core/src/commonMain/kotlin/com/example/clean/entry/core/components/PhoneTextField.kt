@@ -4,16 +4,19 @@ package com.example.clean.entry.core.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import cleanentry.core.generated.resources.Res
 import cleanentry.core.generated.resources.select_country_code
@@ -60,34 +63,28 @@ fun PhoneTextField(
         placeholderText = placeholderText,
         leadingIcon = {
             Row(
-                modifier = Modifier.clickable(onClick = onCountryCodeClick),
+                modifier = Modifier
+                    .height(ButtonDefaults.MinHeight)
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable(onClick = onCountryCodeClick),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-
                 Text(
-                    text = countryFlag,
-                    style = MaterialTheme.typography.bodyLarge
+                    text = countryFlag, style = MaterialTheme.typography.bodyLarge
                 )
-
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-
-
                 Text(
                     text = countryCode,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = stringResource(Res.string.select_country_code)
                 )
             }
-        }
-    )
+        })
 }
 
 @Preview

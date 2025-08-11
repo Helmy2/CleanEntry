@@ -6,7 +6,7 @@ import Combine
  * An ObservableObject that acts as the ViewModel for the native SwiftUI CountryCodePicker.
  * This version correctly handles asynchronous data loading and search cancellation.
  */
-@MainActor
+
 class CountryPickerViewModelHelper: ObservableObject {
 
     private let countryRepository: CountryRepository

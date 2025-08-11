@@ -7,6 +7,7 @@ import com.example.clean.entry.feature_auth.presentation.country_code_picker.Cou
 import com.example.clean.entry.feature_auth.util.PhoneNumberUtil
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import java.io.File
@@ -22,6 +23,7 @@ actual val authPlatformModule: Module = module {
             .build()
     }
 
-    single { PhoneNumberUtil() }
+    single { com.google.i18n.phonenumbers.PhoneNumberUtil.getInstance() }
+    singleOf(::PhoneNumberUtil)
     viewModelOf(::CountryCodePickerViewModel)
 }
