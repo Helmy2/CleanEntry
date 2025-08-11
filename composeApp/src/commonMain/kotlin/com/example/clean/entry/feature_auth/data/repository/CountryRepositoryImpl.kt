@@ -11,7 +11,6 @@ import com.example.clean.entry.feature_auth.data.toCountry
 import com.example.clean.entry.feature_auth.data.toEntity
 import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -38,11 +37,6 @@ class CountryRepositoryImpl(
             pagingSourceFactory = { localDataSource.getPagingCountries(query) }
         ).flow.map { pagingData ->
             pagingData.map {
-                // Add a delay to simulate network latency
-                // This is just for demo purposes
-                // In a real app, you should handle this differently
-                // TODO: Remove this
-                delay(5)
                 it.toCountry()
             }
         }
@@ -64,8 +58,6 @@ class CountryRepositoryImpl(
         val cachedCountries = localDataSource.getCountries(query)
             .map { it ->
                 it.map {
-                // TODO: Remove this
-                delay(10)
                 it.toCountry()
             }
         }

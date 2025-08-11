@@ -65,6 +65,8 @@ kotlin {
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.room.paging)
+
+            implementation(libs.libphonenumber.jvm)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
