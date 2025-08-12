@@ -23,12 +23,20 @@ The project features a complete user authentication flow, including:
 
 ## 📸 Screenshots
 
+| Screen                  | Android                                           | IOS                                           |
+|-------------------------|---------------------------------------------------|-----------------------------------------------|
+| **Login**               | ![](images/image_android_login.jpg)               | ![](images/image_ios_login.png)               |
+| **Login Dark**          | ![](images/image_android_login_dark.jpg)          | ![](images/image_ios_login_dark.png)          |
+| **Registration**        | ![](images/image_android_signup.jpg)              | ![](images/image_ios_signup.png)              |
+| **Registration Dark**   | ![](images/image_android_signup_dark.jpg)         | ![](images/image_ios_signup_dark.png)         |
+| **Country Picker**      | ![](images/image_android_select_country.jpg)      | ![](images/image_ios_select_country.png)      |
+| **Country Picker Dark** | ![](images/image_android_select_country_dark.jpg) | ![](images/image_ios_select_country_dark.png) |
 
-| Screen             | Light Mode              | Dark Mode               |
-|--------------------|-------------------------|-------------------------|
-| **Login**          | ![](images/image_4.jpg) | ![](images/image_1.jpg) |
-| **Registration**   | ![](images/image_5.jpg) | ![](images/image_2.jpg) |
-| **Country Picker** | ![](images/image_6.jpg) | ![](images/image_3.jpg) |
+| Screen             | Light Mode                                 | Dark Mode                                       |
+|--------------------|--------------------------------------------|-------------------------------------------------|
+| **Login**          | ![](images/image_macos_login.png)          | ![](images/image_macos_login_dark.png)          |
+| **Registration**   | ![](images/image_macos_signup.png)         | ![](images/image_macos_signup_dark.png)         |
+| **Country Picker** | ![](images/image_macos_select_country.png) | ![](images/image_macos_select_country_dark.png) |
 
 ## 🛠️ Tech Stack & Key Concepts
 
