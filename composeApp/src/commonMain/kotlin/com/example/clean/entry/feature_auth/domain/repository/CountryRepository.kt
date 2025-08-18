@@ -1,6 +1,6 @@
 package com.example.clean.entry.feature_auth.domain.repository
 
-import androidx.paging.PagingData
+import app.cash.paging.PagingData
 import com.example.clean.entry.feature_auth.domain.model.Country
 import kotlinx.coroutines.flow.Flow
 

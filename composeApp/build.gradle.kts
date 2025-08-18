@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.skie)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -43,6 +44,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.paging.runtime.ktx)
             implementation(libs.androidx.paging.compose)
+            implementation(libs.android.driver)
         }
         commonMain.dependencies {
             implementation(project(":core"))
@@ -67,6 +69,8 @@ kotlin {
             implementation(libs.room.paging)
 
             implementation(libs.libphonenumber.jvm)
+            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
+            implementation("app.cash.sqldelight:androidx-paging3-extensions:2.1.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,6 +80,10 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.sqlite.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.native.driver)
         }
     }
 }
@@ -126,5 +134,13 @@ room {
 apollo {
     service("service") {
         packageName.set("com.example.clean.entry")
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.example.clean.entry.db")
+        }
     }
 }

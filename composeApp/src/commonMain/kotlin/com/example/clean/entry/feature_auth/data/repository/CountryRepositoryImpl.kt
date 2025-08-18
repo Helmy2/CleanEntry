@@ -1,9 +1,9 @@
 package com.example.clean.entry.feature_auth.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
+import app.cash.paging.Pager
+import app.cash.paging.PagingConfig
+import app.cash.paging.PagingData
+import app.cash.paging.map
 import com.example.clean.entry.core.util.runCatchingOnIO
 import com.example.clean.entry.feature_auth.data.source.local.CountryLocalDataSource
 import com.example.clean.entry.feature_auth.data.source.remote.CountryRemoteDataSource
@@ -58,9 +58,9 @@ class CountryRepositoryImpl(
         val cachedCountries = localDataSource.getCountries(query)
             .map { it ->
                 it.map {
-                it.toCountry()
+                    it.toCountry()
+                }
             }
-        }
 
         trySend(cachedCountries.first())
 
