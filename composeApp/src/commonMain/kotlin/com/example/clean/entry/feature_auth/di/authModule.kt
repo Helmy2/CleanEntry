@@ -1,9 +1,10 @@
 package com.example.clean.entry.feature_auth.di
 
 import com.apollographql.apollo.ApolloClient
+import com.example.clean.entry.db.AppDatabase
 import com.example.clean.entry.feature_auth.data.repository.CountryRepositoryImpl
-import com.example.clean.entry.feature_auth.data.source.local.AppDatabase
 import com.example.clean.entry.feature_auth.data.source.local.CountryLocalDataSource
+import com.example.clean.entry.feature_auth.data.source.local.DatabaseDriverFactory
 import com.example.clean.entry.feature_auth.data.source.remote.CountryRemoteDataSource
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import com.example.clean.entry.feature_auth.domain.usecase.ValidateEmailUseCase
@@ -28,8 +29,12 @@ expect val authPlatformModule: Module
 val authModule = module {
     includes(authPlatformModule)
 
-    factory { get<AppDatabase>().countryDao() }
+    single<AppDatabase> {
+        val driver = get<DatabaseDriverFactory>().createDriver()
+        AppDatabase(driver)
+    }
 
+    factory { get<AppDatabase>().countryEntityQueries }
 
     single {
         ApolloClient.Builder()
