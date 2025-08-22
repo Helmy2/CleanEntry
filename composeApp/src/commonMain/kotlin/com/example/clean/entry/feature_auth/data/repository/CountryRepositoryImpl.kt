@@ -10,10 +10,8 @@ import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-private const val PAGE_SIZE = 10
 
 /**
  * The concrete implementation of the CountryRepository.
@@ -25,29 +23,34 @@ class CountryRepositoryImpl(
     private val localDataSource: CountryLocalDataSource
 ) : CountryRepository {
     override fun getCountries(query: String): Flow<List<Country>> = channelFlow {
-        val cachedCountries = localDataSource.getCountries(query)
-            .map { it ->
-                it.map {
-                    it.toCountry()
-                }
-            }
-
-        trySend(cachedCountries.first())
-
         runCatchingOnIO {
-            remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
-                localDataSource.insertCountries(freshCountries.map { it.toEntity() })
+            val cachedCountries = localDataSource.getCountries(query)
+                .map { it ->
+                    it.map {
+                        it.toCountry()
+                    }
+                }
+
+            cachedCountries.collectLatest {
+                trySend(it)
             }
         }
 
-        cachedCountries.collectLatest {
-            trySend(it)
+        runCatchingOnIO {
+            remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
+                trySend(freshCountries.filter { it.name.contains(query, ignoreCase = true) })
+                localDataSource.insertCountries(freshCountries.map { it.toEntity() })
+            }
         }
     }
 
     override suspend fun getCountry(code: String): Result<Country> {
         return runCatchingOnIO {
-            localDataSource.getCountry(code)?.toCountry() ?: throw Exception("Country not found")
+            runCatchingOnIO {
+                localDataSource.getCountry(code)?.toCountry()
+                    ?: throw Exception("Country not found Locally")
+            }.getOrNull() ?: remoteDataSource.getCountries().getOrThrow()
+                .firstOrNull { it.code == code } ?: throw Exception("Country not found Remotely")
         }
     }
 }
