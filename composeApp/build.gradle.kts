@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,7 +11,6 @@ plugins {
     alias(libs.plugins.apollo)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
     alias(libs.plugins.skie)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.sqldelight)
@@ -23,6 +24,26 @@ kotlin {
     }
 
     jvm()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName.set("composeApp")
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+        binaries.executable()
+    }
     
     listOf(
         iosX64(),
@@ -64,13 +85,8 @@ kotlin {
 
             implementation(libs.apollo.runtime)
 
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
-            implementation(libs.room.paging)
-
             implementation(libs.libphonenumber.jvm)
-            implementation("app.cash.sqldelight:coroutines-extensions:2.1.0")
-            implementation("app.cash.sqldelight:androidx-paging3-extensions:2.1.0")
+            implementation(libs.coroutines.extensions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -125,10 +141,6 @@ dependencies {
     add("kspIosArm64", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     debugImplementation(compose.uiTooling)
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
 }
 
 apollo {

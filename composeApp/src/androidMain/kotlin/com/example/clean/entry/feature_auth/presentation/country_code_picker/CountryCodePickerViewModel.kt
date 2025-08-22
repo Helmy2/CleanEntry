@@ -3,7 +3,6 @@ package com.example.clean.entry.feature_auth.presentation.country_code_picker
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import androidx.paging.cachedIn
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
@@ -29,14 +28,13 @@ class CountryCodePickerViewModel(
         .debounce(300L)
         .map { it.searchQuery }
         .flatMapLatest { query ->
-            countryRepository.getPagingCountries(query)
+            countryRepository.getCountries(query)
         }
         .catch {
             val errorMessage =
                 StringResource.FromString("Failed to load countries. Please try again.")
             setState(CountryCodePickerReducer.Event.LoadCountriesFailed(errorMessage))
         }
-        .cachedIn(viewModelScope)
 
     override suspend fun initialDataLoad() {
         val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code

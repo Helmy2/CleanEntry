@@ -1,9 +1,5 @@
 package com.example.clean.entry.feature_auth.data.repository
 
-import app.cash.paging.Pager
-import app.cash.paging.PagingConfig
-import app.cash.paging.PagingData
-import app.cash.paging.map
 import com.example.clean.entry.core.util.runCatchingOnIO
 import com.example.clean.entry.feature_auth.data.source.local.CountryLocalDataSource
 import com.example.clean.entry.feature_auth.data.source.remote.CountryRemoteDataSource
@@ -28,32 +24,6 @@ class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource,
     private val localDataSource: CountryLocalDataSource
 ) : CountryRepository {
-    override fun getPagingCountries(query: String): Flow<PagingData<Country>> = channelFlow {
-        val cachedCountries = Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { localDataSource.getPagingCountries(query) }
-        ).flow.map { pagingData ->
-            pagingData.map {
-                it.toCountry()
-            }
-        }
-
-        trySend(cachedCountries.first())
-
-        runCatchingOnIO {
-            remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
-                localDataSource.insertCountries(freshCountries.map { it.toEntity() })
-            }
-        }
-
-        cachedCountries.collectLatest {
-            trySend(it)
-        }
-    }
-
     override fun getCountries(query: String): Flow<List<Country>> = channelFlow {
         val cachedCountries = localDataSource.getCountries(query)
             .map { it ->
