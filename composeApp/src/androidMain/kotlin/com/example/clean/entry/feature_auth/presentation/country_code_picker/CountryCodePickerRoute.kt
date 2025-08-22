@@ -18,9 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import cleanentry.composeapp.generated.resources.Res
 import cleanentry.composeapp.generated.resources.back
 import cleanentry.composeapp.generated.resources.search
@@ -28,7 +25,6 @@ import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.ui.ObserveEffect
-import com.example.clean.entry.feature_auth.domain.model.Country
 import com.example.clean.entry.feature_auth.domain.model.CountryData
 import com.example.clean.entry.feature_auth.presentation.components.CountryRow
 import com.example.clean.entry.feature_auth.presentation.components.CountryRowShimmer
@@ -71,7 +67,7 @@ fun CountryCodePickerScreen(
     onEvent: (CountryCodePickerReducer.Event) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val countries: LazyPagingItems<Country> = state.countryFlow.collectAsLazyPagingItems()
+    val countries by state.countryFlow.collectAsStateWithLifecycle(emptyList())
 
     Scaffold(
         topBar = {
@@ -133,48 +129,34 @@ fun CountryCodePickerScreen(
                 Status.Idle, Status.Loading -> {
                     LazyColumn {
                         items(
-                            count = countries.itemCount,
-                            key = { index -> countries[index]?.code ?: "" }
+                            count = countries.size,
+                            key = { index -> countries[index].code }
                         ) { index ->
                             val country = countries[index]
-                            if (country != null) {
-                                CountryRow(
-                                    country = country,
-                                    isSelected = state.selectedCountryCode == country.code,
-                                    onClick = {
-                                        onEvent(
-                                            CountryCodePickerReducer.Event.CountrySelectedCode(
-                                                it.code
-                                            )
+                            CountryRow(
+                                country = country,
+                                isSelected = state.selectedCountryCode == country.code,
+                                onClick = {
+                                    onEvent(
+                                        CountryCodePickerReducer.Event.CountrySelectedCode(
+                                            it.code
                                         )
-                                    }, modifier = Modifier.padding(
+                                    )
+                                }, modifier = Modifier.padding(
+                                    top = MaterialTheme.spacing.small,
+                                    bottom = MaterialTheme.spacing.small
+                                )
+                            )
+                        }
+
+                        if (countries.isEmpty()) {
+                            items(10) {
+                                CountryRowShimmer(
+                                    modifier = Modifier.padding(
                                         top = MaterialTheme.spacing.small,
                                         bottom = MaterialTheme.spacing.small
                                     )
                                 )
-                            }
-                        }
-
-                        when  {
-                            countries.loadState.refresh == LoadState.Loading -> {
-                                items(10) {
-                                    CountryRowShimmer(
-                                        modifier = Modifier.padding(
-                                            top = MaterialTheme.spacing.small,
-                                            bottom = MaterialTheme.spacing.small
-                                        )
-                                    )
-                                }
-                            }
-                            countries.loadState.append == LoadState.Loading -> {
-                                items(2) {
-                                    CountryRowShimmer(
-                                        modifier = Modifier.padding(
-                                            top = MaterialTheme.spacing.small,
-                                            bottom = MaterialTheme.spacing.small
-                                        )
-                                    )
-                                }
                             }
                         }
                     }
