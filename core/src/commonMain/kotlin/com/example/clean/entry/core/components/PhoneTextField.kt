@@ -17,10 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import cleanentry.core.generated.resources.Res
+import cleanentry.core.generated.resources.emojione_android
 import cleanentry.core.generated.resources.select_country_code
 import com.example.clean.entry.core.design_system.spacing
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -71,7 +75,13 @@ fun PhoneTextField(
             ) {
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Text(
-                    text = countryFlag, style = MaterialTheme.typography.bodyLarge
+                    text = countryFlag,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = FontFamily(
+                        Font(
+                            resource = Res.font.emojione_android, weight = FontWeight.Normal
+                        )
+                    )
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Text(

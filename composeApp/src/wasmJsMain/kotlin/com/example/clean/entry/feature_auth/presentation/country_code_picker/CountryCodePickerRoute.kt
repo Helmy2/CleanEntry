@@ -50,7 +50,6 @@ fun CountryCodePickerRoute(
                     name = effect.country.name
                 )
                 onNavigateBack(result)
-                println("CountryCodePickerRoute: Navigating back with result: $result")
             }
         }
     }
@@ -174,3 +173,47 @@ fun CountryCodePickerScreen(
         }
     }
 }
+//
+//@Composable
+//fun CountryRow(
+//    country: Country,
+//    isSelected: Boolean,
+//    onClick: (Country) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Column {
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//                .clickable(onClick = { onClick(country) })
+//                .padding(MaterialTheme.spacing.small),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                "👋 \\uD83D\\uDE00",
+//                style = MaterialTheme.typography.titleLarge,
+//            )
+//            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+//            Text(
+//                text = country.code,
+//                style = MaterialTheme.typography.bodyLarge,
+//                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+//            )
+//            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+//            Text(
+//                text = country.name,
+//                style = MaterialTheme.typography.bodyLarge,
+//                color = MaterialTheme.colorScheme.onSurface
+//            )
+//            Spacer(modifier = Modifier.weight(1f))
+//            if (isSelected) {
+//                Icon(
+//                    imageVector = Icons.Default.CheckCircle,
+//                    contentDescription = stringResource(Res.string.selected),
+//                    tint = MaterialTheme.colorScheme.primary
+//                )
+//            }
+//        }
+//        HorizontalDivider()
+//    }
+//}
