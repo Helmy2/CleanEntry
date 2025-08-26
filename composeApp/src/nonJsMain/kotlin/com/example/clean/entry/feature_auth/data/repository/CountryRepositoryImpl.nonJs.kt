@@ -13,11 +13,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
 
-/**
- * The concrete implementation of the CountryRepository.
- * It is responsible for orchestrating data from different data sources (remote, local).
- * For now, it only fetches from the remote data source.
- */
 class CountryRepositoryImpl(
     private val remoteDataSource: CountryRemoteDataSource,
     private val localDataSource: CountryLocalDataSource
@@ -38,7 +33,6 @@ class CountryRepositoryImpl(
 
         runCatchingOnIO {
             remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
-                trySend(freshCountries.filter { it.name.contains(query, ignoreCase = true) })
                 localDataSource.insertCountries(freshCountries.map { it.toEntity() })
             }
         }
@@ -49,8 +43,7 @@ class CountryRepositoryImpl(
             runCatchingOnIO {
                 localDataSource.getCountry(code)?.toCountry()
                     ?: throw Exception("Country not found Locally")
-            }.getOrNull() ?: remoteDataSource.getCountries().getOrThrow()
-                .firstOrNull { it.code == code } ?: throw Exception("Country not found Remotely")
+            }.getOrNull() ?: remoteDataSource.getCountryByCode(code).getOrThrow()
         }
     }
 }

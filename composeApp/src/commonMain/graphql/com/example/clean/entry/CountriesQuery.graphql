@@ -6,3 +6,12 @@ query CountriesQuery {
     emoji
   }
 }
+
+query CountryCodeQuery($code: ID!) {
+  country(code: $code) {
+    code
+    name
+    phone
+    emoji
+  }
+}
