@@ -58,6 +58,16 @@ kotlin {
     }
     
     sourceSets {
+        val nonJsMain by creating { dependsOn(commonMain.get()) }
+        val iosMain by creating { dependsOn(nonJsMain) }
+
+        androidMain.get().dependsOn(nonJsMain)
+        jvmMain.get().dependsOn(nonJsMain)
+
+        iosX64Main.get().dependsOn(iosMain)
+        iosArm64Main.get().dependsOn(iosMain)
+        iosSimulatorArm64Main.get().dependsOn(iosMain)
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)

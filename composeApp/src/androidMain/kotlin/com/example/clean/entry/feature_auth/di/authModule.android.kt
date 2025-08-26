@@ -10,6 +10,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 actual val authPlatformModule: Module = module{
+    includes(nonJsModule)
     singleOf(::DatabaseDriverFactory)
 
     single { PhoneNumberUtil.createInstance(androidContext()) }
