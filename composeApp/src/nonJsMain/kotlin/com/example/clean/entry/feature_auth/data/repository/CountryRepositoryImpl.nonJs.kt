@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 
 class CountryRepositoryImpl(
@@ -24,16 +25,13 @@ class CountryRepositoryImpl(
                     it.map {
                         it.toCountry()
                     }
+                }.onStart {
+                    remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
+                        localDataSource.insertCountries(freshCountries.map { it.toEntity() })
+                    }
                 }
-
             cachedCountries.collectLatest {
                 trySend(it)
-            }
-        }
-
-        runCatchingOnIO {
-            remoteDataSource.getCountries().getOrThrow().let { freshCountries ->
-                localDataSource.insertCountries(freshCountries.map { it.toEntity() })
             }
         }
     }
