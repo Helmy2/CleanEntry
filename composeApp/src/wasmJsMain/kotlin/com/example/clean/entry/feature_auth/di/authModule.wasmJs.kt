@@ -15,5 +15,4 @@ actual val authPlatformModule: Module = module {
         bind<CountryRepository>()
     }
     singleOf(::PhoneNumberUtil)
-    viewModelOf(::CountryCodePickerViewModel)
 }
