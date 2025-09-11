@@ -16,15 +16,6 @@ import kotlinx.browser.document
 fun main() {
     initKoin()
     ComposeViewport(document.body!!) {
-        CleanEntryTheme {
-            Scaffold {
-                val navController = rememberNavController()
-                AppNavHost(
-                    navController = navController,
-                    startDestination = AppDestination.AuthGraph,
-                    modifier = Modifier.padding(it)
-                )
-            }
-        }
+        App()
     }
 }
