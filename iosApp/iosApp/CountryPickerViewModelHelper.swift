@@ -57,17 +57,32 @@ class CountryPickerViewModelHelper: ObservableObject {
             do {
                 let stream = countryRepository.getCountries(query: query)
                 for try await result in stream {
-                    // Check if the task has been cancelled before updating the UI
                     if Task.isCancelled {
+                        // It's good practice to print or log cancellation if you want to observe it,
+                        // but often it's an expected part of the flow.
+                        print("Country loading task cancelled while iterating.")
                         return
                     }
 
-                    self.countries = result
+                    // Switch to the main actor (main thread) to update @Published property
+                    await MainActor.run {
+                        self.countries = result
+                    }
                 }
             } catch {
-                if !Task.isCancelled {
-                    print("Failed to observe countries stream: \(error.localizedDescription)")
-                    self.countries = []
+                if error is CancellationError { // More specific check for cancellation
+                    print("Country loading Flow was cancelled.")
+                    // Optionally, clear countries on cancellation if that's desired behavior
+                    // await MainActor.run {
+                    // self.countries = []
+                    // }
+                    return // Important to return if it's a cancellation
+                }
+
+                // If it's a different error
+                print("Failed to observe countries stream: \(error.localizedDescription)")
+                await MainActor.run {
+                    self.countries = [] // Ensure UI update for error state is also on main
                 }
             }
         }
