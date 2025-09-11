@@ -111,6 +111,9 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.native.driver)
         }
+        wasmJsMain.dependencies {
+            implementation(npm("google-libphonenumber", "3.2.42"))
+        }
     }
 }
 
