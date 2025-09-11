@@ -1,8 +1,7 @@
 CleanEntry: A KMP Case Study
 CleanEntry is a Kotlin Multiplatform (KMP) application built to demonstrate a modern, scalable, and
 maintainable app architecture. It serves as a case study for implementing Clean Architecture
-principles with an MVI (Model-View-Intent) pattern, sharing logic and UI across Android, iOS, and
-Desktop.
+principles with an MVI (Model-View-Intent) pattern, sharing logic and UI across Android, iOS, Desktop, and Web (via Kotlin/WasmJs).
 
 The project features a complete user authentication flow, including:
 
@@ -38,11 +37,13 @@ The project features a complete user authentication flow, including:
 | **Registration**   | ![](images/image_macos_signup.png)         | ![](images/image_macos_signup_dark.png)         |
 | **Country Picker** | ![](images/image_macos_select_country.png) | ![](images/image_macos_select_country_dark.png) |
 
+Web (WasmJs) screenshots can be added here once available.
+
 ## 🛠️ Tech Stack & Key Concepts
 
-- Kotlin Multiplatform: For sharing code across Android, iOS, and Desktop.
+- Kotlin Multiplatform: For sharing code across Android, iOS, Desktop, and Web (via Kotlin/WasmJs).
 
-- Compose Multiplatform: For the Android & Desktop UI, and for shared screens hosted on iOS.
+- Compose Multiplatform: For the Android, Desktop, and Web (WasmJs) UI, and for shared screens hosted on iOS.
 
 - SwiftUI: For the native iOS UI shell, navigation, and specific screens.
 
@@ -82,35 +83,44 @@ The project is organized into several modules, each with a distinct responsibili
 ```
 📁 CleanEntry/
 ├── 📁 composeApp/
-│   ├── 📂 commonMain/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 data/
-│   │           ├── 📂 di/
-│   │           ├── 📂 domain/
-│   │           │   ├── 📂 model/
-│   │           │   └── 📂 usecase/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               ├── 📂 login/
-│   │               └── 📂 registration/
-│   ├── 📂 androidMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
-│   ├── 📂 iosMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
-│   └── 📂 desktopMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
+│   ├── 📁 src/
+│   │   ├── 📂 commonMain/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 data/
+│   │   │           ├── 📂 di/
+│   │   │           ├── 📂 domain/
+│   │   │           │   ├── 📂 model/
+│   │   │           │   └── 📂 usecase/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               ├── 📂 login/
+│   │   │               └── 📂 registration/
+│   │   ├── 📂 androidMain/
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 iosMain/
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 jvmMain/  
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 nonJsMain/
+│   │   │   └── 📂 ...
+│   │   ├── 📂 commonTest/
+│   │   │   └── 📂 ...
+│   │   └── 📂 wasmJsMain/
+│   │       └── 📂 ...
+│   ├── 📄 build.gradle.kts
+│   └── 📄 countries.db
 ├── 📁 core/
 │   ├── 📂 commonMain/
 │   │   ├── 📂 designsystem/
@@ -119,7 +129,7 @@ The project is organized into several modules, each with a distinct responsibili
 │   │   └── 📂 util/
 │   ├── 📂 androidMain/...
 │   ├── 📂 iosMain/...
-│   └── 📂 desktopMain/...
+│   └── 📂 jvmMain/...
 └── 📁 iosApp/ (Native iOS Application)
 ```
 
@@ -128,7 +138,7 @@ The project is organized into several modules, each with a distinct responsibili
   feature.
 
 - `:composeApp` - The shared Kotlin Multiplatform module. It contains all the shared code, including
-  the domain and data layers, ViewModels, and the shared Compose UI.
+  the domain and data layers, ViewModels, and the shared Compose UI for Android, Desktop, and Web (WasmJs).
 
 - `:iosApp` - The native iOS application. It is written primarily in SwiftUI and is responsible for
   the overall app structure, navigation, and hosting the shared Compose UI screens.
@@ -175,3 +185,4 @@ To build and run the project:
 - To run on Android, select the composeApp run configuration.
 - To run on iOS, open the iosApp in Xcode and run it on a simulator or device.
 - To run on Desktop, select the desktop run configuration in Android Studio.
+- To run on Web (WasmJs), execute the Gradle task `./gradlew wasmJsBrowserDevelopmentRun` (or a similar task defined in your `build.gradle.kts`) and open the displayed URL (usually `http://localhost:8080`) in your browser.

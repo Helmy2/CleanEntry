@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,9 +11,9 @@ plugins {
     alias(libs.plugins.apollo)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
     alias(libs.plugins.skie)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -22,6 +24,26 @@ kotlin {
     }
 
     jvm()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName.set("composeApp")
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+        binaries.executable()
+    }
     
     listOf(
         iosX64(),
@@ -36,6 +58,16 @@ kotlin {
     }
     
     sourceSets {
+        val nonJsMain by creating { dependsOn(commonMain.get()) }
+        val iosMain by creating { dependsOn(nonJsMain) }
+
+        androidMain.get().dependsOn(nonJsMain)
+        jvmMain.get().dependsOn(nonJsMain)
+
+        iosX64Main.get().dependsOn(iosMain)
+        iosArm64Main.get().dependsOn(iosMain)
+        iosSimulatorArm64Main.get().dependsOn(iosMain)
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -43,6 +75,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.paging.runtime.ktx)
             implementation(libs.androidx.paging.compose)
+            implementation(libs.android.driver)
         }
         commonMain.dependencies {
             implementation(project(":core"))
@@ -62,11 +95,8 @@ kotlin {
 
             implementation(libs.apollo.runtime)
 
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
-            implementation(libs.room.paging)
-
             implementation(libs.libphonenumber.jvm)
+            implementation(libs.coroutines.extensions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,6 +106,13 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.sqlite.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.native.driver)
+        }
+        wasmJsMain.dependencies {
+            implementation(npm("google-libphonenumber", "3.2.42"))
         }
     }
 }
@@ -119,12 +156,16 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
 apollo {
     service("service") {
         packageName.set("com.example.clean.entry")
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.example.clean.entry.db")
+        }
     }
 }

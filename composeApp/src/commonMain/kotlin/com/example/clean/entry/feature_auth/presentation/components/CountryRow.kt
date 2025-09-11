@@ -20,32 +20,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cleanentry.composeapp.generated.resources.Res
+import cleanentry.composeapp.generated.resources.emojione_android
 import cleanentry.composeapp.generated.resources.selected
 import com.example.clean.entry.core.components.shimmer
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.feature_auth.domain.model.Country
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CountryRow(
-    country: Country,
-    isSelected: Boolean,
-    onClick: (Country) -> Unit,
-    modifier: Modifier = Modifier
+    country: Country, isSelected: Boolean, onClick: (Country) -> Unit, modifier: Modifier = Modifier
 ) {
     Column {
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .clickable(onClick = { onClick(country) })
+            modifier = modifier.fillMaxWidth().clickable(onClick = { onClick(country) })
                 .padding(MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = country.flagEmoji,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                fontFamily = FontFamily(
+                    Font(
+                        resource = Res.font.emojione_android, weight = FontWeight.Normal
+                    )
+                )
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
             Text(
@@ -76,36 +80,28 @@ fun CountryRow(
 fun CountryRowShimmer(modifier: Modifier = Modifier) {
     Column {
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing.small),
+            modifier = modifier.fillMaxWidth().padding(MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier
-                    .width(32.dp)
+                modifier = Modifier.width(32.dp)
                     .height(MaterialTheme.typography.titleLarge.lineHeight.value.dp)
-                    .clip(RoundedCornerShape(10))
-                    .shimmer()
+                    .clip(RoundedCornerShape(10)).shimmer()
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
             Box(
-                modifier = Modifier
-                    .width(32.dp)
+                modifier = Modifier.width(32.dp)
                     .height(MaterialTheme.typography.bodyLarge.lineHeight.value.dp)
-                    .clip(RoundedCornerShape(10))
-                    .shimmer()
+                    .clip(RoundedCornerShape(10)).shimmer()
             )
 
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
                     .height(MaterialTheme.typography.bodyLarge.lineHeight.value.dp)
-                    .clip(RoundedCornerShape(10))
-                    .shimmer()
+                    .clip(RoundedCornerShape(10)).shimmer()
             )
         }
         HorizontalDivider()
