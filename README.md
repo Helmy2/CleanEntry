@@ -83,37 +83,44 @@ The project is organized into several modules, each with a distinct responsibili
 ```
 📁 CleanEntry/
 ├── 📁 composeApp/
-│   ├── 📂 commonMain/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 data/
-│   │           ├── 📂 di/
-│   │           ├── 📂 domain/
-│   │           │   ├── 📂 model/
-│   │           │   └── 📂 usecase/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               ├── 📂 login/
-│   │               └── 📂 registration/
-│   ├── 📂 androidMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
-│   ├── 📂 iosMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
-│   ├── 📂 desktopMain/
-│   │   ├── 📂 navigation/
-│   │   └── 📁 feature_auth/
-│   │           ├── 📂 navigation/
-│   │           └── 📂 presentation/
-│   │               └── 📂 country_code_picker/
-│   └── 📂 wasmJsMain/
-│       └── 📂 ... 
+│   ├── 📁 src/
+│   │   ├── 📂 commonMain/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 data/
+│   │   │           ├── 📂 di/
+│   │   │           ├── 📂 domain/
+│   │   │           │   ├── 📂 model/
+│   │   │           │   └── 📂 usecase/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               ├── 📂 login/
+│   │   │               └── 📂 registration/
+│   │   ├── 📂 androidMain/
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 iosMain/
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 jvmMain/  
+│   │   │   ├── 📂 navigation/
+│   │   │   └── 📁 feature_auth/
+│   │   │           ├── 📂 navigation/
+│   │   │           └── 📂 presentation/
+│   │   │               └── 📂 country_code_picker/
+│   │   ├── 📂 nonJsMain/
+│   │   │   └── 📂 ...
+│   │   ├── 📂 commonTest/
+│   │   │   └── 📂 ...
+│   │   └── 📂 wasmJsMain/
+│   │       └── 📂 ...
+│   ├── 📄 build.gradle.kts
+│   └── 📄 countries.db
 ├── 📁 core/
 │   ├── 📂 commonMain/
 │   │   ├── 📂 designsystem/
@@ -122,7 +129,7 @@ The project is organized into several modules, each with a distinct responsibili
 │   │   └── 📂 util/
 │   ├── 📂 androidMain/...
 │   ├── 📂 iosMain/...
-│   └── 📂 desktopMain/...
+│   └── 📂 jvmMain/...
 └── 📁 iosApp/ (Native iOS Application)
 ```
 
