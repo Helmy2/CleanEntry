@@ -17,17 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CleanEntryTheme {
-                Scaffold(
-                ) {
-                    val navController = rememberNavController()
-                    AppNavHost(
-                        navController = navController,
-                        startDestination = AppDestination.AuthGraph,
-                        modifier = Modifier.padding(it)
-                    )
-                }
-            }
+            App()
         }
     }
 }

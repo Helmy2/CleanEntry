@@ -13,7 +13,7 @@ rule: outer layers can depend on inner layers, but inner layers know nothing abo
 - **Why Clean Architecture?**
 
   - **Platform Independence:**The core business logic in`commonMain`is not dependent on the Android,
-    iOS, or JVM frameworks, making it truly portable.
+    iOS, JVM, or Web frameworks, making it truly portable. The addition of the Web (WasmJs) target further exemplifies this, allowing the same core logic to run in the browser.
 
   - **Testability:**Each layer can be tested in isolation. The domain layer, containing the most
     critical business rules, can be tested with simple, fast unit tests that run on any machine.
@@ -49,9 +49,9 @@ strategy to deliver a native experience on each platform.
 
 ### UI Strategy
 
-- **Android & Desktop (Shared UI):**The Android and Desktop apps are built entirely with**Compose
+- **Android, Desktop, & Web (Shared UI):**The Android, Desktop, and Web (WasmJs) apps are built entirely with**Compose
   Multiplatform**. The UI is written once in the`shared`module (`composeApp`) and runs natively on
-  both platforms.
+  these platforms.
 
 - **iOS (Hybrid UI):**The iOS app uses a hybrid approach.
 
@@ -63,7 +63,7 @@ strategy to deliver a native experience on each platform.
     using`UIViewControllerRepresentable`.
 
 - **Why this strategy?**This approach demonstrates the flexibility of KMP. We can achieve maximum
-  code reuse for Android and Desktop, while still delivering a perfectly native navigation
+  code reuse for Android, Desktop, and Web, while still delivering a perfectly native navigation
   experience and feel on iOS where it matters most.
 
 ## 3. 🎨 Design System
@@ -98,7 +98,9 @@ Navigation is handled natively on each platform but is driven by logic from the 
 - **Android & Desktop:**The`androidApp`and`desktop`targets use Jetpack Compose Navigation with a
   type-safe graph defined in`AuthNavHost.kt`.
 
-This approach ensures that navigation feels completely native on each platform while the decision of
+- **Web (WasmJs):** The `wasmJs` target will likely use Jetpack Compose Navigation, similar to Android and Desktop, for a consistent single-page application experience, potentially using a shared `AuthNavHost.kt`.
+
+This approach ensures that navigation feels completely native on each platform (or consistent in the case of Compose targets) while the decision of
 _when_to navigate remains part of the shared business logic.
 
 ## 5. 🧪 Quality Assurance

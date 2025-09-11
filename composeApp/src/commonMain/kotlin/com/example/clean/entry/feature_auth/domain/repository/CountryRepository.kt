@@ -1,6 +1,5 @@
 package com.example.clean.entry.feature_auth.domain.repository
 
-import androidx.paging.PagingData
 import com.example.clean.entry.feature_auth.domain.model.Country
 import kotlinx.coroutines.flow.Flow
 
@@ -9,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
  * This lives in the domain layer and has no knowledge of the data source.
  */
 interface CountryRepository {
-    fun getPagingCountries(query: String): Flow<PagingData<Country>>
     fun getCountries(query: String): Flow<List<Country>>
 
     suspend fun getCountry(code: String): Result<Country>
