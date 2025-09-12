@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.apollo)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.skie)
     alias(libs.plugins.composeHotReload)
@@ -73,8 +72,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.libphonenumber.android)
             implementation(libs.koin.android)
-            implementation(libs.androidx.paging.runtime.ktx)
-            implementation(libs.androidx.paging.compose)
             implementation(libs.android.driver)
         }
         commonMain.dependencies {
@@ -145,14 +142,6 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.room.compiler)
-    add("kspAndroid", libs.room.compiler)
-
-    add("kspJvm", libs.room.compiler)
-
-    add("kspIosX64", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
-    add("kspIosSimulatorArm64", libs.room.compiler)
     debugImplementation(compose.uiTooling)
 }
 

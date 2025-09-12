@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.clean.entry.feature_auth.navigation.AuthNavHost
+import com.example.clean.entry.feature.auth.navigation.AuthNavHost
 
 
 @Composable
