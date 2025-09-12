@@ -31,13 +31,13 @@ import cleanentry.composeapp.generated.resources.password_placeholder
 import cleanentry.composeapp.generated.resources.phone_placeholder
 import cleanentry.composeapp.generated.resources.please_fill_the_details_and_log_in
 import cleanentry.composeapp.generated.resources.you_don_t_have_an_account
+import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.stringResource
 import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature_auth.domain.model.Country
-import com.example.clean.entry.feature_auth.presentation.components.NativeAppButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -157,7 +157,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            NativeAppButton(
+            AppButton(
                 text = stringResource(Res.string.continue_label),
                 onClick = { onEvent(LoginReducer.Event.LoginClicked) },
                 enabled = state.isLoginButtonEnabled,
