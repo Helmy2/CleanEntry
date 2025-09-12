@@ -2,10 +2,8 @@ import SwiftUI
 import Combine
 import ComposeApp
 
-/**
- * An ObservableObject that bridges the shared CountryCodePickerViewModel
- * to the native SwiftUI Country picker UI, mirroring the pattern used by LoginViewModelHelper.
- */
+
+/// Bridges the Kotlin CountryCodePickerViewModel to SwiftUI and exposes local published state.
 class CountryPickerViewModelHelper: ObservableObject {
 
     let viewModel = iOSApp.dependenciesHelper.countryCodePickerViewModel

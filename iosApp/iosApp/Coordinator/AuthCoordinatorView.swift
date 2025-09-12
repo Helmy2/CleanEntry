@@ -1,15 +1,21 @@
 import SwiftUI
 import ComposeApp
 
+// Identifies which flow should receive a selected country.
+enum CountrySelectionTarget: Hashable {
+    case login
+    case registration
+}
 
+// Defines the navigation destinations for the auth flow.
 enum AuthNavigationPath: Hashable {
     case registration
-    case countryPicker(countryCode: String)
+    case countryPicker(countryCode: String, target: CountrySelectionTarget)
 }
 
 /**
- * A coordinator view that manages the navigation and state for the authentication flow.
- * It is the single source of truth, owning the LoginViewModelHelper.
+ A coordinator view that manages navigation and state for the authentication flow.
+ It owns the LoginViewModelHelper and RegistrationViewModelHelper and routes user actions.
  */
 struct AuthCoordinatorView: View {
 
@@ -20,16 +26,16 @@ struct AuthCoordinatorView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
+            // Root: Login view
             LoginView(
                 viewModel: loginHelper.loginViewModel,
-                onNavigateToCountryPicker: { Country in
-                    path
-                        .append(
-                            AuthNavigationPath
-                                .countryPicker(countryCode: Country!.code)
-                        )
+                onNavigateToCountryPicker: { country in
+                    // Prefer provided country code if present, else use current selection.
+                    let code = country?.code ?? loginHelper.selectedCountryCode
+                    path.append(AuthNavigationPath.countryPicker(countryCode: code, target: .login))
                 },
                 onLoginSuccess: {
+                    // TODO: Replace with navigation to main app flow
                     print("Login successful! Navigate to main app...")
                 },
                 onCreateAccountClick: {
@@ -37,39 +43,55 @@ struct AuthCoordinatorView: View {
                 }
             )
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(
-                for: AuthNavigationPath.self
-            ) { destination in
+            .navigationDestination(for: AuthNavigationPath.self) { destination in
                 switch destination {
                 case .registration:
-                    RegistrationView(viewModel: registrationHelper
-                        .registrationViewModel,
-                                     onBackClick: {
-                                         path.removeLast()
-                                     },
-                                     onNavigateToCountryPicker: { Country in
-                                         path.append(
-                                             AuthNavigationPath.countryPicker(countryCode: Country!.code))
-                                     }, onRegistrationSuccess: {
-                        print("Registration successful! Navigate to main app...")
-                    }
+                    RegistrationView(
+                        viewModel: registrationHelper.registrationViewModel,
+                        onBackClick: {
+                            if !path.isEmpty {
+                                path.removeLast()
+                            }
+                        },
+                        onNavigateToCountryPicker: { country in
+                            let code = country?.code ?? registrationHelper.selectedCountryCode
+                            path.append(AuthNavigationPath.countryPicker(countryCode: code, target: .registration))
+                        },
+                        onRegistrationSuccess: {
+                            // TODO: Replace with navigation to main app flow
+                            print("Registration successful! Navigate to main app...")
+                        }
                     )
                     .navigationBarBackButtonHidden(true)
-                case .countryPicker(let countryCode):
+
+                case let .countryPicker(countryCode, target):
                     NativeCountryPickerView(
                         selectedCountryCode: countryCode,
                         onCountrySelected: { country in
-                            loginHelper.onCountrySelected(country: country)
-                            registrationHelper
-                                .onCountrySelected(country: country)
+                            // Route selection to the correct flow.
+                            switch target {
+                            case .login:
+                                loginHelper.onCountrySelected(country: country)
+                            case .registration:
+                                registrationHelper.onCountrySelected(country: country)
+                            }
+                            // Pop back after selection.
+                            if !path.isEmpty {
+                                path.removeLast()
+                            }
                         }
                     )
                 }
             }
         }
-        .task {
-            await loginHelper.activate()
-            await registrationHelper.activate()
+        // Lifecycle-aware state collection
+        .onAppear {
+            loginHelper.start()
+            registrationHelper.start()
+        }
+        .onDisappear {
+            loginHelper.stop()
+            registrationHelper.stop()
         }
     }
 }
