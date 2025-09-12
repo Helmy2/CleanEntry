@@ -1,7 +1,7 @@
 package com.example.clean.entry.shared.di
 
 import com.example.clean.entry.shared.data.source.local.DatabaseDriverFactory
-import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerViewModel
+import com.example.clean.entry.feature.auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.shared.util.PhoneNumberUtil
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
