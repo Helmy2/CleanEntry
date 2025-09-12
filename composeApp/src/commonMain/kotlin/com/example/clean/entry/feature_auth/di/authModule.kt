@@ -11,19 +11,15 @@ import com.example.clean.entry.feature_auth.domain.usecase.ValidateSurnameUseCas
 import com.example.clean.entry.feature_auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.feature_auth.presentation.login.LoginViewModel
 import com.example.clean.entry.feature_auth.presentation.registration.RegistrationViewModel
-import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-
-expect val authPlatformModule: Module
 
 /**
  * Koin module for the authentication feature.
  * This provides all the necessary dependencies for auth-related classes.
  */
 val authModule = module {
-    includes(authPlatformModule)
 
     factory { get<AppDatabase>().countryEntityQueries }
 

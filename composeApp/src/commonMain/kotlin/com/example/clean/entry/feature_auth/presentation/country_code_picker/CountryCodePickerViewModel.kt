@@ -1,12 +1,9 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
-import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
@@ -18,7 +15,6 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
     val countryRepository: CountryRepository,
-    val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
     reducer = CountryCodePickerReducer, initialState = CountryCodePickerReducer.State()
 ) {
@@ -37,8 +33,6 @@ class CountryCodePickerViewModel(
         }
 
     override suspend fun initialDataLoad() {
-        val selectedCountryCode = savedStateHandle.toRoute<AuthDestination.CountryCodePicker>().code
-        setState(CountryCodePickerReducer.Event.CountrySelectedCode(selectedCountryCode))
         setState(CountryCodePickerReducer.Event.CountryDataFlow(countryFlow))
     }
 
