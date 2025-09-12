@@ -2,7 +2,7 @@ package com.example.clean.entry.feature_auth.domain.usecase
 
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
-import com.example.clean.entry.feature_auth.util.PhoneNumberUtil
+import com.example.clean.entry.shared.util.PhoneNumberUtil
 
 /**
  * A use case that validates a phone number using Google's libphonenumber.
