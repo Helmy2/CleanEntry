@@ -5,7 +5,6 @@ import com.example.clean.entry.core.design_system.CleanEntryTheme
 import com.example.clean.entry.feature_auth.domain.model.Country
 import platform.UIKit.UIViewController
 
-
 fun LoginViewController(
     viewModel: LoginViewModel,
     onNavigateToCountryPicker: (Country) -> Unit,

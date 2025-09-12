@@ -1,12 +1,9 @@
 package com.example.clean.entry.feature_auth.presentation.country_code_picker
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature_auth.domain.repository.CountryRepository
-import com.example.clean.entry.feature_auth.navigation.AuthDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
