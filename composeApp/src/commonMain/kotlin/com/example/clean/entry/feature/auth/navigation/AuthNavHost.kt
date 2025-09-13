@@ -1,65 +1,60 @@
 package com.example.clean.entry.feature.auth.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.navigation
 import com.example.clean.entry.feature.auth.domain.model.Country
 import com.example.clean.entry.feature.auth.presentation.country_code_picker.CountryCodePickerRoute
 import com.example.clean.entry.feature.auth.presentation.login.LoginRoute
 import com.example.clean.entry.feature.auth.presentation.registration.RegistrationRoute
+import com.example.clean.entry.navigation.AppDestination
+import com.example.clean.entry.navigation.AppNavigator
 
-
-@Composable
-fun AuthNavHost(modifier: Modifier = Modifier, onSuccess: () -> Unit) {
-    val navController = rememberNavController()
-    var country by remember {
-        mutableStateOf(
-            Country(
-                name = "Egypt", dialCode = "+20", code = "EG", flagEmoji = "🇪🇬"
-            )
-        )
-    }
-
-    NavHost(
-        navController = navController,
-        startDestination = AuthDestination.Login,
-        modifier = modifier,
+fun NavGraphBuilder.authNavBuilder(
+    country: Country,
+    onCountryChange: (Country) -> Unit,
+    navigator: AppNavigator,
+) {
+    navigation<AppDestination.Auth>(
+        startDestination = AppDestination.Auth.Login
     ) {
-        composable<AuthDestination.Login> { backStackEntry ->
+
+        composable<AppDestination.Auth.Login> { backStackEntry ->
             LoginRoute(
-                onCreateAccountClick = { navController.navigate(AuthDestination.Registration) },
-                onNavigateToCountryPicker = {
-                    navController.navigate(AuthDestination.CountryCodePicker(it.code))
+                onCreateAccountClick = {
+                    navigator.navigate(AppDestination.Auth.Registration)
                 },
-                onLoginSuccess = onSuccess,
+                onNavigateToCountryPicker = {
+                    navigator.navigate(AppDestination.Auth.CountryCodePicker(it.code))
+                },
+                onLoginSuccess = {
+                    navigator.navigateAsRoot(AppDestination.Dashboard)
+                },
                 countryResult = country,
             )
         }
 
-        composable<AuthDestination.Registration> { backStackEntry ->
+        composable<AppDestination.Auth.Registration> { backStackEntry ->
             RegistrationRoute(
                 countryResult = country,
                 onNavigateToCountryPicker = {
-                    navController.navigate(AuthDestination.CountryCodePicker(it.code))
+                    navigator.navigate(AppDestination.Auth.CountryCodePicker(it.code))
                 },
-                onRegistrationSuccess = onSuccess, onBackClick = { navController.popBackStack() },
+                onRegistrationSuccess = {
+                    navigator.navigateAsRoot(AppDestination.Dashboard)
+                },
+                onBackClick = { navigator.navigateBack() },
             )
         }
 
-        composable<AuthDestination.CountryCodePicker> {
+        composable<AppDestination.Auth.CountryCodePicker> {
             CountryCodePickerRoute(
                 countryResult = country,
                 onNavigateBack = {
                     it?.let {
-                        country = it
+                        onCountryChange(it)
                     }
-                    navController.popBackStack()
+                    navigator.navigateBack()
                 },
             )
         }

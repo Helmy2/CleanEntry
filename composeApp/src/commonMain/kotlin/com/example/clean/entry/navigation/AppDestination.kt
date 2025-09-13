@@ -9,11 +9,20 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class AppDestination {
 
-    @Serializable
-    data object AuthGraph : AppDestination()
 
     @Serializable
-    data object MainGraph : AppDestination()
+    data object Auth : AppDestination() {
+        @Serializable
+        data object Login : AppDestination()
+
+        @Serializable
+        data object Registration : AppDestination()
+
+        @Serializable
+        data class CountryCodePicker(val code: String) : AppDestination()
+    }
+
+
 
     @Serializable
     data object Dashboard : AppDestination()
