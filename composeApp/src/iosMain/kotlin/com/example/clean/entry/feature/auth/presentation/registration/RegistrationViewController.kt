@@ -8,18 +8,12 @@ import platform.UIKit.UIViewController
 
 fun RegistrationViewController(
     viewModel: RegistrationViewModel,
-    onBackClick: () -> Unit,
     countryResult: Country?,
-    onNavigateToCountryPicker: (Country) -> Unit,
-    onRegistrationSuccess: () -> Unit
 ): UIViewController {
     return ComposeUIViewController {
         CleanEntryTheme {
             RegistrationRoute(
                 viewModel = viewModel,
-                onNavigateToCountryPicker = onNavigateToCountryPicker,
-                onBackClick = onBackClick,
-                onRegistrationSuccess = onRegistrationSuccess,
                 countryResult = countryResult,
             )
         }

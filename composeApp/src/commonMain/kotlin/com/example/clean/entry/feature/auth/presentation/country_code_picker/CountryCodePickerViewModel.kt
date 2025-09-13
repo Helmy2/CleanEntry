@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.feature.auth.domain.repository.CountryRepository
+import com.example.clean.entry.navigation.AppNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
@@ -14,8 +15,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
-    val countryRepository: CountryRepository,
-) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
+     val countryRepository: CountryRepository,
+    private val navigator: AppNavigator,
+) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, Nothing>(
     reducer = CountryCodePickerReducer, initialState = CountryCodePickerReducer.State()
 ) {
 
@@ -46,10 +48,15 @@ class CountryCodePickerViewModel(
 
             is CountryCodePickerReducer.Event.CountrySelectedCode -> viewModelScope.launch {
                 countryRepository.getCountry(event.code).onSuccess {
-                    setState(
-                        CountryCodePickerReducer.Event.NavigateBackWithResult(it)
+                    navigator.navigateBackWithResult(
+                        key = AppNavigator.Companion.Keys.COUNTER_CODE,
+                        it.code
                     )
                 }
+            }
+
+            is CountryCodePickerReducer.Event.BackButtonClicked -> {
+                navigator.navigateBack()
             }
 
             else -> setState(event)

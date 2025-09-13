@@ -32,7 +32,6 @@ import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.stringResource
-import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature.auth.domain.model.Country
 import com.example.clean.entry.feature.auth.presentation.components.TopBarWithBackNavigation
 import org.jetbrains.compose.resources.stringResource
@@ -45,20 +44,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun RegistrationRoute(
     viewModel: RegistrationViewModel = koinViewModel(),
-    onBackClick: () -> Unit,
     countryResult: Country?,
-    onNavigateToCountryPicker: (Country) -> Unit,
-    onRegistrationSuccess: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    ObserveEffect(viewModel.effect) { effect ->
-        when (effect) {
-            is RegistrationReducer.Effect.RegistrationSuccess -> {
-                onRegistrationSuccess()
-            }
-        }
-    }
 
     LaunchedEffect(countryResult) {
         if (countryResult != null) {
@@ -67,16 +55,7 @@ fun RegistrationRoute(
     }
 
     RegistrationScreen(
-        state = state, onEvent = viewModel::handleEvent, onCountryCodeClick = {
-            onNavigateToCountryPicker(
-                Country(
-                    dialCode = state.selectedCountryDialCode,
-                    code = state.selectedCountryCode,
-                    flagEmoji = state.selectedCountryFlag,
-                    name = ""
-                )
-            )
-        }, onBackClick = onBackClick
+        state = state, onEvent = viewModel::handleEvent,
     )
 }
 
@@ -85,14 +64,14 @@ fun RegistrationRoute(
 fun RegistrationScreen(
     state: RegistrationReducer.State,
     onEvent: (RegistrationReducer.Event) -> Unit,
-    onCountryCodeClick: () -> Unit,
-    onBackClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopBarWithBackNavigation(
                 title = stringResource(Res.string.sign_up),
-                onBackClick = onBackClick,
+                onBackClick = {
+                    onEvent(RegistrationReducer.Event.BackButtonClicked)
+                },
                 modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
         }) { padding ->
@@ -149,9 +128,9 @@ fun RegistrationScreen(
             PhoneTextField(
                 value = state.phone,
                 onValueChange = { onEvent(RegistrationReducer.Event.PhoneChanged(it)) },
-                onCountryCodeClick = onCountryCodeClick,
-                countryCode = state.selectedCountryDialCode,
-                countryFlag = state.selectedCountryFlag,
+                onCountryCodeClick = {onEvent(RegistrationReducer.Event.CountryButtonClick)},
+                countryCode = state.selectedCountry.dialCode,
+                countryFlag = state.selectedCountry.flagEmoji,
                 isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
                 placeholderText = stringResource(Res.string.phone_placeholder),

@@ -9,7 +9,7 @@ import com.example.clean.entry.core.domain.model.StringResource
  * Defines the contract for the Login screen and also acts as the Reducer
  * for its state transformations.
  */
-object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReducer.Effect> {
+object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, Nothing> {
 
     data class State(
         val phone: String = "",
@@ -18,9 +18,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         val passwordError: StringResource? = null,
         val isPasswordVisible: Boolean = false,
         val isLoading: Boolean = false,
-        val selectedCountryCode: String = "EG",
-        val selectedCountryDialCode: String = "+20",
-        val selectedCountryFlag: String = "🇪🇬"
+        val selectedCountry: Country = Country.Egypt,
     ) : Reducer.ViewState {
         val isLoginButtonEnabled
             get() = phone.isNotBlank() && phoneError == null &&
@@ -34,22 +32,24 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         data class PasswordChanged(val value: String) : Event
         data object TogglePasswordVisibility : Event
         data object LoginClicked : Event
-        data class CountrySelected(val result: Country) : Event // New event
+        data class CountrySelected(val country: Country) : Event // New event
 
         // Internal Events
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
         data class PasswordUpdated(val value: String, val result: ValidationResult) : Event
         data object LoginFinished : Event
-    }
 
-    sealed interface Effect : Reducer.ViewEffect {
-        data object LoginSuccess : Effect
+        data object BackButtonClicked : Event
+
+        data object CountryButtonClick : Event
+
+        data object CreateAccountClicked : Event
     }
 
     override fun reduce(
         previousState: State,
         event: Event
-    ): Pair<State, Effect?> {
+    ): Pair<State, Nothing?> {
         return when (event) {
             is Event.PhoneUpdated -> {
                 previousState.copy(
@@ -70,11 +70,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
             }
 
             is Event.CountrySelected -> {
-                previousState.copy(
-                    selectedCountryCode = event.result.code,
-                    selectedCountryDialCode = event.result.dialCode,
-                    selectedCountryFlag = event.result.flagEmoji
-                ) to null
+                previousState.copy(selectedCountry = event.country) to null
             }
 
             is Event.LoginClicked -> {
@@ -82,7 +78,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
             }
 
             is Event.LoginFinished -> {
-                previousState.copy(isLoading = false) to Effect.LoginSuccess
+                previousState.copy(isLoading = false) to null
             }
 
             else -> previousState to null
