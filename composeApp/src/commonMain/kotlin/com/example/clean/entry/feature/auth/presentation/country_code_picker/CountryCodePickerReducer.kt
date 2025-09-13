@@ -4,6 +4,7 @@ import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.Reducer
 import com.example.clean.entry.feature.auth.domain.model.Country
+import com.example.clean.entry.feature.auth.presentation.registration.RegistrationReducer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.flowOf
  * Defines the contract for the CountryCodePicker screen and acts as its Reducer.
  */
 object CountryCodePickerReducer :
-    Reducer<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect> {
+    Reducer<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, Nothing> {
 
     data class State(
         val searchQuery: String = "",
@@ -28,17 +29,15 @@ object CountryCodePickerReducer :
         data class CountryDataFlow(val countryFlow: Flow<List<Country>>) : Event
         data class LoadCountriesFailed(val errorMessage: StringResource) : Event
         data class SearchQueryChanged(val query: String) : Event
-        data class NavigateBackWithResult(val country: Country) : Event
-    }
 
-    sealed interface Effect : Reducer.ViewEffect {
-        data class NavigateBackWithResult(val country: Country) : Effect
+        data object BackButtonClicked : Event
+
     }
 
     override fun reduce(
         previousState: State,
         event: Event
-    ): Pair<State, Effect?> {
+    ): Pair<State, Nothing?> {
         return when (event) {
             is Event.CountryDataFlow -> {
                 previousState.copy(
@@ -61,10 +60,6 @@ object CountryCodePickerReducer :
 
             is Event.SearchQueryChanged -> {
                 previousState.copy(searchQuery = event.query) to null
-            }
-
-            is Event.NavigateBackWithResult -> {
-                previousState to Effect.NavigateBackWithResult(event.country)
             }
 
             else -> {

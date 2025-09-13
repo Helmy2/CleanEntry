@@ -87,6 +87,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.navigation.composee)
 
+            implementation(libs.kotlinx.serialization.json)
+
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 

@@ -7,18 +7,12 @@ import platform.UIKit.UIViewController
 
 fun LoginViewController(
     viewModel: LoginViewModel,
-    onNavigateToCountryPicker: (Country) -> Unit,
-    onLoginSuccess: () -> Unit,
-    onCreateAccountClick: () -> Unit,
     countryResult: Country?,
 ): UIViewController {
     return ComposeUIViewController {
         CleanEntryTheme {
             LoginRoute(
                 viewModel = viewModel,
-                onNavigateToCountryPicker = onNavigateToCountryPicker,
-                onLoginSuccess = onLoginSuccess,
-                onCreateAccountClick = onCreateAccountClick,
                 countryResult = countryResult,
             )
         }
