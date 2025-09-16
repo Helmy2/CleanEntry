@@ -3,8 +3,8 @@ import SwiftUI
 import ComposeApp
 
 struct RegistrationView: UIViewControllerRepresentable {
-    var viewModel: RegistrationViewModel
-    var countryResult: Country?
+    var viewModel: AuthRegistrationViewModel
+    var countryResult: AuthCountry?
 
     func makeUIViewController(context: Context) -> UIViewController {
         return RegistrationViewControllerKt.RegistrationViewController(

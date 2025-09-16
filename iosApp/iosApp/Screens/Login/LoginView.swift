@@ -4,9 +4,9 @@ import ComposeApp
 
 
 struct LoginView: UIViewControllerRepresentable {
-    
-    var viewModel: LoginViewModel
-    var countryResult: Country?
+
+    var viewModel: AuthLoginViewModel
+    var countryResult: AuthCountry?
 
     
     func makeUIViewController(context: Context) -> UIViewController {

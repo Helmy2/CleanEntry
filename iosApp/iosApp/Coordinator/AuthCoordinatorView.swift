@@ -55,53 +55,57 @@ struct AuthCoordinatorView: View {
             loginHelper.stop()
             registrationHelper.stop()
             navigatorHelper.stop()
-        }.onChange(of: navigatorHelper.command) { oldCommand, newCommand in
-            guard let command = newCommand else { return }
+        }
+        .onChange(of: navigatorHelper.command) { oldCommand, newCommand in
+            guard let command = newCommand else {
+                return
+            }
 
             switch command {
-            case let navigateTo as Command.NavigateTo:
+            case let navigateTo as CoreCommand.NavigateTo:
                 handleNavigateTo(destination: navigateTo.destination)
 
-            case is Command.NavigateBack:
+            case is CoreCommand.NavigateBack:
                 if !path.isEmpty {
                     path.removeLast()
                 }
-                
-            case is Command.NavigateBackWithResult:
+
+            case is CoreCommand.NavigateBackWithResult:
                 if !path.isEmpty {
                     path.removeLast()
                 }
-                
-            case let navigateAsRoot as Command.NavigateAsRoot:
+
+            case let navigateAsRoot as CoreCommand.NavigateAsRoot:
                 // This command implies a new navigation stack.
                 // For example, after login, you leave the auth flow entirely.
                 // You would typically call a delegate/closure to notify the parent
                 // coordinator to swap the view hierarchy.
-                if navigateAsRoot.destination is AppDestination.Dashboard {
-                     print("Navigate to Dashboard as root!")
-                     // In a real app, you would have a callback here to change the root view.
-                     // For now, we can clear the auth path.
-                     path = NavigationPath()
+                if navigateAsRoot.destination is CoreAppDestination.Dashboard {
+                    print("Navigate to Dashboard as root!")
+                    // In a real app, you would have a callback here to change the root view.
+                    // For now, we can clear the auth path.
+                    path = NavigationPath()
                 }
 
-            // You can add more cases for other command types like NavigateBackWithResult
+                // You can add more cases for other command types like NavigateBackWithResult
             default:
                 print("Received an unhandled navigation command.")
             }
         }
     }
 
-    private func handleNavigateTo(destination: AppDestination) {
+    private func handleNavigateTo(destination: CoreAppDestination) {
+
         // Map KMP AppDestination to SwiftUI AuthNavigationPath
-        if destination is AppDestination.Auth.AuthRegistration {
+        if destination is CoreAppDestination.Registration {
             path.append(AuthNavigationPath.registration)
-        } else if let countryPickerDest = destination as? AppDestination.Auth.AuthCountryCodePicker {
+        } else if let countryPickerDest = destination as? CoreAppDestination.CountryCodePicker {
             // Note: The KMP destination doesn't know about the "target",
             // so you may need to adjust how you handle this or pass more info.
             // For now, we can assume a default target or handle it as needed.
             path.append(AuthNavigationPath.countryPicker(
-                countryCode: countryPickerDest.code,
-            ))
+                countryCode: countryPickerDest.code ?? "",
+                ))
         }
         // Add other destination mappings here
     }

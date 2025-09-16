@@ -37,3 +37,5 @@ plugins {
 rootProject.name = "CleanEntry"
 include(":composeApp")
 include(":core")
+include(":feature:auth")
+

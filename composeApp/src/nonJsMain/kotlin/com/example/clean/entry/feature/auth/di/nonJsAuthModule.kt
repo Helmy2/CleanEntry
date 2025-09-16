@@ -1,8 +1,8 @@
 package com.example.clean.entry.feature.auth.di
 
-import com.example.clean.entry.feature.auth.data.source.local.CountryLocalDataSource
+import com.example.clean.entry.auth.domain.repository.CountryRepository
 import com.example.clean.entry.feature.auth.data.repository.CountryRepositoryImpl
-import com.example.clean.entry.feature.auth.domain.repository.CountryRepository
+import com.example.clean.entry.feature.auth.data.source.local.CountryLocalDataSource
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

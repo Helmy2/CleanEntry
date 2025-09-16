@@ -33,9 +33,9 @@ class LoginViewModelHelper: ObservableObject {
         }
     }
 
-    func onCountrySelected(country: Country) {
+    func onCountrySelected(country: AuthCountry) {
         loginViewModel.handleEvent(
-            event: LoginReducerEventCountrySelected(country: country)
+            event: AuthLoginReducerEventCountrySelected(country: country)
         )
     }
 }

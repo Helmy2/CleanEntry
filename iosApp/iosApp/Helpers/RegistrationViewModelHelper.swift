@@ -33,9 +33,9 @@ class RegistrationViewModelHelper: ObservableObject {
         }
     }
 
-    func onCountrySelected(country: Country) {
+    func onCountrySelected(country: AuthCountry) {
         registrationViewModel.handleEvent(
-            event: RegistrationReducerEventCountrySelected(country: country)
+            event: AuthRegistrationReducerEventCountrySelected(country: country)
         )
     }
 }
