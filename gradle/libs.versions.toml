@@ -12,12 +12,13 @@ koin = "4.1.1"
 turbine = "1.2.1"
 apollo = "4.3.3"
 composeMultiplatform = "1.9.0-rc02"
-androidx-lifecycle = "2.9.3"
-androidx-navigation = "2.8.0-alpha13"
+androidxLifecycle = "2.9.3"
+androidxNavigation = "2.8.0-alpha13"
 skie = "0.10.6"
 composeHotReload = "1.0.0-beta06"
 kotlinxCoroutines = "1.10.2"
 sqldelight = "2.1.0"
+serializationJson = "1.9.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -35,14 +36,16 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 
-androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-navigation-composee = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-navigation-composee = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
 
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+
+kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJson"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

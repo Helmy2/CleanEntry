@@ -11,4 +11,13 @@ data class Country(
     val dialCode: String,
     val code: String, // ISO 3166-1 alpha-2 code (e.g., "EG")
     val flagEmoji: String
-)
+){
+    companion object {
+        val Egypt = Country(
+            name = "Egypt",
+            dialCode = "+20",
+            code = "EG",
+            flagEmoji = "🇪🇬"
+        )
+    }
+}

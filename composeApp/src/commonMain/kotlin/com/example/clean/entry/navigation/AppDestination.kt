@@ -1,5 +1,6 @@
 package com.example.clean.entry.navigation
 
+import com.example.clean.entry.feature.auth.domain.model.Country
 import kotlinx.serialization.Serializable
 
 /**
@@ -10,10 +11,17 @@ import kotlinx.serialization.Serializable
 sealed class AppDestination {
 
     @Serializable
-    data object AuthGraph : AppDestination()
+    data object Auth : AppDestination() {
+        @Serializable
+        data object Login : AppDestination()
 
-    @Serializable
-    data object MainGraph : AppDestination()
+        @Serializable
+        data object Registration : AppDestination()
+
+        @Serializable
+        data class CountryCodePicker(val code: String) : AppDestination()
+    }
+
 
     @Serializable
     data object Dashboard : AppDestination()
