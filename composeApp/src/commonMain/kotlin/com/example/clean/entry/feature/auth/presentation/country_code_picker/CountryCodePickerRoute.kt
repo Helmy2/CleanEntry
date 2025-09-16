@@ -25,7 +25,6 @@ import cleanentry.composeapp.generated.resources.search
 import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.design_system.spacing
 import com.example.clean.entry.core.domain.model.Status
-import com.example.clean.entry.core.ui.ObserveEffect
 import com.example.clean.entry.feature.auth.domain.model.Country
 import com.example.clean.entry.feature.auth.presentation.components.CountryRow
 import com.example.clean.entry.feature.auth.presentation.components.CountryRowShimmer
@@ -36,34 +35,19 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CountryCodePickerRoute(
     viewModel: CountryCodePickerViewModel = koinViewModel(),
-    countryResult: Country?,
-    onNavigateBack: (Country?) -> Unit,
+    countryCode: String?,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    ObserveEffect(viewModel.effect) { effect ->
-        when (effect) {
-            is CountryCodePickerReducer.Effect.NavigateBackWithResult -> {
-                val result = Country(
-                    dialCode = effect.country.dialCode,
-                    code = effect.country.code,
-                    flagEmoji = effect.country.flagEmoji,
-                    name = effect.country.name
-                )
-                onNavigateBack(result)
-            }
-        }
-    }
 
-    LaunchedEffect(countryResult) {
-        countryResult?.let {
-            viewModel.handleEvent(CountryCodePickerReducer.Event.InitCountrySelectedCode(it.code))
+    LaunchedEffect(countryCode) {
+        countryCode?.let {
+            viewModel.handleEvent(CountryCodePickerReducer.Event.InitCountrySelectedCode(it))
         }
     }
 
     CountryCodePickerScreen(
         state = state,
         onEvent = viewModel::handleEvent,
-        onBackClick = { onNavigateBack(null) }
     )
 }
 
@@ -71,7 +55,6 @@ fun CountryCodePickerRoute(
 fun CountryCodePickerScreen(
     state: CountryCodePickerReducer.State,
     onEvent: (CountryCodePickerReducer.Event) -> Unit,
-    onBackClick: () -> Unit,
 ) {
     val countries: List<Country> by state.countryFlow.collectAsStateWithLifecycle(emptyList())
 
@@ -103,7 +86,7 @@ fun CountryCodePickerScreen(
                     ),
                 leadingIcon = {
                     IconButton(
-                        onClick = onBackClick,
+                        onClick = { onEvent(CountryCodePickerReducer.Event.BackButtonClicked) },
                         content = {
                             Icon(
                                 imageVector = Icons.Default.ArrowBackIosNew,

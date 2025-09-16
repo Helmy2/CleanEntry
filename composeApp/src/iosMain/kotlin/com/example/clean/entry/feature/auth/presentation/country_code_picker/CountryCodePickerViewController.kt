@@ -9,14 +9,12 @@ import platform.UIKit.UIViewController
 fun CountryCodePickerViewController(
     viewModel: CountryCodePickerViewModel,
     countryResult: Country?,
-    onNavigateBack: (Country?) -> Unit,
 ): UIViewController {
     return ComposeUIViewController {
         CleanEntryTheme {
             CountryCodePickerRoute(
                 viewModel = viewModel,
-                countryResult = countryResult,
-                onNavigateBack = onNavigateBack
+                countryCode =  countryResult?.code ,
             )
         }
     }

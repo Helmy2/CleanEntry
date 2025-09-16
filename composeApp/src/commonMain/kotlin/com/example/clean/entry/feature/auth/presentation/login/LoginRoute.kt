@@ -48,20 +48,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = koinViewModel(),
-    onNavigateToCountryPicker: (Country) -> Unit,
-    onLoginSuccess: () -> Unit,
-    onCreateAccountClick: () -> Unit,
     countryResult: Country?
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    ObserveEffect(viewModel.effect) { effect ->
-        when (effect) {
-            is LoginReducer.Effect.LoginSuccess -> {
-                onLoginSuccess()
-            }
-        }
-    }
 
     LaunchedEffect(countryResult) {
         if (countryResult != null) {
@@ -72,17 +61,6 @@ fun LoginRoute(
     LoginScreen(
         state = state,
         onEvent = viewModel::handleEvent,
-        onCountryCodeClick = {
-            onNavigateToCountryPicker(
-                Country(
-                    dialCode = state.selectedCountryDialCode,
-                    code = state.selectedCountryCode,
-                    flagEmoji = state.selectedCountryFlag,
-                    name = ""
-                )
-            )
-        },
-        onCreateAccountClick = onCreateAccountClick
     )
 }
 
@@ -90,8 +68,6 @@ fun LoginRoute(
 fun LoginScreen(
     state: LoginReducer.State,
     onEvent: (LoginReducer.Event) -> Unit,
-    onCountryCodeClick: () -> Unit,
-    onCreateAccountClick: () -> Unit
 ) {
 
     Scaffold(
@@ -128,9 +104,9 @@ fun LoginScreen(
             PhoneTextField(
                 value = state.phone,
                 onValueChange = { onEvent(LoginReducer.Event.PhoneChanged(it)) },
-                onCountryCodeClick = onCountryCodeClick,
-                countryCode = state.selectedCountryDialCode,
-                countryFlag = state.selectedCountryFlag,
+                onCountryCodeClick = { onEvent(LoginReducer.Event.CountryButtonClick) },
+                countryCode = state.selectedCountry.dialCode,
+                countryFlag = state.selectedCountry.flagEmoji,
                 isError = state.phoneError != null,
                 supportingText = state.phoneError?.let { stringResource(it) },
                 placeholderText = stringResource(Res.string.phone_placeholder),
@@ -180,7 +156,7 @@ fun LoginScreen(
                     text = stringResource(Res.string.create_account),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable(onClick = onCreateAccountClick)
+                    modifier = Modifier.clickable(onClick = { onEvent(LoginReducer.Event.CreateAccountClicked) })
                 )
             }
         }

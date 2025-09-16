@@ -2,10 +2,14 @@ package com.example.clean.entry.feature.auth.presentation.registration
 
 import androidx.lifecycle.viewModelScope
 import com.example.clean.entry.core.mvi.BaseViewModel
+import com.example.clean.entry.feature.auth.domain.model.Country
+import com.example.clean.entry.feature.auth.domain.repository.CountryRepository
 import com.example.clean.entry.feature.auth.domain.usecase.ValidateEmailUseCase
 import com.example.clean.entry.feature.auth.domain.usecase.ValidateFirstNameUseCase
 import com.example.clean.entry.feature.auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.entry.feature.auth.domain.usecase.ValidateSurnameUseCase
+import com.example.clean.entry.navigation.AppDestination
+import com.example.clean.entry.navigation.AppNavigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -14,10 +18,21 @@ class RegistrationViewModel(
     private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneUseCase: ValidatePhoneUseCase,
-) : BaseViewModel<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect>(
+    private val countryRepository: CountryRepository,
+    private val navigator: AppNavigator,
+) : BaseViewModel<RegistrationReducer.State, RegistrationReducer.Event, Nothing>(
     reducer = RegistrationReducer,
     initialState = RegistrationReducer.State()
 ) {
+    override suspend fun initialDataLoad() {
+        super.initialDataLoad()
+        viewModelScope.launch {
+            navigator.getValue(AppNavigator.Companion.Keys.COUNTER_CODE).collect {
+                val country = countryRepository.getCountry(it).getOrNull() ?: Country.Egypt
+                handleEvent(RegistrationReducer.Event.CountrySelected(country))
+            }
+        }
+    }
 
     override fun handleEvent(event: RegistrationReducer.Event) {
         when (event) {
@@ -37,13 +52,27 @@ class RegistrationViewModel(
             }
 
             is RegistrationReducer.Event.PhoneChanged -> {
-                val regionCode = state.value.selectedCountryCode
+                val regionCode = state.value.selectedCountry.code
                 val result = validatePhoneUseCase(event.value, regionCode)
                 setState(RegistrationReducer.Event.PhoneUpdated(event.value, result))
             }
 
             is RegistrationReducer.Event.Submit -> {
                 submitRegistration()
+            }
+
+            is RegistrationReducer.Event.BackButtonClicked -> {
+                navigator.navigateBack()
+            }
+
+            is RegistrationReducer.Event.CountryButtonClick -> {
+                navigator.navigate(
+                    AppDestination.Auth.CountryCodePicker(state.value.selectedCountry.code)
+                )
+            }
+
+            is RegistrationReducer.Event.RegistrationFinished -> {
+                navigator.navigateAsRoot(AppDestination.Dashboard)
             }
 
             else -> setState(event)

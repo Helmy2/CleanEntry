@@ -1,16 +1,16 @@
 package com.example.clean.entry.feature.auth.presentation.registration
 
-import com.example.clean.entry.feature.auth.domain.model.Country
+import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.mvi.Reducer
-import com.example.clean.entry.core.domain.model.StringResource
+import com.example.clean.entry.feature.auth.domain.model.Country
 
 /**
  * Defines the contract for the Registration screen and also acts as the Reducer
  * for its state transformations.
  */
 object RegistrationReducer :
-    Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
+    Reducer<RegistrationReducer.State, RegistrationReducer.Event, Nothing> {
 
     data class State(
         val firstName: String = "",
@@ -22,9 +22,7 @@ object RegistrationReducer :
         val phone: String = "",
         val phoneError: StringResource? = null,
         val isLoading: Boolean = false,
-        val selectedCountryCode: String = "EG",
-        val selectedCountryDialCode: String = "+20",
-        val selectedCountryFlag: String = "🇪🇬"
+        val selectedCountry: Country = Country.Egypt,
     ) : Reducer.ViewState {
         val isContinueButtonEnabled
             get() = firstName.isNotBlank() && firstNameError == null && surname.isNotBlank() && surnameError == null && email.isNotBlank() && emailError == null && phone.isNotBlank() && phoneError == null
@@ -37,23 +35,24 @@ object RegistrationReducer :
         data class EmailChanged(val value: String) : Event
         data class PhoneChanged(val value: String) : Event
         data object Submit : Event
-        data class CountrySelected(val result: Country) : Event // New event
+        data class CountrySelected(val country: Country) : Event // New event
 
         // Internal Events
         data class FirstNameUpdated(val value: String, val result: ValidationResult) : Event
         data class SurnameUpdated(val value: String, val result: ValidationResult) : Event
         data class EmailUpdated(val value: String, val result: ValidationResult) : Event
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
-        data object RegistrationFinished : Event
-    }
 
-    sealed interface Effect : Reducer.ViewEffect {
-        data object RegistrationSuccess : Effect
+        data object RegistrationFinished : Event
+
+        data object BackButtonClicked : Event
+
+        data object CountryButtonClick : Event
     }
 
     override fun reduce(
         previousState: State, event: Event
-    ): Pair<State, Effect?> {
+    ): Pair<State, Nothing?> {
         return when (event) {
             is Event.FirstNameUpdated -> {
                 previousState.copy(
@@ -81,9 +80,7 @@ object RegistrationReducer :
 
             is Event.CountrySelected -> {
                 previousState.copy(
-                    selectedCountryCode = event.result.code,
-                    selectedCountryDialCode = event.result.dialCode,
-                    selectedCountryFlag = event.result.flagEmoji
+                    selectedCountry = event.country,
                 ) to null
             }
 
@@ -96,7 +93,7 @@ object RegistrationReducer :
             }
 
             is Event.RegistrationFinished -> {
-                previousState.copy(isLoading = false) to Effect.RegistrationSuccess
+                previousState.copy(isLoading = false) to null
             }
 
             else -> previousState to null
