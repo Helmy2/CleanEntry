@@ -1,10 +1,14 @@
 package com.example.clean.entry.core.design_system
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import cleanentry.core.generated.resources.Res
+import cleanentry.core.generated.resources.emojione_android
+import org.jetbrains.compose.resources.Font
 
 
 /**
@@ -19,22 +23,19 @@ val Typography = Typography(
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
-    ),
-    bodyLarge = TextStyle(
+    ), bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
-    ),
-    labelLarge = TextStyle(
+    ), labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
-    ),
-    labelMedium = TextStyle(
+    ), labelMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
@@ -42,3 +43,18 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
+
+val Typography.emojiLarge: TextStyle
+    @Composable
+    get() = TextStyle(
+        fontFamily = FontFamily(
+            Font(
+                resource = Res.font.emojione_android,
+                weight = FontWeight.Normal
+            )
+        ),
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp
+    )

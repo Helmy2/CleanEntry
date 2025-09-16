@@ -5,6 +5,15 @@ CREATE TABLE CountryEntity (
     flagEmoji TEXT NOT NULL
 );
 
+-- Initial data for specific countries
+-- Add Egypt (EG)
+INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
+VALUES ('EG', 'Egypt', '+20', '🇪🇬');
+
+-- Add Saudi Arabia (SA)
+INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
+VALUES ('SA', 'Saudi Arabia', '+966', '🇸🇦');
+
 insert:
 INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
 VALUES ?;
@@ -14,15 +23,3 @@ SELECT * FROM CountryEntity WHERE name LIKE '%' || :name || '%' ORDER BY name AS
 
 selectByCode:
 SELECT * FROM CountryEntity WHERE code == :code;
-
-deleteAll:
-DELETE FROM CountryEntity;
-
-countCountrys:
-SELECT count(*) FROM CountryEntity;
-
-countrys:
-SELECT *
-FROM CountryEntity
-WHERE name LIKE '%' || :name || '%' ORDER BY name ASC
-LIMIT :limit OFFSET :offset;

@@ -11,15 +11,18 @@ import com.example.clean.entry.auth.presentation.country_code_picker.CountryCode
 import com.example.clean.entry.auth.presentation.login.LoginViewModel
 import com.example.clean.entry.auth.presentation.registration.RegistrationViewModel
 import com.example.clean.entry.db.AppDatabase
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
+expect val platformModule: Module
 /**
  * Koin module for the authentication feature.
  * This provides all the necessary dependencies for auth-related classes.
  */
 val authModule = module {
+    includes(platformModule)
 
     factory { get<AppDatabase>().countryEntityQueries }
 
