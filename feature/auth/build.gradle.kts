@@ -55,7 +55,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.libphonenumber.android)
             implementation(libs.koin.android)
             implementation(libs.android.driver)
         }
@@ -77,7 +76,6 @@ kotlin {
 
             implementation(libs.apollo.runtime)
 
-            implementation(libs.libphonenumber.jvm)
             implementation(libs.coroutines.extensions)
         }
         commonTest.dependencies {
@@ -92,9 +90,6 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.native.driver)
-        }
-        wasmJsMain.dependencies {
-            implementation(npm("google-libphonenumber", "3.2.42"))
         }
     }
 }

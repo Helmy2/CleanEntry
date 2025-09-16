@@ -20,16 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cleanentry.feature.auth.generated.resources.Res
-import cleanentry.feature.auth.generated.resources.emojione_android
 import cleanentry.feature.auth.generated.resources.selected
 import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.core.components.shimmer
+import com.example.clean.entry.core.design_system.emojiLarge
 import com.example.clean.entry.core.design_system.spacing
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -44,12 +41,7 @@ fun CountryRow(
         ) {
             Text(
                 text = country.flagEmoji,
-                style = MaterialTheme.typography.titleLarge,
-                fontFamily = FontFamily(
-                    Font(
-                        resource = Res.font.emojione_android, weight = FontWeight.Normal
-                    )
-                )
+                style = MaterialTheme.typography.emojiLarge,
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
             Text(
