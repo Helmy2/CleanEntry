@@ -8,7 +8,7 @@ class CountryPickerViewModelHelper: ObservableObject {
 
     let viewModel = iOSApp.dependenciesHelper.countryCodePickerViewModel
 
-    @Published private(set) var countries: [Country] = []
+    @Published private(set) var countries: [AuthCountry] = []
     @Published var searchQuery: String = ""
 
     private var cancellables = Set<AnyCancellable>()
@@ -26,7 +26,7 @@ class CountryPickerViewModelHelper: ObservableObject {
                 guard let self = self else { return }
                 // Forward query change to shared VM state
                 self.viewModel.handleEvent(
-                    event: CountryCodePickerReducerEventSearchQueryChanged(query: query)
+                    event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: query)
                 )
                 // Load countries using the repository from the shared VM
                 self.loadCountries(query: query)
@@ -34,7 +34,7 @@ class CountryPickerViewModelHelper: ObservableObject {
             .store(in: &cancellables)
 
         // Initial load
-        viewModel.handleEvent(event: CountryCodePickerReducerEventSearchQueryChanged(query: ""))
+        viewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: ""))
         loadCountries(query: "")
     }
 
@@ -67,9 +67,9 @@ class CountryPickerViewModelHelper: ObservableObject {
     /**
      * Forwards the selected country to the shared ViewModel (optional for current UI flow).
      */
-    func onCountrySelected(country: Country) {
+    func onCountrySelected(country: AuthCountry) {
         viewModel.handleEvent(
-            event: CountryCodePickerReducerEventCountrySelectedCode(code: country.code)
+            event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code)
         )
     }
 }

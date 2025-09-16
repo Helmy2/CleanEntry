@@ -13,12 +13,12 @@ struct NativeCountryPickerView: View {
     private var selectedCountryCode: String
 
     // The callback to the parent coordinator.
-    var onCountrySelected: (Country) -> Void
+    var onCountrySelected: (AuthCountry) -> Void
     
     @Environment(\.presentationMode) var presentationMode
 
     // Custom initializer to receive the repository
-    init(selectedCountryCode: String, onCountrySelected: @escaping (Country) -> Void) {
+    init(selectedCountryCode: String, onCountrySelected: @escaping (AuthCountry) -> Void) {
         // We create the StateObject with the repository dependency
         _helper = StateObject(wrappedValue: CountryPickerViewModelHelper())
         self.onCountrySelected = onCountrySelected
@@ -59,7 +59,7 @@ struct NativeCountryPickerView: View {
  * if it is the currently selected country.
  */
 struct CountryPickerRow: View {
-    let country: Country
+    let country: AuthCountry
     let isSelected: Bool
     let action: () -> Void
     

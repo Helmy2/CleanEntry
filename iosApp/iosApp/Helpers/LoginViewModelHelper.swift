@@ -28,14 +28,14 @@ class LoginViewModelHelper: ObservableObject {
     @MainActor
     func activate() async {
         for await state in loginViewModel.state {
-            self.selectedCountryCode = state.selectedCountryCode
+            self.selectedCountryCode = state.selectedCountry.code
             if Task.isCancelled { break }
         }
     }
 
-    func onCountrySelected(country: Country) {
+    func onCountrySelected(country: AuthCountry) {
         loginViewModel.handleEvent(
-            event: LoginReducerEventCountrySelected(result: country)
+            event: AuthLoginReducerEventCountrySelected(country: country)
         )
     }
 }

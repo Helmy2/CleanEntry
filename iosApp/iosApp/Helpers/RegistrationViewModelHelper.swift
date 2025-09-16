@@ -28,14 +28,14 @@ class RegistrationViewModelHelper: ObservableObject {
     @MainActor
     func activate() async {
         for await state in registrationViewModel.state {
-            self.selectedCountryCode = state.selectedCountryCode
+            self.selectedCountryCode = state.selectedCountry.code
             if Task.isCancelled { break }
         }
     }
 
-    func onCountrySelected(country: Country) {
+    func onCountrySelected(country: AuthCountry) {
         registrationViewModel.handleEvent(
-            event: RegistrationReducerEventCountrySelected(result: country)
+            event: AuthRegistrationReducerEventCountrySelected(country: country)
         )
     }
 }

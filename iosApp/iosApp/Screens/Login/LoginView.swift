@@ -4,20 +4,14 @@ import ComposeApp
 
 
 struct LoginView: UIViewControllerRepresentable {
-    
-    var viewModel: LoginViewModel
-    var onNavigateToCountryPicker: (Country?) -> Void
-    var onLoginSuccess: () -> Void
-    var onCreateAccountClick: () -> Void
-    var countryResult: Country?
+
+    var viewModel: AuthLoginViewModel
+    var countryResult: AuthCountry?
 
     
     func makeUIViewController(context: Context) -> UIViewController {
         return LoginViewControllerKt.LoginViewController(
             viewModel: viewModel,
-            onNavigateToCountryPicker: onNavigateToCountryPicker,
-            onLoginSuccess: onLoginSuccess,
-            onCreateAccountClick: onCreateAccountClick,
             countryResult: countryResult
         )
     }

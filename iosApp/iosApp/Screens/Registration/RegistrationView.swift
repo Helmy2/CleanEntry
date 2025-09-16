@@ -3,19 +3,13 @@ import SwiftUI
 import ComposeApp
 
 struct RegistrationView: UIViewControllerRepresentable {
-    var viewModel: RegistrationViewModel
-    var onBackClick: () -> Void
-    var countryResult: Country?
-    var onNavigateToCountryPicker: (Country?) -> Void
-    var onRegistrationSuccess: () -> Void
+    var viewModel: AuthRegistrationViewModel
+    var countryResult: AuthCountry?
 
     func makeUIViewController(context: Context) -> UIViewController {
         return RegistrationViewControllerKt.RegistrationViewController(
             viewModel: viewModel,
-            onBackClick: onBackClick,
             countryResult: countryResult,
-            onNavigateToCountryPicker: onNavigateToCountryPicker,
-            onRegistrationSuccess: onRegistrationSuccess
         )
     }
 

@@ -76,6 +76,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(project(":core"))
+            implementation(project(":feature:auth"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -143,18 +144,4 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-}
-
-apollo {
-    service("service") {
-        packageName.set("com.example.clean.entry")
-    }
-}
-
-sqldelight {
-    databases {
-        create("AppDatabase") {
-            packageName.set("com.example.clean.entry.db")
-        }
-    }
 }

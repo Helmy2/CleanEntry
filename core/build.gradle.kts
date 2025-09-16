@@ -62,7 +62,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.clean.entry"
+    namespace = "com.example.clean.entry.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
