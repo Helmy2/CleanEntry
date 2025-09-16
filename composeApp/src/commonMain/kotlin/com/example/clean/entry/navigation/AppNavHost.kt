@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.clean.entry.feature.auth.navigation.authNavBuilder
+import com.example.clean.entry.auth.navigation.authNavBuilder
+import com.example.clean.entry.core.navigation.AppDestination
+import com.example.clean.entry.core.navigation.Command
 import org.koin.compose.koinInject
 
 
@@ -19,7 +21,7 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
-    val navigator = koinInject<AppNavigator>()
+    val navigator = koinInject<AppNavigatorImpl>()
 
     LaunchedEffect(navigator.commands.value) {
         navigator.commands.collect { command ->

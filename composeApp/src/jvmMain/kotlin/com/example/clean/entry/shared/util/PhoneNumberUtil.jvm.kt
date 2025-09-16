@@ -1,13 +1,14 @@
 package com.example.clean.entry.shared.util
 
+import com.example.clean.entry.core.util.PhoneNumberVerifier
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 
 
-actual class PhoneNumberUtil(
+actual class PhoneNumberVerifierImpl(
     private val phoneNumberUtil: PhoneNumberUtil
-) {
-    actual fun isValidNumber(phone: String, regionCode: String): Boolean {
+) : PhoneNumberVerifier {
+    actual override fun isValidNumber(phone: String, regionCode: String): Boolean {
         val phoneNumberProto: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phone, regionCode)
         return phoneNumberUtil.isValidNumber(phoneNumberProto)
     }
