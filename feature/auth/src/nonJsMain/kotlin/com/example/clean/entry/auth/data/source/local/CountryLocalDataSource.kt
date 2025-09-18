@@ -1,4 +1,4 @@
-package com.example.clean.entry.feature.auth.data.source.local
+package com.example.clean.entry.auth.data.source.local
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
