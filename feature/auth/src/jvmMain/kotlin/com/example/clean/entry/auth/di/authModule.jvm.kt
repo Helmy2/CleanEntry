@@ -2,9 +2,9 @@ package com.example.clean.entry.auth.di
 
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.example.clean.entry.auth.data.repository.CountryRepositoryImpl
+import com.example.clean.entry.auth.data.source.local.CountryLocalDataSource
 import com.example.clean.entry.auth.domain.repository.CountryRepository
 import com.example.clean.entry.db.AppDatabase
-import com.example.clean.entry.feature.auth.data.source.local.CountryLocalDataSource
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
