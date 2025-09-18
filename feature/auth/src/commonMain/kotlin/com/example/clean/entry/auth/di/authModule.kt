@@ -16,13 +16,13 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-expect val platformModule: Module
+expect val authPlatformModule: Module
 /**
  * Koin module for the authentication feature.
  * This provides all the necessary dependencies for auth-related classes.
  */
 val authModule = module {
-    includes(platformModule)
+    includes(authPlatformModule)
 
     factory { get<AppDatabase>().countryEntityQueries }
 
