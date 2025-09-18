@@ -50,7 +50,7 @@ class AppNavigatorImpl(override val startDestination: AppDestination) : AppNavig
         return saveSatedChannel.map {
             try {
                 it.getOrElse(key) { null } as? T
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }
