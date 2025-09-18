@@ -2,6 +2,7 @@ package com.example.clean.entry.auth.presentation.country_code_picker
 
 import androidx.lifecycle.viewModelScope
 import com.example.clean.entry.auth.domain.repository.CountryRepository
+import com.example.clean.entry.auth.navigation.CounterCodeResult
 import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.core.navigation.AppNavigator
@@ -49,8 +50,7 @@ class CountryCodePickerViewModel(
             is CountryCodePickerReducer.Event.CountrySelectedCode -> viewModelScope.launch {
                 countryRepository.getCountry(event.code).onSuccess {
                     navigator.navigateBackWithResult(
-                        key = AppNavigator.Companion.Keys.COUNTER_CODE,
-                        it.code
+                        CounterCodeResult(it)
                     )
                 }
             }

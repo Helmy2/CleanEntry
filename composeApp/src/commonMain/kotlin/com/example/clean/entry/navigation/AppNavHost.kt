@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.clean.entry.auth.navigation.authNavBuilder
 import com.example.clean.entry.core.navigation.AppDestination
+import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
 import org.koin.compose.koinInject
 
@@ -21,7 +22,7 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
-    val navigator = koinInject<AppNavigatorImpl>()
+    val navigator = koinInject<AppNavigator>()
 
     LaunchedEffect(navigator.commands.value) {
         navigator.commands.collect { command ->
@@ -33,11 +34,8 @@ fun AppNavHost(
                 }
 
                 Command.NavigateBack -> navController.popBackStack()
+
                 is Command.NavigateTo -> navController.navigate(command.destination)
-                is Command.NavigateBackWithResult -> {
-                    navigator.setValue(command.key, command.value)
-                    navController.popBackStack()
-                }
 
                 Command.Idle -> {
                     // Do nothing
