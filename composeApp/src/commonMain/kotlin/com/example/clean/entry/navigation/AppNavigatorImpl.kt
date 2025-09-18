@@ -3,18 +3,21 @@ package com.example.clean.entry.navigation
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
+import com.example.clean.entry.core.navigation.NavigationSavedResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 
-class AppNavigatorImpl(val startDestination: AppDestination) : AppNavigator {
+class AppNavigatorImpl(override val startDestination: AppDestination) : AppNavigator {
 
-    val saveState = MutableStateFlow<List<Pair<String, String>>>(emptyList())
+    private val saveSatedChannel = MutableStateFlow<Map<String, NavigationSavedResult>>(
+        emptyMap()
+    )
 
     private val _commands = MutableStateFlow<Command>(Command.Idle)
+
     override val commands: StateFlow<Command> = _commands
 
     override fun navigate(destination: AppDestination) {
@@ -25,8 +28,13 @@ class AppNavigatorImpl(val startDestination: AppDestination) : AppNavigator {
         _commands.value = Command.NavigateBack
     }
 
-    override fun navigateBackWithResult(key: String, value: String) {
-        _commands.value = Command.NavigateBackWithResult(key, value)
+    override fun navigateBackWithResult(returnResult: NavigationSavedResult) {
+        val returnResultMap = buildMap {
+            putAll(saveSatedChannel.value)
+            put(returnResult.key, returnResult)
+        }
+        saveSatedChannel.tryEmit(returnResultMap)
+        navigateBack()
     }
 
     override fun navigateAsRoot(destination: AppDestination) {
@@ -37,20 +45,15 @@ class AppNavigatorImpl(val startDestination: AppDestination) : AppNavigator {
         _commands.value = Command.Idle
     }
 
-    override suspend fun setValue(key: String, value: String) {
-        val currentList = saveState.value.toMutableList()
-        val index = currentList.indexOfFirst { it.first == key }
-        if (index != -1) {
-            currentList[index] = key to value
-        } else {
-            currentList.add(key to value)
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : NavigationSavedResult> getResultValue(key: String): Flow<T?> {
+        return saveSatedChannel.map {
+            try {
+                it.getOrElse(key) { null } as? T
+            } catch (e: Exception) {
+                null
+            }
         }
-        saveState.emit(currentList)
-    }
-
-    override fun getValue(key: String): Flow<String> {
-        return saveState.filter { it.any { it.first == key } }
-            .map { it.first { it.first == key }.second }
     }
 }
 

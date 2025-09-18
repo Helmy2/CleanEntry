@@ -1,5 +1,7 @@
 package com.example.clean.entry.navigation
 
+import com.example.clean.entry.core.navigation.AppDestination
+
 sealed class Command {
     data object Idle : Command()
     data class NavigateTo(val destination: AppDestination) : Command()

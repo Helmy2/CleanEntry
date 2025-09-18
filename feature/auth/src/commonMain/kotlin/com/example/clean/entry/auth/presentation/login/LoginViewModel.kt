@@ -1,10 +1,9 @@
 package com.example.clean.entry.auth.presentation.login
 
 import androidx.lifecycle.viewModelScope
-import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.auth.domain.repository.CountryRepository
 import com.example.clean.entry.auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.auth.domain.usecase.ValidatePhoneUseCase
+import com.example.clean.entry.auth.navigation.CounterCodeResult
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
@@ -14,7 +13,6 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val validatePhoneUseCase: ValidatePhoneUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
-    private val countryRepository: CountryRepository,
     private val navigator: AppNavigator,
 ) : BaseViewModel<LoginReducer.State, LoginReducer.Event, Nothing>(
     reducer = LoginReducer,
@@ -23,10 +21,12 @@ class LoginViewModel(
     override suspend fun initialDataLoad() {
         super.initialDataLoad()
         viewModelScope.launch {
-            navigator.getValue(AppNavigator.Companion.Keys.COUNTER_CODE).collect {
-                val country = countryRepository.getCountry(it).getOrNull() ?: Country.Egypt
-                handleEvent(LoginReducer.Event.CountrySelected(country))
-            }
+            navigator.getResultValue<CounterCodeResult>(CounterCodeResult.KEY)
+                .collect {
+                    if (it != null) {
+                        handleEvent(LoginReducer.Event.CountrySelected(it.country))
+                    }
+                }
         }
     }
 

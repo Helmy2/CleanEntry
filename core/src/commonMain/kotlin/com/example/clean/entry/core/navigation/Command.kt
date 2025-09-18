@@ -5,6 +5,5 @@ sealed class Command {
     data class NavigateTo(val destination: AppDestination) : Command()
     data object NavigateBack : Command()
 
-    data class NavigateBackWithResult(val key: String, val value: String) : Command()
     data class NavigateAsRoot(val destination: AppDestination) : Command()
 }
