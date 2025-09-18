@@ -11,7 +11,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-actual val platformModule: Module = module {
+actual val authPlatformModule: Module = module {
     single<AppDatabase> {
         AppDatabase(NativeSqliteDriver(AppDatabase.Companion.Schema, "countries.db"))
     }

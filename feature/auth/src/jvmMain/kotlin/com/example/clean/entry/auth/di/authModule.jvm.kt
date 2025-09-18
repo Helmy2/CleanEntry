@@ -12,7 +12,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.util.Properties
 
-actual val platformModule: Module = module {
+actual val authPlatformModule: Module = module {
     single<AppDatabase> {
         AppDatabase(JdbcSqliteDriver("jdbc:sqlite:countries.db", Properties(), AppDatabase.Schema))
     }

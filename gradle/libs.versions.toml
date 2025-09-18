@@ -4,7 +4,6 @@ android-compileSdk = "36"
 android-minSdk = "28"
 android-targetSdk = "36"
 kotlin = "2.2.10"
-ksp = "2.2.10-2.0.2"
 libphonenumberAndroid = "9.0.12"
 libphonenumberJvm = "9.0.14"
 activityCompose = "1.11.0"
@@ -18,7 +17,6 @@ skie = "0.10.6"
 composeHotReload = "1.0.0-beta06"
 kotlinxCoroutines = "1.10.2"
 sqldelight = "2.1.0"
-serializationJson = "1.9.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -45,8 +43,6 @@ sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "s
 native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 
-kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJson"}
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -54,7 +50,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
