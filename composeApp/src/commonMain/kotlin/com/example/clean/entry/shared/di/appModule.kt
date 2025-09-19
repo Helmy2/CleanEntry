@@ -7,5 +7,5 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
-    single { AppNavigatorImpl(AppDestination.Auth) }.bind<AppNavigator>()
+    single { AppNavigatorImpl(AppDestination.Dashboard) }.bind<AppNavigator>()
 }
