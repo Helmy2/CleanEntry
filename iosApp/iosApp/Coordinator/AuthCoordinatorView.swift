@@ -23,16 +23,15 @@ struct AuthCoordinatorView: View {
         NavigationStack(path: $path) {
             // Root: Login view
             LoginView(
-                viewModel: loginHelper.loginViewModel,
+                viewModel: loginHelper
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: AuthNavigationPath.self) { destination in
                 switch destination {
                 case .registration:
                     RegistrationView(
-                        viewModel: registrationHelper.registrationViewModel,
+                        viewModel: registrationHelper
                     )
-                    .navigationBarBackButtonHidden(true)
 
                 case let .countryPicker(countryCode):
                     NativeCountryPickerView(
@@ -70,10 +69,6 @@ struct AuthCoordinatorView: View {
                     path.removeLast()
                 }
 
-            case is CoreCommand.NavigateBackWithResult:
-                if !path.isEmpty {
-                    path.removeLast()
-                }
 
             case let navigateAsRoot as CoreCommand.NavigateAsRoot:
                 // This command implies a new navigation stack.
@@ -104,7 +99,7 @@ struct AuthCoordinatorView: View {
             // so you may need to adjust how you handle this or pass more info.
             // For now, we can assume a default target or handle it as needed.
             path.append(AuthNavigationPath.countryPicker(
-                countryCode: countryPickerDest.code ?? "",
+                countryCode: countryPickerDest.code ?? ""
                 ))
         }
         // Add other destination mappings here

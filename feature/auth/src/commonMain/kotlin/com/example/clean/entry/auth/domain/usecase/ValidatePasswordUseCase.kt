@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 
 
@@ -19,7 +18,7 @@ class ValidatePasswordUseCase {
         if (password.length < 6) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Password must be at least 6 characters long.")
+                errorMessage = "Password must be at least 6 characters long."
             )
         }
         return ValidationResult(isSuccessful = true)

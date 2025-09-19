@@ -36,7 +36,6 @@ import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.domain.model.stringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -107,7 +106,7 @@ fun LoginScreen(
                 countryCode = state.selectedCountry.dialCode,
                 countryFlag = state.selectedCountry.flagEmoji,
                 isError = state.phoneError != null,
-                supportingText = state.phoneError?.let { stringResource(it) },
+                supportingText = state.phoneError,
                 placeholderText = stringResource(Res.string.phone_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next
@@ -123,7 +122,7 @@ fun LoginScreen(
                 isVisible = state.isPasswordVisible,
                 onVisibilityToggle = { onEvent(LoginReducer.Event.TogglePasswordVisibility) },
                 isError = state.passwordError != null,
-                supportingText = state.passwordError?.let { stringResource(it) },
+                supportingText = state.passwordError,
                 placeholderText = stringResource(Res.string.password_placeholder),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
