@@ -7,5 +7,5 @@ package com.example.clean.entry.core.domain.model
  */
 data class ValidationResult(
     val isSuccessful: Boolean,
-    val errorMessage: StringResource? = null
+    val errorMessage: String? = null
 )

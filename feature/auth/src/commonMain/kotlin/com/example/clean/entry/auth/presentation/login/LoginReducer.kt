@@ -1,7 +1,6 @@
 package com.example.clean.entry.auth.presentation.login
 
 import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.mvi.Reducer
 
@@ -13,9 +12,9 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, Nothing> {
 
     data class State(
         val phone: String = "",
-        val phoneError: StringResource? = null,
+        val phoneError: String? = null,
         val password: String = "",
-        val passwordError: StringResource? = null,
+        val passwordError: String? = null,
         val isPasswordVisible: Boolean = false,
         val isLoading: Boolean = false,
         val selectedCountry: Country = Country.Egypt,

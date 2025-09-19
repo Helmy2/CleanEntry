@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 
 
@@ -19,13 +18,13 @@ class ValidateFirstNameUseCase {
         if (firstName.isBlank()) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Name cannot be empty.")
+                errorMessage = "Name cannot be empty."
             )
         }
         if (firstName.length < 2) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Name must be at least 2 characters long.")
+                errorMessage = "Name must be at least 2 characters long."
             )
         }
         return ValidationResult(isSuccessful = true)
