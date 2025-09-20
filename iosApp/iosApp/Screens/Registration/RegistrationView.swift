@@ -8,6 +8,10 @@ struct RegistrationView: View {
     @State private var email: String = ""
     @State private var phone: String = ""
 
+    init() {
+        self.viewModel = RegistrationViewModelHelper()
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             HStack {
