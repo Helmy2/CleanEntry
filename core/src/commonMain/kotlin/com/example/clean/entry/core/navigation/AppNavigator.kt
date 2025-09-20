@@ -1,12 +1,10 @@
 package com.example.clean.entry.core.navigation
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface AppNavigator {
     val startDestination: AppDestination
-    val commands: StateFlow<Command>
-    fun onCommandConsumed()
+    val commands: Flow<Command>
 
     fun navigateAsRoot(destination: AppDestination)
 

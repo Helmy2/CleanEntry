@@ -22,12 +22,6 @@ class NavigatorHelper: ObservableObject {
                 // When a new command is emitted, publish it.
                 self.command = cmd
 
-                // If the command is not nil, it means we have a new navigation event
-                // to process. We must consume it so it doesn't trigger again.
-                if cmd != nil {
-                    navigator.onCommandConsumed()
-                }
-
                 if Task.isCancelled {
                     break
                 }
