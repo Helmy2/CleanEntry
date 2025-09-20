@@ -65,8 +65,6 @@ struct AuthCoordinatorView: View {
                     path = NavigationPath()
                 }
 
-            case is CoreCommand.Idle: break
-
                 // You can add more cases for other command types like NavigateBackWithResult
             default:
                 print("Received an unhandled navigation command.")

@@ -4,56 +4,56 @@ import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
 import com.example.clean.entry.core.navigation.NavigationSavedResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
-class AppNavigatorImpl(override val startDestination: AppDestination) : AppNavigator {
+class AppNavigatorImpl(
+    override val startDestination: AppDestination,
+    private val scope: CoroutineScope
+) : AppNavigator {
 
-    private val saveSatedChannel = MutableStateFlow<Map<String, NavigationSavedResult>>(
+    private val savedResults = MutableStateFlow<Map<String, NavigationSavedResult>>(
         emptyMap()
     )
 
-    private val _commands = MutableStateFlow<Command>(Command.Idle)
+    private val _commands = Channel<Command>(Channel.BUFFERED)
 
-    override val commands: StateFlow<Command> = _commands
+    override val commands = _commands.receiveAsFlow()
 
     override fun navigate(destination: AppDestination) {
-        _commands.value = Command.NavigateTo(destination)
+        scope.launch {
+            _commands.send(Command.NavigateTo(destination))
+        }
     }
 
     override fun navigateBack() {
-        _commands.value = Command.NavigateBack
+        scope.launch {
+            _commands.send(Command.NavigateBack)
+        }
     }
 
     override fun navigateBackWithResult(returnResult: NavigationSavedResult) {
-        val returnResultMap = buildMap {
-            putAll(saveSatedChannel.value)
-            put(returnResult.key, returnResult)
-        }
-        saveSatedChannel.tryEmit(returnResultMap)
+        savedResults.update { it + (returnResult.key to returnResult) }
         navigateBack()
     }
 
     override fun navigateAsRoot(destination: AppDestination) {
-        _commands.value = Command.NavigateAsRoot(destination)
-    }
-
-    override fun onCommandConsumed() {
-        _commands.value = Command.Idle
+        scope.launch {
+            _commands.send(Command.NavigateAsRoot(destination))
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : NavigationSavedResult> getResultValue(key: String): Flow<T?> {
-        return saveSatedChannel.map {
-            try {
-                it.getOrElse(key) { null } as? T
-            } catch (_: Exception) {
-                null
-            }
-        }
+        return savedResults.map { it[key] as? T }.distinctUntilChanged()
     }
 }
 
