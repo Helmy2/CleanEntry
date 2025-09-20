@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 
 
@@ -23,13 +22,13 @@ class ValidateEmailUseCase {
         if (email.isBlank()) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Email cannot be empty.")
+                errorMessage = "Email cannot be empty."
             )
         }
         if (!emailRegex.matches(email)) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("That's not a valid email.")
+                errorMessage = "That's not a valid email."
             )
         }
         return ValidationResult(isSuccessful = true)

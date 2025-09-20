@@ -1,75 +1,66 @@
-import SwiftUI
+import Foundation
 import Combine
 import ComposeApp
 
-
 /// Bridges the Kotlin CountryCodePickerViewModel to SwiftUI and exposes local published state.
 class CountryPickerViewModelHelper: ObservableObject {
+    private let countryPickerViewModel: AuthCountryCodePickerViewModel
 
-    let viewModel = iOSApp.dependenciesHelper.countryCodePickerViewModel
-
+    @Published private(set) var searchQuery: String = ""
     @Published private(set) var countries: [AuthCountry] = []
-    @Published var searchQuery: String = ""
+    @Published private(set) var status: CoreStatus = CoreStatus.Loading()
 
-    private var cancellables = Set<AnyCancellable>()
-    private var searchTask: Task<Void, Never>? = nil
+    private var stateTask: Task<Void, Never>?
 
-    init() {}
-
-    func startObserving() {
-        // Observe local searchQuery changes, debounce, then
-        // 1) forward to shared VM, 2) load countries from VM's repository.
-        $searchQuery
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .removeDuplicates()
-            .sink { [weak self] query in
-                guard let self = self else { return }
-                // Forward query change to shared VM state
-                self.viewModel.handleEvent(
-                    event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: query)
-                )
-                // Load countries using the repository from the shared VM
-                self.loadCountries(query: query)
-            }
-            .store(in: &cancellables)
-
-        // Initial load
-        viewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: ""))
-        loadCountries(query: "")
+    init(initialCountryCode: String?) {
+        self.countryPickerViewModel = iOSApp.dependenciesHelper.countryCodePickerViewModel
+        if (initialCountryCode != nil) {
+            countryPickerViewModel.handleEvent(event: AuthCountryCodePickerReducerEventInitCountrySelectedCode(code: initialCountryCode!))
+        }
+        start()
     }
 
-    /**
-     * Loads countries using the repository exposed by the shared ViewModel.
-     * Cancels any in-flight task to prevent race conditions.
-     */
-    func loadCountries(query: String) {
-        searchTask?.cancel()
+    deinit {
+        stop()
+    }
 
-        searchTask = Task {
-            do {
-                let stream = viewModel.countryRepository.getCountries(query: query)
-                for try await result in stream {
-                    if Task.isCancelled { return }
-                    await MainActor.run {
-                        self.countries = result
-                    }
-                }
-            } catch {
-                if error is CancellationError { return }
-                print("Failed to observe countries stream: \(error.localizedDescription)")
-                await MainActor.run {
-                    self.countries = []
-                }
+    /// Begins observing the view model state.
+    private func start() {
+        guard stateTask == nil else {
+            return
+        }
+        stateTask = Task { [weak self] in
+            await self?.activate()
+        }
+    }
+
+    /// Stops observing the view model state.
+    private func stop() {
+        stateTask?.cancel()
+        stateTask = nil
+    }
+
+    /// Collects the state stream and updates published properties on the main actor.
+    @MainActor
+    private func activate() async {
+        for await state in countryPickerViewModel.state {
+            self.searchQuery = state.searchQuery
+            self.status = state.status
+            for await countries in state.countryFlow {
+                self.countries = countries
             }
         }
     }
 
-    /**
-     * Forwards the selected country to the shared ViewModel (optional for current UI flow).
-     */
+    func onSearchQueryChanged(query: String) {
+        countryPickerViewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: query))
+    }
+
     func onCountrySelected(country: AuthCountry) {
-        viewModel.handleEvent(
-            event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code)
-        )
+        countryPickerViewModel.handleEvent(event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code))
+    }
+
+    func onBackButtonClicked() {
+        countryPickerViewModel.handleEvent(event: AuthCountryCodePickerReducerEventBackButtonClicked())
     }
 }

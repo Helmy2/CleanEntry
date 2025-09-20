@@ -1,6 +1,5 @@
 package com.example.clean.entry.core.util
 
-import com.example.clean.entry.core.domain.model.StringResource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
  * @param action An optional action the user can take.
  */
 data class SnackbarEvent(
-    val message: StringResource,
+    val message: String,
     val action: SnackbarAction? = null
 )
 
@@ -23,7 +22,7 @@ data class SnackbarEvent(
  * @param action The suspend function to be executed when the action is clicked.
  */
 data class SnackbarAction(
-    val name: StringResource,
+    val name: String,
     val action: suspend () -> Unit
 )
 
