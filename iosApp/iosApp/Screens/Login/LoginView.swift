@@ -2,9 +2,13 @@ import SwiftUI
 import ComposeApp
 
 struct LoginView: View {
-    @ObservedObject var viewModel: LoginViewModelHelper
+    @ObservedObject private var viewModel: LoginViewModelHelper
     @State private var phone: String = ""
     @State private var password: String = ""
+
+    init() {
+        viewModel = LoginViewModelHelper()
+    }
 
     var body: some View {
         VStack(spacing: 16) {
