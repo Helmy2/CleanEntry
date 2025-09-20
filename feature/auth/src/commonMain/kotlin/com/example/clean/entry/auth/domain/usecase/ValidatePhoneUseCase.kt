@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.util.PhoneNumberVerifier
 
@@ -21,7 +20,7 @@ class ValidatePhoneUseCase(private val verifier: PhoneNumberVerifier) {
         if (phone.isBlank()) {
             return ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Phone number cannot be empty.")
+                errorMessage = "Phone number cannot be empty."
             )
         }
         return try {
@@ -31,14 +30,14 @@ class ValidatePhoneUseCase(private val verifier: PhoneNumberVerifier) {
             } else {
                 ValidationResult(
                     isSuccessful = false,
-                    errorMessage = StringResource.FromString("Invalid phone number for the selected region.")
+                    errorMessage = "Invalid phone number for the selected region."
                 )
             }
         } catch (e: Exception) {
             e.printStackTrace()
             ValidationResult(
                 isSuccessful = false,
-                errorMessage = StringResource.FromString("Invalid phone number format.")
+                errorMessage = "Invalid phone number format."
             )
         }
     }

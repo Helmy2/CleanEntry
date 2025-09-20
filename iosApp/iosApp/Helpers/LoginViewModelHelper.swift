@@ -6,7 +6,11 @@ class LoginViewModelHelper: ObservableObject {
     let loginViewModel = iOSApp.dependenciesHelper.loginViewModel
 
     @Published
-    private(set) var selectedCountryCode: String = ""
+    private(set) var selectedCountry: AuthCountry = AuthCountry.Companion.init().Egypt
+    @Published
+    private(set) var phoneError: String? = nil
+    @Published
+    private(set) var passwordError: String? = nil
 
     private var stateTask: Task<Void, Never>?
 
@@ -28,7 +32,9 @@ class LoginViewModelHelper: ObservableObject {
     @MainActor
     func activate() async {
         for await state in loginViewModel.state {
-            self.selectedCountryCode = state.selectedCountry.code
+            self.selectedCountry = state.selectedCountry
+            self.phoneError = state.phoneError
+            self.passwordError = state.passwordError
             if Task.isCancelled { break }
         }
     }

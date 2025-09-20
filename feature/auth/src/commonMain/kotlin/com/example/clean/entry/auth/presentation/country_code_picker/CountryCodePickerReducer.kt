@@ -2,7 +2,6 @@ package com.example.clean.entry.auth.presentation.country_code_picker
 
 import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.core.domain.model.Status
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.mvi.Reducer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -26,7 +25,7 @@ object CountryCodePickerReducer :
         data class InitCountrySelectedCode(val code: String) : Event
         data class CountrySelectedCode(val code: String) : Event
         data class CountryDataFlow(val countryFlow: Flow<List<Country>>) : Event
-        data class LoadCountriesFailed(val errorMessage: StringResource) : Event
+        data class LoadCountriesFailed(val errorMessage: String) : Event
         data class SearchQueryChanged(val query: String) : Event
 
         data object BackButtonClicked : Event
