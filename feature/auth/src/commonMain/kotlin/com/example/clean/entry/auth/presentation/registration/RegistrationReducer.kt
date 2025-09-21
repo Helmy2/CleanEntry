@@ -9,7 +9,7 @@ import com.example.clean.entry.core.mvi.Reducer
  * for its state transformations.
  */
 object RegistrationReducer :
-    Reducer<RegistrationReducer.State, RegistrationReducer.Event, Nothing> {
+    Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
 
     data class State(
         val firstName: String = "",
@@ -48,6 +48,8 @@ object RegistrationReducer :
 
         data object CountryButtonClick : Event
     }
+
+    sealed interface Effect : Reducer.ViewEffect
 
     override fun reduce(
         previousState: State, event: Event

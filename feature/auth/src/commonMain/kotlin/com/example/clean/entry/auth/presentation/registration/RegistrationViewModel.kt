@@ -18,7 +18,7 @@ class RegistrationViewModel(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneUseCase: ValidatePhoneUseCase,
     private val navigator: AppNavigator,
-) : BaseViewModel<RegistrationReducer.State, RegistrationReducer.Event, Nothing>(
+) : BaseViewModel<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect>(
     reducer = RegistrationReducer,
     initialState = RegistrationReducer.State()
 ) {
