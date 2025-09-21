@@ -8,7 +8,7 @@ import com.example.clean.entry.core.mvi.Reducer
  * Defines the contract for the Login screen and also acts as the Reducer
  * for its state transformations.
  */
-object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, Nothing> {
+object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReducer.Effect> {
 
     data class State(
         val phone: String = "",
@@ -44,6 +44,8 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, Nothing> {
 
         data object CreateAccountClicked : Event
     }
+
+    sealed interface Effect : Reducer.ViewEffect
 
     override fun reduce(
         previousState: State,
