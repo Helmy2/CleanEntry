@@ -14,7 +14,7 @@ class LoginViewModel(
     private val validatePhoneUseCase: ValidatePhoneUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val navigator: AppNavigator,
-) : BaseViewModel<LoginReducer.State, LoginReducer.Event, Nothing>(
+) : BaseViewModel<LoginReducer.State, LoginReducer.Event, LoginReducer.Effect>(
     reducer = LoginReducer,
     initialState = LoginReducer.State()
 ) {
