@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 /// Bridges the Kotlin RegistrationViewModel to SwiftUI and exposes local published state.
 class RegistrationViewModelHelper: ObservableObject {

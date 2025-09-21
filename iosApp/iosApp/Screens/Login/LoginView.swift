@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 struct LoginView: View {
     @StateObject private var helper = LoginViewModelHelper()

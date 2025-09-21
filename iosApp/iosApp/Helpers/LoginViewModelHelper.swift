@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 /// Bridges the Kotlin LoginViewModel to SwiftUI and exposes local published state.
 class LoginViewModelHelper: BaseViewModelHelper<AuthLoginReducerState, AuthLoginReducerEvent, AuthLoginReducerEffect> {

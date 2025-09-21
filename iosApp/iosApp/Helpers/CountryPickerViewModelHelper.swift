@@ -1,6 +1,6 @@
 import Foundation
 import Combine
-import ComposeApp
+import shared
 
 /// Bridges the Kotlin CountryCodePickerViewModel to SwiftUI and exposes local published state.
 class CountryPickerViewModelHelper: ObservableObject {

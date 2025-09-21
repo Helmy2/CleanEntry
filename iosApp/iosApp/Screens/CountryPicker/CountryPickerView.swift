@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 struct CountryPickerView: View {
     @StateObject var viewModel: CountryPickerViewModelHelper
