@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 // Defines the navigation destinations for the auth flow.
 enum AuthNavigationPath: Hashable {

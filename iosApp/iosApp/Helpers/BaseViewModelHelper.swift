@@ -1,6 +1,6 @@
 import Foundation
 import Combine
-import ComposeApp
+import shared
 
 @MainActor
 class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEvent, Effect: CoreReducerViewEffect>: ObservableObject {
