@@ -2,47 +2,54 @@ import SwiftUI
 import shared
 
 struct CountryPickerView: View {
-    @StateObject var viewModel: CountryPickerViewModelHelper
+    @StateObject var viewModel: CountryPickerViewModelHelper = CountryPickerViewModelHelper()
     @State private var searchText = ""
+    private let _initialCountryCode: String
 
     init(initialCountryCode: String) {
-        _viewModel = StateObject(wrappedValue: CountryPickerViewModelHelper(initialCountryCode: initialCountryCode))
+        _initialCountryCode = initialCountryCode
     }
 
     var body: some View {
         VStack {
-            // Search field
             TextField("Search", text: $searchText)
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .onChange(of: searchText) { _, newValue in
-                    viewModel.onSearchQueryChanged(query: newValue)
+                    viewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: newValue))
                 }
 
-            // Status content
-            if viewModel.status is CoreStatus.Loading {
+            if viewModel.currentState.status is CoreStatus.Loading {
                 ProgressView("Loading...")
-            } else if let errorStatus = viewModel.status as? CoreStatus.Error {
+            } else if let errorStatus = viewModel.currentState.status as? CoreStatus.Error {
                 Text(errorStatus.message)
                     .foregroundColor(.red)
             } else {
                 List {
-                    ForEach(viewModel.countries, id: \.code) { country in
-                        CountryRow(country: country) {
-                            viewModel.onCountrySelected(country: country)
+                    ForEach(viewModel.currentState.countries, id: \.self.code) { country in
+                        CountryRow(country: country, isSelected: country.code == _initialCountryCode) {
+                            viewModel.handleEvent(event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code))
                         }
                     }
                 }
             }
         }
         .navigationTitle("Select Country")
+        .onAppear {
+            viewModel.start()
+            viewModel.handleEvent(event: AuthCountryCodePickerReducerEventInitCountrySelectedCode(code: _initialCountryCode))
+        }
+        .onDisappear {
+            viewModel.stop()
+        }
     }
 }
 
 // Helper view for a single country row
 struct CountryRow: View {
     let country: AuthCountry
+    let isSelected: Bool
     let onClick: () -> Void
 
     var body: some View {
@@ -57,10 +64,10 @@ struct CountryRow: View {
                     .font(.body)
                     .foregroundColor(.primary)
                 Spacer()
-//                if country.code == viewModel.selectedCountry.code { // This part needs to be handled in your view model
-//                    Image(systemName: "checkmark.circle.fill")
-//                        .foregroundColor(.blue)
-//                }
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.blue)
+                }
             }
             .padding(.vertical, 8)
         }
