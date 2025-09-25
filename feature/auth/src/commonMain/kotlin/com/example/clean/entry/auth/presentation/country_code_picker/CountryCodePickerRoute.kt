@@ -22,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cleanentry.feature.auth.generated.resources.Res
 import cleanentry.feature.auth.generated.resources.back
 import cleanentry.feature.auth.generated.resources.search
-import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.auth.presentation.components.CountryRow
 import com.example.clean.entry.auth.presentation.components.CountryRowShimmer
 import com.example.clean.entry.auth.presentation.country_code_picker.CountryCodePickerReducer.Event.LoadCountries
@@ -56,8 +55,6 @@ fun CountryCodePickerScreen(
     state: CountryCodePickerReducer.State,
     onEvent: (CountryCodePickerReducer.Event) -> Unit,
 ) {
-    val countries: List<Country> by state.countryFlow.collectAsStateWithLifecycle(emptyList())
-
     Scaffold(
         topBar = {
             OutlinedTextField(
@@ -118,10 +115,10 @@ fun CountryCodePickerScreen(
                 Status.Idle, Status.Loading -> {
                     LazyColumn {
                         items(
-                            count = countries.size,
-                            key = { index -> countries[index].code }
+                            count = state.countries.size,
+                            key = { index -> state.countries[index].code }
                         ) { index ->
-                            val country = countries[index]
+                            val country = state.countries[index]
                             CountryRow(
                                 country = country,
                                 isSelected = state.selectedCountryCode == country.code,
@@ -139,7 +136,7 @@ fun CountryCodePickerScreen(
                         }
 
                         when {
-                            countries.isEmpty() -> {
+                            state.countries.isEmpty() -> {
                                 items(10) {
                                     CountryRowShimmer(
                                         modifier = Modifier.padding(
