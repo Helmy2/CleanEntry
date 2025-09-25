@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,8 +23,8 @@ class ValidatePasswordUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Password must be at least 6 characters long.").toString(),
-            result.errorMessage?.toString()
+            "Password must be at least 6 characters long.",
+            result.errorMessage
         )
     }
 
@@ -54,7 +53,7 @@ class ValidatePasswordUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Password must be at least 6 characters long.").toString(),
+            "Password must be at least 6 characters long.",
             result.errorMessage?.toString()
         )
     }

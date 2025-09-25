@@ -1,7 +1,6 @@
 package com.example.clean.entry.auth.presentation.login
 
 import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,7 +31,7 @@ class LoginReducerTest {
         val errorMsg = "Invalid phone"
         val validationError = ValidationResult(
             isSuccessful = false,
-            errorMessage = StringResource.FromString(errorMsg)
+            errorMessage = errorMsg
         )
         val event = LoginReducer.Event.PhoneUpdated(testPhone, validationError)
 
@@ -62,7 +61,7 @@ class LoginReducerTest {
         val errorMsg = "Password too short"
         val validationError = ValidationResult(
             isSuccessful = false,
-            errorMessage = StringResource.FromString(errorMsg)
+            errorMessage = errorMsg
         )
         val event = LoginReducer.Event.PasswordUpdated(testPassword, validationError)
 
@@ -157,7 +156,7 @@ class LoginReducerTest {
     fun `isLoginButtonEnabled should be false if phone has error`() {
         val state = LoginReducer.State(
             phone = "123",
-            phoneError = StringResource.FromString("Error"),
+            phoneError = "Error",
             password = "password123",
             passwordError = null,
             isLoading = false
@@ -183,7 +182,7 @@ class LoginReducerTest {
             phone = "123456789",
             phoneError = null,
             password = "123",
-            passwordError = StringResource.FromString("Error"),
+            passwordError = "Error",
             isLoading = false
         )
         assertFalse(state.isLoginButtonEnabled)
