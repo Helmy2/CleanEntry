@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,7 +21,7 @@ class ValidateFirstNameUseCaseTest {
         val result = validateFirstNameUseCase("")
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Name cannot be empty."),
+            "Name cannot be empty.",
             result.errorMessage
         )
     }
@@ -31,7 +30,7 @@ class ValidateFirstNameUseCaseTest {
     fun `given string containing only spaces when invoke then returns unsuccessful result and not empty message`() {
         val result = validateFirstNameUseCase("   ")
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("Name cannot be empty."), result.errorMessage)
+        assertEquals("Name cannot be empty.", result.errorMessage)
     }
 
     @Test
@@ -39,7 +38,7 @@ class ValidateFirstNameUseCaseTest {
         val result = validateFirstNameUseCase("a")
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Name must be at least 2 characters long."),
+            "Name must be at least 2 characters long.",
             result.errorMessage
         )
     }

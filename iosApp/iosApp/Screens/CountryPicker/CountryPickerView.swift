@@ -20,11 +20,8 @@ struct CountryPickerView: View {
                     viewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: newValue))
                 }
 
-            if viewModel.currentState.status is CoreStatus.Loading {
-                ProgressView("Loading...")
-            } else if let errorStatus = viewModel.currentState.status as? CoreStatus.Error {
-                Text(errorStatus.message)
-                    .foregroundColor(.red)
+            if viewModel.currentState.errorMessage != nil {
+                Text("Error").foregroundColor(.red)
             } else {
                 List {
                     ForEach(viewModel.currentState.countries, id: \.self.code) { country in

@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,8 +23,8 @@ class ValidateSurnameUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Surname cannot be empty.").toString(),
-            result.errorMessage?.toString()
+            "Surname cannot be empty.",
+            result.errorMessage
         )
     }
 
@@ -36,8 +35,8 @@ class ValidateSurnameUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Surname cannot be empty.").toString(),
-            result.errorMessage?.toString()
+            "Surname cannot be empty.",
+            result.errorMessage
         )
     }
 
@@ -48,7 +47,7 @@ class ValidateSurnameUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Surname must be at least 2 characters long.").toString(),
+            "Surname must be at least 2 characters long.",
             result.errorMessage?.toString()
         )
     }
@@ -96,8 +95,8 @@ class ValidateSurnameUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Surname must be at least 2 characters long.").toString(),
-            result.errorMessage?.toString()
+            "Surname must be at least 2 characters long.",
+            result.errorMessage
         )
     }
 }
