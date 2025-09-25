@@ -1,5 +1,5 @@
 import Foundation
-import ComposeApp
+import shared
 import Combine
 
 /// Observes navigation commands from the KMP AppNavigator and publishes them for SwiftUI consumption.
@@ -21,12 +21,6 @@ class NavigatorHelper: ObservableObject {
             for await cmd in navigator.commands {
                 // When a new command is emitted, publish it.
                 self.command = cmd
-
-                // If the command is not nil, it means we have a new navigation event
-                // to process. We must consume it so it doesn't trigger again.
-                if cmd != nil {
-                    navigator.onCommandConsumed()
-                }
 
                 if Task.isCancelled {
                     break

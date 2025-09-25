@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.domain.model.StringResource
-import com.example.clean.entry.core.domain.model.stringResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * A general-purpose composable for displaying a full-screen error message with a retry button.
@@ -64,6 +64,37 @@ fun ErrorScreen(
     ) {
         Text(
             text = org.jetbrains.compose.resources.stringResource(message),
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        AppButton(
+            text = "Retry",
+            onClick = onRetry,
+            modifier = Modifier.padding(top = MaterialTheme.spacing.medium)
+        )
+    }
+}
+
+/**
+ * A general-purpose composable for displaying a full-screen error message with a retry button.
+ *
+ * @param message The error message to display.
+ * @param onRetry A lambda to be invoked when the user clicks the "Retry" button.
+ * @param modifier The modifier to be applied to the container.
+ */
+@Composable
+fun ErrorScreen(
+    message: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = message,
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyLarge
         )

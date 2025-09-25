@@ -1,7 +1,6 @@
 package com.example.clean.entry.auth.presentation.registration
 
 import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.core.domain.model.StringResource
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.mvi.Reducer
 
@@ -10,17 +9,17 @@ import com.example.clean.entry.core.mvi.Reducer
  * for its state transformations.
  */
 object RegistrationReducer :
-    Reducer<RegistrationReducer.State, RegistrationReducer.Event, Nothing> {
+    Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
 
     data class State(
         val firstName: String = "",
-        val firstNameError: StringResource? = null,
+        val firstNameError: String? = null,
         val surname: String = "",
-        val surnameError: StringResource? = null,
+        val surnameError: String? = null,
         val email: String = "",
-        val emailError: StringResource? = null,
+        val emailError: String? = null,
         val phone: String = "",
-        val phoneError: StringResource? = null,
+        val phoneError: String? = null,
         val isLoading: Boolean = false,
         val selectedCountry: Country = Country.Egypt,
     ) : Reducer.ViewState {
@@ -49,6 +48,8 @@ object RegistrationReducer :
 
         data object CountryButtonClick : Event
     }
+
+    sealed interface Effect : Reducer.ViewEffect
 
     override fun reduce(
         previousState: State, event: Event

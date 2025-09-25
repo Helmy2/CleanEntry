@@ -1,6 +1,6 @@
 import Foundation
 import PhoneNumberKit
-import ComposeApp
+import shared
 
 class IosPhoneNumberValidatorProvider : PhoneNumberValidatorProvider {
     private let phoneNumberUtility = PhoneNumberUtility()

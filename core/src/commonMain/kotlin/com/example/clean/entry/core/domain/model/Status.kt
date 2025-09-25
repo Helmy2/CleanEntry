@@ -7,5 +7,5 @@ package com.example.clean.entry.core.domain.model
 sealed class Status {
     object Idle : Status()
     object Loading : Status()
-    class Error(val message: StringResource) : Status()
+    class Error(val message: String) : Status()
 }
