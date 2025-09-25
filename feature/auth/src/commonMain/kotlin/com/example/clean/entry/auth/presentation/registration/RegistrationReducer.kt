@@ -1,104 +1,110 @@
 package com.example.clean.entry.auth.presentation.registration
 
+import com.example.clean.entry.auth.domain.model.AuthMethod
 import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.core.domain.model.ValidationResult
 import com.example.clean.entry.core.mvi.Reducer
 
-/**
- * Defines the contract for the Registration screen and also acts as the Reducer
- * for its state transformations.
- */
 object RegistrationReducer :
     Reducer<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect> {
 
     data class State(
-        val firstName: String = "",
-        val firstNameError: String? = null,
-        val surname: String = "",
-        val surnameError: String? = null,
         val email: String = "",
         val emailError: String? = null,
         val phone: String = "",
         val phoneError: String? = null,
+        val password: String = "",
+        val passwordError: String? = null,
+        val confirmPassword: String = "",
+        val confirmPasswordError: String? = null,
         val isLoading: Boolean = false,
+        val error: String? = null,
         val selectedCountry: Country = Country.Egypt,
+        val authMethod: AuthMethod = AuthMethod.EMAIL_PASSWORD,
+        val verificationId: String? = null,
+        val otp: String = "",
+        val otpCount: Int = 6
     ) : Reducer.ViewState {
         val isContinueButtonEnabled
-            get() = firstName.isNotBlank() && firstNameError == null && surname.isNotBlank() && surnameError == null && email.isNotBlank() && emailError == null && phone.isNotBlank() && phoneError == null
+            get() = when {
+                verificationId != null -> otp.length == otpCount && !isLoading
+                authMethod == AuthMethod.EMAIL_PASSWORD -> email.isNotBlank() && emailError == null &&
+                        password.isNotBlank() && passwordError == null &&
+                        confirmPassword.isNotBlank() && confirmPasswordError == null && !isLoading
+
+                authMethod == AuthMethod.PHONE -> phone.isNotBlank() && phoneError == null && !isLoading
+                else -> false
+            }
     }
 
     sealed interface Event : Reducer.ViewEvent {
-        // UI Events
-        data class FirstNameChanged(val value: String) : Event
-        data class SurnameChanged(val value: String) : Event
         data class EmailChanged(val value: String) : Event
         data class PhoneChanged(val value: String) : Event
+        data class PasswordChanged(val value: String) : Event
+        data class ConfirmPasswordChanged(val value: String) : Event
+        data class OtpChanged(val value: String) : Event
         data object Submit : Event
-        data class CountrySelected(val country: Country) : Event // New event
+        data class CountrySelected(val country: Country) : Event
+        data class AuthMethodChanged(val method: AuthMethod) : Event
 
-        // Internal Events
-        data class FirstNameUpdated(val value: String, val result: ValidationResult) : Event
-        data class SurnameUpdated(val value: String, val result: ValidationResult) : Event
         data class EmailUpdated(val value: String, val result: ValidationResult) : Event
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
+        data class PasswordUpdated(val value: String, val result: ValidationResult) : Event
+        data class ConfirmPasswordUpdated(val value: String, val result: ValidationResult) : Event
+        data class VerificationCodeSent(val verificationId: String) : Event
 
-        data object RegistrationFinished : Event
+        data object RegistrationSuccess : Event
+        data class RegistrationFailed(val error: String) : Event
 
         data object BackButtonClicked : Event
-
         data object CountryButtonClick : Event
     }
 
     sealed interface Effect : Reducer.ViewEffect
 
-    override fun reduce(
-        previousState: State, event: Event
-    ): Pair<State, Nothing?> {
+    override fun reduce(previousState: State, event: Event): Pair<State, Nothing?> {
         return when (event) {
-            is Event.FirstNameUpdated -> {
-                previousState.copy(
-                    firstName = event.value, firstNameError = event.result.errorMessage
-                ) to null
-            }
+            is Event.EmailUpdated -> previousState.copy(
+                email = event.value,
+                emailError = event.result.errorMessage
+            ) to null
 
-            is Event.SurnameUpdated -> {
-                previousState.copy(
-                    surname = event.value, surnameError = event.result.errorMessage
-                ) to null
-            }
+            is Event.PhoneUpdated -> previousState.copy(
+                phone = event.value,
+                phoneError = event.result.errorMessage
+            ) to null
 
-            is Event.EmailUpdated -> {
-                previousState.copy(
-                    email = event.value, emailError = event.result.errorMessage
-                ) to null
-            }
+            is Event.PasswordUpdated -> previousState.copy(
+                password = event.value,
+                passwordError = event.result.errorMessage
+            ) to null
 
-            is Event.PhoneUpdated -> {
-                previousState.copy(
-                    phone = event.value, phoneError = event.result.errorMessage
-                ) to null
-            }
+            is Event.ConfirmPasswordUpdated -> previousState.copy(
+                confirmPassword = event.value,
+                confirmPasswordError = event.result.errorMessage
+            ) to null
 
-            is Event.CountrySelected -> {
-                previousState.copy(
-                    selectedCountry = event.country,
-                ) to null
-            }
+            is Event.CountrySelected -> previousState.copy(selectedCountry = event.country) to null
+            is Event.Submit -> previousState.copy(isLoading = true, error = null) to null
+            is Event.RegistrationSuccess -> previousState.copy(isLoading = false) to null
+            is Event.RegistrationFailed -> previousState.copy(
+                isLoading = false,
+                error = event.error,
+                otp = ""
+            ) to null
 
-            is Event.PhoneChanged -> {
-                previousState.copy(phone = event.value) to null
-            }
+            is Event.AuthMethodChanged -> previousState.copy(
+                authMethod = event.method,
+                error = null
+            ) to null
 
-            is Event.Submit -> {
-                previousState.copy(isLoading = true) to null
-            }
+            is Event.VerificationCodeSent -> previousState.copy(
+                isLoading = false,
+                verificationId = event.verificationId
+            ) to null
 
-            is Event.RegistrationFinished -> {
-                previousState.copy(isLoading = false) to null
-            }
-
+            is Event.OtpChanged -> previousState.copy(otp = event.value) to null
             else -> previousState to null
         }
-
     }
 }
