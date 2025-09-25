@@ -4,11 +4,6 @@ import shared
 struct FeedView: View {
     @StateObject var viewModel: FeedViewModelHelper = FeedViewModelHelper()
 
-    private let gridItems: [GridItem] = [
-        .init(.flexible(), spacing: 8),
-        .init(.flexible(), spacing: 8)
-    ]
-
     var body: some View {
         ZStack {
             if viewModel.currentState.error != nil {
@@ -19,35 +14,39 @@ struct FeedView: View {
                     }
                 }
             } else if viewModel.currentState.isLoading {
-                ScrollView {
-                    LazyVGrid(columns: gridItems, spacing: 8) {
-                        ForEach(0..<20, id: \.self) { _ in
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.gray.opacity(0.3))
-                                .frame(height: CGFloat.random(in: 100...300))
-                        }
-                    }
-                    .padding()
+                let shimmerItems = (0..<10).map { _ in ShimmerItem() }
+                StaggeredGrid(columns: 2, list: shimmerItems) { _ in
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: CGFloat.random(in: 100...300))
                 }
+                .padding(.horizontal)
+
             } else {
-                ScrollView {
-                    LazyVGrid(columns: gridItems, spacing: 8) {
-                        ForEach(viewModel.currentState.images, id: \.id) { image in
-                            ImageCard(image: image)
-                        }
-                    }
-                    .padding()
+                StaggeredGrid(columns: 2, list: viewModel.currentState.images) { image in
+                    ImageCard(image: image)
                 }
+                .padding(.horizontal)
+            }
+        }
+        .navigationTitle("Feed")
+        .onAppear {
+            if viewModel.currentState.images.isEmpty {
+                viewModel.handleEvent(event: HomeFeedReducerEventLoadImages())
             }
         }
     }
+}
+
+private struct ShimmerItem: Identifiable, Hashable {
+    let id = UUID()
 }
 
 struct ImageCard: View {
     let image: shared.HomeImage
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             AsyncImage(url: URL(string: image.imageUrl)) { phase in
                 switch phase {
                 case .empty:
@@ -67,16 +66,15 @@ struct ImageCard: View {
                     EmptyView()
                 }
             }
-            .frame(maxWidth: .infinity)
-            .aspectRatio(CGFloat(image.aspectRatio), contentMode: .fit)
-            .clipped()
 
             Text("Photo by \(image.photographer)")
                 .font(.caption)
-                .padding()
+                .padding(8)
         }
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(10)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
         .shadow(radius: 2)
     }
 }
+
+extension HomeImage: @retroactive Identifiable{}
