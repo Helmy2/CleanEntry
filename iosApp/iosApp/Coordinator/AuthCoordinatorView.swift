@@ -17,6 +17,8 @@ struct AuthCoordinatorView: View {
 
     @State private var path = NavigationPath()
 
+    @Binding var isAuthenticated: Bool
+
     var body: some View {
         NavigationStack(path: $path) {
             LoginView()
@@ -63,6 +65,7 @@ struct AuthCoordinatorView: View {
                     // In a real app, you would have a callback here to change the root view.
                     // For now, we can clear the auth path.
                     path = NavigationPath()
+                    isAuthenticated = true
                 }
 
                 // You can add more cases for other command types like NavigateBackWithResult

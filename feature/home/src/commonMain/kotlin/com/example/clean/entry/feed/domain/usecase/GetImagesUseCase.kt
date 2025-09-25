@@ -1,9 +1,9 @@
-package com.example.clean.entry.home.domain.usecase
+package com.example.clean.entry.feed.domain.usecase
 
 import com.example.clean.entry.core.util.runCatchingOnIO
-import com.example.clean.entry.home.data.ImageRepository
-import com.example.clean.entry.home.data.mapper.toDomainModel
-import com.example.clean.entry.home.domain.model.Image
+import com.example.clean.entry.feed.data.ImageRepository
+import com.example.clean.entry.feed.data.mapper.toDomainModel
+import com.example.clean.entry.feed.domain.model.Image
 
 class GetImagesUseCase(
     private val repository: ImageRepository

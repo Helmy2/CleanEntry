@@ -1,4 +1,4 @@
-package com.example.clean.entry.home.domain.model
+package com.example.clean.entry.feed.domain.model
 
 data class Image(
     val id: Long,

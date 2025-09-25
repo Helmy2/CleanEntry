@@ -1,35 +1,36 @@
-package com.example.clean.entry.home.presentation
+package com.example.clean.entry.feed.presentation
 
 import androidx.lifecycle.viewModelScope
 import cleanentry.feature.home.generated.resources.Res
 import cleanentry.feature.home.generated.resources.error_loading_images
 import com.example.clean.entry.core.mvi.BaseViewModel
-import com.example.clean.entry.home.domain.usecase.GetImagesUseCase
-import com.example.clean.entry.home.presentation.HomeReducer.HomeEvent
-import com.example.clean.entry.home.presentation.HomeReducer.HomeState
+import com.example.clean.entry.feed.domain.usecase.GetImagesUseCase
+import com.example.clean.entry.feed.presentation.FeedReducer.Effect
+import com.example.clean.entry.feed.presentation.FeedReducer.Event
+import com.example.clean.entry.feed.presentation.FeedReducer.State
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class FeedViewModel(
     private val getImagesUseCase: GetImagesUseCase
-) : BaseViewModel<HomeState, HomeEvent, Nothing>(
-    reducer = HomeReducer(),
-    initialState = HomeState()
+) : BaseViewModel<State, Event, Effect>(
+    reducer = FeedReducer(),
+    initialState = State()
 ) {
     override suspend fun initialDataLoad() {
         super.initialDataLoad()
-        handleEvent(HomeEvent.LoadImages)
+        handleEvent(Event.LoadImages)
     }
 
-    override fun handleEvent(event: HomeEvent) {
+    override fun handleEvent(event: FeedReducer.Event) {
         when (event) {
-            HomeEvent.LoadImages -> {
+            Event.LoadImages -> {
                 setState(event)
                 viewModelScope.launch {
                     val result = getImagesUseCase()
                     result.onSuccess { images ->
-                        setState(HomeEvent.LoadImagesSuccess(images))
+                        setState(Event.LoadImagesSuccess(images))
                     }.onFailure { throwable ->
-                        setState(HomeEvent.LoadImagesFailure(Res.string.error_loading_images))
+                        setState(Event.LoadImagesFailure(Res.string.error_loading_images))
                     }
                 }
             }

@@ -8,3 +8,4 @@ class RegistrationViewModelHelper: BaseViewModelHelper<AuthRegistrationReducerSt
         super.init(viewModel: vm, initialState: vm.state.value)
     }
 }
+

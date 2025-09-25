@@ -1,4 +1,4 @@
-package com.example.clean.entry.home.presentation
+package com.example.clean.entry.feed.presentation
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -25,18 +25,18 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.components.shimmer
-import com.example.clean.entry.home.domain.model.Image
+import com.example.clean.entry.feed.domain.model.Image
 import org.jetbrains.compose.resources.StringResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.random.Random
 
 @Composable
-fun HomeRoute(
-    viewModel: HomeViewModel = koinViewModel()
+fun FeedRoute(
+    viewModel: FeedViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
-    HomeScreen(
+    FeedScreen(
         isLoading = state.isLoading,
         images = state.images,
         error = state.error,
@@ -45,11 +45,11 @@ fun HomeRoute(
 }
 
 @Composable
-fun HomeScreen(
+fun FeedScreen(
     isLoading: Boolean,
     images: List<Image>,
     error: StringResource?,
-    handleEvent: (HomeReducer.HomeEvent) -> Unit
+    handleEvent: (FeedReducer.Event) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when {
@@ -57,7 +57,7 @@ fun HomeScreen(
                 ErrorScreen(
                     message = error,
                     onRetry = {
-                        handleEvent(HomeReducer.HomeEvent.LoadImages)
+                        handleEvent(FeedReducer.Event.LoadImages)
                     }
                 )
             }
