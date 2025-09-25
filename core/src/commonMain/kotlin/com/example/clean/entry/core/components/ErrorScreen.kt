@@ -43,34 +43,3 @@ fun ErrorScreen(
         )
     }
 }
-
-/**
- * A general-purpose composable for displaying a full-screen error message with a retry button.
- *
- * @param message The error message to display.
- * @param onRetry A lambda to be invoked when the user clicks the "Retry" button.
- * @param modifier The modifier to be applied to the container.
- */
-@Composable
-fun ErrorScreen(
-    message: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = message,
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        AppButton(
-            text = "Retry",
-            onClick = onRetry,
-            modifier = Modifier.padding(top = MaterialTheme.spacing.medium)
-        )
-    }
-}

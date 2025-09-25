@@ -4,6 +4,7 @@ import com.example.clean.entry.auth.presentation.country_code_picker.CountryCode
 import com.example.clean.entry.auth.presentation.login.LoginViewModel
 import com.example.clean.entry.auth.presentation.registration.RegistrationViewModel
 import com.example.clean.entry.core.navigation.AppNavigator
+import com.example.clean.entry.feed.presentation.FeedViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -11,5 +12,6 @@ class DependenciesHelper : KoinComponent {
     val loginViewModel: LoginViewModel by inject()
     val registrationViewModel: RegistrationViewModel by inject()
     val countryCodePickerViewModel: CountryCodePickerViewModel by inject()
+    val feedViewModel: FeedViewModel by inject()
     val navigator: AppNavigator by inject()
 }

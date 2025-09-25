@@ -1,6 +1,5 @@
 package com.example.clean.entry.auth.domain.usecase
 
-import com.example.clean.entry.core.domain.model.StringResource
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,8 +24,8 @@ class ValidateEmailUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Email cannot be empty.").toString(),
-            result.errorMessage?.toString()
+            "Email cannot be empty.",
+            result.errorMessage
         )
     }
 
@@ -38,7 +37,7 @@ class ValidateEmailUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("Email cannot be empty.").toString(),
+            "Email cannot be empty.",
             result.errorMessage?.toString()
         )
     }
@@ -61,8 +60,8 @@ class ValidateEmailUseCaseTest {
 
         assertFalse(result.isSuccessful)
         assertEquals(
-            StringResource.FromString("That's not a valid email.").toString(),
-            result.errorMessage?.toString()
+            "That's not a valid email.",
+            result.errorMessage
         )
     }
 
@@ -73,7 +72,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -83,7 +82,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -93,7 +92,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -103,7 +102,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -113,7 +112,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -123,7 +122,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -193,7 +192,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -203,7 +202,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -213,7 +212,7 @@ class ValidateEmailUseCaseTest {
         val result = validateEmailUseCase(email)
 
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 
     @Test
@@ -222,6 +221,6 @@ class ValidateEmailUseCaseTest {
 
         val result = validateEmailUseCase(email)
         assertFalse(result.isSuccessful)
-        assertEquals(StringResource.FromString("That's not a valid email.").toString(), result.errorMessage.toString())
+        assertEquals("That's not a valid email.", result.errorMessage.toString())
     }
 }

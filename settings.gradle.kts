@@ -38,4 +38,5 @@ rootProject.name = "CleanEntry"
 include(":composeApp")
 include(":core")
 include(":feature:auth")
+include(":feature:home")
 

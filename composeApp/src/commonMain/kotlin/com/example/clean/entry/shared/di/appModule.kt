@@ -12,7 +12,7 @@ import org.koin.dsl.module
 val appModule = module {
     single {
         AppNavigatorImpl(
-            AppDestination.Auth,
+            AppDestination.Dashboard,
             CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         )
     }.bind<AppNavigator>()

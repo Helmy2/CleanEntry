@@ -27,7 +27,6 @@ import com.example.clean.entry.auth.presentation.components.CountryRowShimmer
 import com.example.clean.entry.auth.presentation.country_code_picker.CountryCodePickerReducer.Event.LoadCountries
 import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.domain.model.Status
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -96,7 +95,7 @@ fun CountryCodePickerScreen(
         }
     ) { padding ->
         AnimatedContent(
-            state.status,
+            state.errorMessage,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -105,14 +104,14 @@ fun CountryCodePickerScreen(
                     end = MaterialTheme.spacing.medium,
                     bottom = MaterialTheme.spacing.medium
                 )
-        ) { status ->
-            when (status) {
-                is Status.Error -> ErrorScreen(
-                    message = status.message,
+        ) { errorMessage ->
+            when {
+                errorMessage != null -> ErrorScreen(
+                    message = errorMessage,
                     onRetry = { onEvent(LoadCountries) }
                 )
 
-                Status.Idle, Status.Loading -> {
+                else -> {
                     LazyColumn {
                         items(
                             count = state.countries.size,
@@ -153,47 +152,3 @@ fun CountryCodePickerScreen(
         }
     }
 }
-//
-//@Composable
-//fun CountryRow(
-//    country: Country,
-//    isSelected: Boolean,
-//    onClick: (Country) -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    Column {
-//        Row(
-//            modifier = modifier
-//                .fillMaxWidth()
-//                .clickable(onClick = { onClick(country) })
-//                .padding(MaterialTheme.spacing.small),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Text(
-//                "👋 \\uD83D\\uDE00",
-//                style = MaterialTheme.typography.titleLarge,
-//            )
-//            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-//            Text(
-//                text = country.code,
-//                style = MaterialTheme.typography.bodyLarge,
-//                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-//            )
-//            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-//            Text(
-//                text = country.name,
-//                style = MaterialTheme.typography.bodyLarge,
-//                color = MaterialTheme.colorScheme.onSurface
-//            )
-//            Spacer(modifier = Modifier.weight(1f))
-//            if (isSelected) {
-//                Icon(
-//                    imageVector = Icons.Default.CheckCircle,
-//                    contentDescription = stringResource(Res.string.selected),
-//                    tint = MaterialTheme.colorScheme.primary
-//                )
-//            }
-//        }
-//        HorizontalDivider()
-//    }
-//}
