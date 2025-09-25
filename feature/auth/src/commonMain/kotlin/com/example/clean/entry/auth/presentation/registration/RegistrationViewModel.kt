@@ -1,22 +1,25 @@
 package com.example.clean.entry.auth.presentation.registration
 
 import androidx.lifecycle.viewModelScope
+import com.example.clean.entry.auth.domain.model.AuthMethod
+import com.example.clean.entry.auth.domain.repository.AuthRepository
+import com.example.clean.entry.auth.domain.usecase.ValidateConfirmPasswordUseCase
 import com.example.clean.entry.auth.domain.usecase.ValidateEmailUseCase
-import com.example.clean.entry.auth.domain.usecase.ValidateFirstNameUseCase
+import com.example.clean.entry.auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.auth.domain.usecase.ValidatePhoneUseCase
-import com.example.clean.entry.auth.domain.usecase.ValidateSurnameUseCase
 import com.example.clean.entry.auth.navigation.CounterCodeResult
+import com.example.clean.entry.auth.util.getReadableFirebaseAuthErrorMessage
 import com.example.clean.entry.core.mvi.BaseViewModel
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel(
-    private val validateFirstNameUseCase: ValidateFirstNameUseCase,
-    private val validateSurnameUseCase: ValidateSurnameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneUseCase: ValidatePhoneUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val validateConfirmPasswordUseCase: ValidateConfirmPasswordUseCase,
+    private val authRepository: AuthRepository,
     private val navigator: AppNavigator,
 ) : BaseViewModel<RegistrationReducer.State, RegistrationReducer.Event, RegistrationReducer.Effect>(
     reducer = RegistrationReducer,
@@ -36,16 +39,6 @@ class RegistrationViewModel(
 
     override fun handleEvent(event: RegistrationReducer.Event) {
         when (event) {
-            is RegistrationReducer.Event.FirstNameChanged -> {
-                val result = validateFirstNameUseCase(event.value)
-                setState(RegistrationReducer.Event.FirstNameUpdated(event.value, result))
-            }
-
-            is RegistrationReducer.Event.SurnameChanged -> {
-                val result = validateSurnameUseCase(event.value)
-                setState(RegistrationReducer.Event.SurnameUpdated(event.value, result))
-            }
-
             is RegistrationReducer.Event.EmailChanged -> {
                 val result = validateEmailUseCase(event.value)
                 setState(RegistrationReducer.Event.EmailUpdated(event.value, result))
@@ -55,6 +48,16 @@ class RegistrationViewModel(
                 val regionCode = state.value.selectedCountry.code
                 val result = validatePhoneUseCase(event.value, regionCode)
                 setState(RegistrationReducer.Event.PhoneUpdated(event.value, result))
+            }
+
+            is RegistrationReducer.Event.PasswordChanged -> {
+                val result = validatePasswordUseCase(event.value)
+                setState(RegistrationReducer.Event.PasswordUpdated(event.value, result))
+            }
+
+            is RegistrationReducer.Event.ConfirmPasswordChanged -> {
+                val result = validateConfirmPasswordUseCase(state.value.password, event.value)
+                setState(RegistrationReducer.Event.ConfirmPasswordUpdated(event.value, result))
             }
 
             is RegistrationReducer.Event.Submit -> {
@@ -72,7 +75,7 @@ class RegistrationViewModel(
                 )
             }
 
-            is RegistrationReducer.Event.RegistrationFinished -> {
+            is RegistrationReducer.Event.RegistrationSuccess -> {
                 navigator.navigateAsRoot(AppDestination.Dashboard)
             }
 
@@ -82,9 +85,52 @@ class RegistrationViewModel(
 
     private fun submitRegistration() {
         viewModelScope.launch {
-            // TODO: Implement registration
-            delay(2000)
-            handleEvent(RegistrationReducer.Event.RegistrationFinished)
+            val state = state.value
+            when (state.authMethod) {
+                AuthMethod.EMAIL_PASSWORD -> {
+                    authRepository.registerWithEmailAndPassword(state.email, state.password)
+                        .onSuccess {
+                            handleEvent(RegistrationReducer.Event.RegistrationSuccess)
+                        }
+                        .onFailure {
+                            val errorMessage = getReadableFirebaseAuthErrorMessage(it.message ?: "")
+                            handleEvent(RegistrationReducer.Event.RegistrationFailed(errorMessage))
+                        }
+                }
+
+                AuthMethod.PHONE -> {
+                    if (state.verificationId == null) {
+                        val fullPhoneNumber = "${state.selectedCountry.dialCode}${state.phone}"
+                        authRepository.sendVerificationCode(fullPhoneNumber)
+                            .onSuccess {
+                                handleEvent(RegistrationReducer.Event.VerificationCodeSent(it))
+                            }
+                            .onFailure {
+                                val errorMessage =
+                                    getReadableFirebaseAuthErrorMessage(it.message ?: "")
+                                handleEvent(
+                                    RegistrationReducer.Event.RegistrationFailed(
+                                        errorMessage
+                                    )
+                                )
+                            }
+                    } else {
+                        authRepository.signInWithPhoneNumber(state.verificationId, state.otp)
+                            .onSuccess {
+                                handleEvent(RegistrationReducer.Event.RegistrationSuccess)
+                            }
+                            .onFailure {
+                                val errorMessage =
+                                    getReadableFirebaseAuthErrorMessage(it.message ?: "")
+                                handleEvent(
+                                    RegistrationReducer.Event.RegistrationFailed(
+                                        errorMessage
+                                    )
+                                )
+                            }
+                    }
+                }
+            }
         }
     }
 }
