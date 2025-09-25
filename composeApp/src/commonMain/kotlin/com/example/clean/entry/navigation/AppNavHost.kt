@@ -10,7 +10,7 @@ import com.example.clean.entry.auth.navigation.authNavBuilder
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
-import com.example.clean.entry.home.presentation.HomeRoute
+import com.example.clean.entry.feed.presentation.FeedRoute
 import org.koin.compose.koinInject
 
 
@@ -45,7 +45,7 @@ fun AppNavHost(
         authNavBuilder()
 
         composable<AppDestination.Dashboard> {
-            HomeRoute()
+            FeedRoute()
         }
     }
 }

@@ -7,6 +7,8 @@ struct iOSApp: App {
     // Immutable dependencies helper to avoid accidental reassignment.
     static let dependenciesHelper = DependenciesHelper()
 
+    @State private var isAuthenticated: Bool = true
+
     init() {
         // Initialize shared Koin container from Kotlin Multiplatform
         InitKoinKt.doInitKoin()
@@ -16,7 +18,11 @@ struct iOSApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AuthCoordinatorView()
+            if isAuthenticated {
+                HomeCoordinatorView()
+            } else {
+                AuthCoordinatorView(isAuthenticated: $isAuthenticated)
+            }
         }
     }
 }

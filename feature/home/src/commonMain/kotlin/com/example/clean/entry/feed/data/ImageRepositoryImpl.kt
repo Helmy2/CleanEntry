@@ -1,6 +1,6 @@
-package com.example.clean.entry.home.data
+package com.example.clean.entry.feed.data
 
-import com.example.clean.entry.home.data.models.PexelsPhotosResponse
+import com.example.clean.entry.feed.data.models.PexelsPhotosResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

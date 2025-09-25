@@ -1,7 +1,7 @@
-package com.example.clean.entry.home.data.mapper
+package com.example.clean.entry.feed.data.mapper
 
-import com.example.clean.entry.home.data.models.PexelsPhoto
-import com.example.clean.entry.home.domain.model.Image
+import com.example.clean.entry.feed.data.models.PexelsPhoto
+import com.example.clean.entry.feed.domain.model.Image
 
 fun PexelsPhoto.toDomainModel(): Image {
     return Image(

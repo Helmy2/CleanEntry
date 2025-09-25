@@ -85,7 +85,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.clean.entry.home"
+    namespace = "com.example.clean.entry.feed"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
