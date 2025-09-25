@@ -33,8 +33,7 @@ class ValidatePhoneUseCase(private val verifier: PhoneNumberVerifier) {
                     errorMessage = "Invalid phone number for the selected region."
                 )
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (_: Exception) {
             ValidationResult(
                 isSuccessful = false,
                 errorMessage = "Invalid phone number format."
