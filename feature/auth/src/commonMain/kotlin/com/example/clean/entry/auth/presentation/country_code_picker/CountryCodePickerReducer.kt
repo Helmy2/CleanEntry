@@ -1,8 +1,8 @@
 package com.example.clean.entry.auth.presentation.country_code_picker
 
 import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.core.domain.model.Status
 import com.example.clean.entry.core.mvi.Reducer
+import org.jetbrains.compose.resources.StringResource
 
 /**
  * Defines the contract for the CountryCodePicker screen and acts as its Reducer.
@@ -13,7 +13,7 @@ object CountryCodePickerReducer :
     data class State(
         val searchQuery: String = "",
         val selectedCountryCode: String? = null,
-        val status: Status = Status.Loading,
+        val errorMessage: StringResource? = null,
         val countries: List<Country> = emptyList(),
     ) : Reducer.ViewState
 
@@ -23,7 +23,7 @@ object CountryCodePickerReducer :
         data class InitCountrySelectedCode(val code: String) : Event
         data class CountrySelectedCode(val code: String) : Event
         data class LoadCountriesListSuccess(val countries: List<Country>) : Event
-        data class LoadCountriesFailed(val errorMessage: String) : Event
+        data class LoadCountriesFailed(val errorMessage: StringResource) : Event
         data class SearchQueryChanged(val query: String) : Event
 
         data object BackButtonClicked : Event
@@ -38,7 +38,7 @@ object CountryCodePickerReducer :
         return when (event) {
             is Event.LoadCountriesListSuccess -> {
                 previousState.copy(
-                    status = Status.Idle,
+                    errorMessage = null,
                     countries = event.countries
                 ) to null
             }
@@ -52,7 +52,7 @@ object CountryCodePickerReducer :
             }
 
             is Event.LoadCountriesFailed -> {
-                previousState.copy(status = Status.Error(event.errorMessage)) to null
+                previousState.copy(errorMessage = event.errorMessage) to null
             }
 
             is Event.SearchQueryChanged -> {

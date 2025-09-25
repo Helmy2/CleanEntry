@@ -1,6 +1,8 @@
 package com.example.clean.entry.auth.presentation.country_code_picker
 
 import androidx.lifecycle.viewModelScope
+import cleanentry.feature.auth.generated.resources.Res
+import cleanentry.feature.auth.generated.resources.country_code_picker_error
 import com.example.clean.entry.auth.domain.repository.CountryRepository
 import com.example.clean.entry.auth.navigation.CounterCodeResult
 import com.example.clean.entry.core.mvi.BaseViewModel
@@ -29,7 +31,7 @@ class CountryCodePickerViewModel(
             countryRepository.getCountries(query)
         }
         .catch {
-            handleEvent(CountryCodePickerReducer.Event.LoadCountriesFailed("Failed to load countries. Please try again."))
+            handleEvent(CountryCodePickerReducer.Event.LoadCountriesFailed(Res.string.country_code_picker_error))
         }
 
     override suspend fun initialDataLoad() {
