@@ -1,5 +1,6 @@
 package com.example.clean.entry.auth.data.source.remote
 
+import com.example.clean.entry.core.util.Secrets
 import com.example.clean.entry.core.util.runCatchingOnIO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -14,7 +15,7 @@ import kotlinx.serialization.Serializable
 
 class AuthRemoteDataSource(private val httpClient: HttpClient) {
 
-    private val apiKey = "AIzaSyCIoWUnayhp80yTh6QHUgj2EPHhUFybOiM" // TODO: Secure this key properly
+    private val apiKey = Secrets.getFirebaseApiKey()
     private val firebaseBaseUrl = "https://identitytoolkit.googleapis.com/v1/accounts"
 
     suspend fun sendVerificationCode(phoneNumber: String): Result<String> = runCatchingOnIO {
