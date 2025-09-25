@@ -19,9 +19,23 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.compilations.getByName("main") {
+            val interop by cinterops.creating {
+                definitionFile.set(project.file("src/nativeInterop/cinterop/Secrets.def"))
+                includeDirs(project.file("src/nativeInterop/cinterop"))
+            }
+        }
+
+        iosTarget.binaries.all {
+            // Linker options required to link to the library.
+            linkerOpts("-L/path/to/library/binaries", "-lbinaryname")
+        }
+    }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -74,6 +88,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 }
 
