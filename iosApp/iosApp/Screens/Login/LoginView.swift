@@ -1,14 +1,10 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 struct LoginView: View {
-    @ObservedObject private var viewModel: LoginViewModelHelper
+    @StateObject private var helper = LoginViewModelHelper()
     @State private var phone: String = ""
     @State private var password: String = ""
-
-    init() {
-        viewModel = LoginViewModelHelper()
-    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -22,19 +18,19 @@ struct LoginView: View {
 
             VStack(alignment: .leading) {
                 PhoneTextFieldWithCountry(
-                    countryFlag: viewModel.selectedCountry.flagEmoji,
-                    countryDialCode: viewModel.selectedCountry.dialCode,
+                    countryFlag: helper.currentState.selectedCountry.flagEmoji,
+                    countryDialCode: helper.currentState.selectedCountry.dialCode,
                     phoneNumber: $phone,
                     onCountryCodeClick: {
-                        viewModel.loginViewModel.handleEvent(event: AuthLoginReducerEventCountryButtonClick())
+                        helper.handleEvent(event: AuthLoginReducerEventCountryButtonClick())
                     },
                     onPhoneNumberChange: { newValue in
-                        viewModel.loginViewModel.handleEvent(event: AuthLoginReducerEventPhoneChanged(value: newValue))
+                        helper.handleEvent(event: AuthLoginReducerEventPhoneChanged(value: newValue))
                     }
                 )
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                if let error = viewModel.phoneError {
+                if let error = helper.currentState.phoneError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -44,11 +40,11 @@ struct LoginView: View {
             VStack(alignment: .leading) {
                 SecureField("Password", text: $password)
                 .onChange(of: password) { _, newValue in
-                    viewModel.loginViewModel.handleEvent(event: AuthLoginReducerEventPasswordChanged(value: newValue))
+                    helper.handleEvent(event: AuthLoginReducerEventPasswordChanged(value: newValue))
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                if let error = viewModel.passwordError {
+                if let error = helper.currentState.passwordError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -58,22 +54,22 @@ struct LoginView: View {
             Spacer()
 
             Button(action: {
-                viewModel.loginViewModel.handleEvent(event: AuthLoginReducerEventLoginClicked())
+                helper.handleEvent(event: AuthLoginReducerEventLoginClicked())
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(viewModel.loginViewModel.state.value.isLoginButtonEnabled ? Color.blue : Color.gray)
+                    .background(helper.currentState.isLoginButtonEnabled ? Color.blue : Color.gray)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
-            .disabled(!viewModel.loginViewModel.state.value.isLoginButtonEnabled)
+            .disabled(!helper.currentState.isLoginButtonEnabled)
 
             HStack {
                 Text("You don't have an account?")
                     .font(.body)
                 Button(action: {
-                    viewModel.loginViewModel.handleEvent(event: AuthLoginReducerEventCreateAccountClicked())
+                    helper.handleEvent(event: AuthLoginReducerEventCreateAccountClicked())
                 }) {
                     Text("Create Account")
                         .font(.body)
@@ -82,12 +78,6 @@ struct LoginView: View {
             }
         }
         .padding()
-        .onAppear {
-            viewModel.start()
-        }
-        .onDisappear {
-            viewModel.stop()
-        }
     }
 }
 

@@ -1,5 +1,5 @@
 import Foundation
-import ComposeApp
+import shared
 import Combine
 
 /// Observes navigation commands from the KMP AppNavigator and publishes them for SwiftUI consumption.

@@ -1,16 +1,13 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 struct RegistrationView: View {
-    @ObservedObject var viewModel: RegistrationViewModelHelper
+    @ObservedObject var viewModel = RegistrationViewModelHelper()
     @State private var firstName: String = ""
     @State private var surname: String = ""
     @State private var email: String = ""
     @State private var phone: String = ""
 
-    init() {
-        self.viewModel = RegistrationViewModelHelper()
-    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -25,10 +22,10 @@ struct RegistrationView: View {
             VStack(alignment: .leading) {
                 TextField("First Name", text: $firstName)
                 .onChange(of: firstName) { _, newValue in
-                    viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventFirstNameChanged(value: newValue))
+                    viewModel.handleEvent(event: AuthRegistrationReducerEventFirstNameChanged(value: newValue))
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                if let error = viewModel.firstNameError {
+                if let error = viewModel.currentState.firstNameError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -38,10 +35,10 @@ struct RegistrationView: View {
             VStack(alignment: .leading) {
                 TextField("Surname", text: $surname)
                 .onChange(of: surname) { _, newValue in
-                    viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventSurnameChanged(value: newValue))
+                    viewModel.handleEvent(event: AuthRegistrationReducerEventSurnameChanged(value: newValue))
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                if let error = viewModel.surnameError {
+                if let error = viewModel.currentState.surnameError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -52,10 +49,10 @@ struct RegistrationView: View {
                 TextField("Email", text: $email)
                 .keyboardType(.emailAddress)
                 .onChange(of: email) { _, newValue in
-                    viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventEmailChanged(value: newValue))
+                    viewModel.handleEvent(event: AuthRegistrationReducerEventEmailChanged(value: newValue))
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                if let error = viewModel.emailError {
+                if let error = viewModel.currentState.emailError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -64,18 +61,18 @@ struct RegistrationView: View {
 
             VStack(alignment: .leading) {
                 PhoneTextFieldWithCountry(
-                    countryFlag: viewModel.selectedCountry.flagEmoji,
-                    countryDialCode: viewModel.selectedCountry.dialCode,
+                    countryFlag: viewModel.currentState.selectedCountry.flagEmoji,
+                    countryDialCode: viewModel.currentState.selectedCountry.dialCode,
                     phoneNumber: $phone,
                     onCountryCodeClick: {
-                        viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventCountryButtonClick())
+                        viewModel.handleEvent(event: AuthRegistrationReducerEventCountryButtonClick())
                     },
                     onPhoneNumberChange: { newValue in
-                        viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventPhoneChanged(value: newValue))
+                        viewModel.handleEvent(event: AuthRegistrationReducerEventPhoneChanged(value: newValue))
                     }
                 )
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                if let error = viewModel.phoneError {
+                if let error = viewModel.currentState.phoneError {
                     Text(error)
                         .font(.caption)
                         .foregroundColor(.red)
@@ -85,23 +82,17 @@ struct RegistrationView: View {
             Spacer()
 
             Button(action: {
-                viewModel.registrationViewModel.handleEvent(event: AuthRegistrationReducerEventSubmit())
+                viewModel.handleEvent(event: AuthRegistrationReducerEventSubmit())
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(viewModel.registrationViewModel.state.value.isContinueButtonEnabled ? Color.blue : Color.gray)
+                    .background(viewModel.currentState.isContinueButtonEnabled ? Color.blue : Color.gray)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
-            .disabled(!viewModel.registrationViewModel.state.value.isContinueButtonEnabled)
+            .disabled(!viewModel.currentState.isContinueButtonEnabled)
         }
         .padding()
-        .onAppear {
-            viewModel.start()
-        }
-        .onDisappear {
-            viewModel.stop()
-        }
     }
 }
