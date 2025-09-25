@@ -1,5 +1,5 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 // Defines the navigation destinations for the auth flow.
 enum AuthNavigationPath: Hashable {
@@ -13,47 +13,30 @@ enum AuthNavigationPath: Hashable {
  */
 struct AuthCoordinatorView: View {
 
-    @StateObject private var loginHelper = LoginViewModelHelper()
-    @StateObject private var registrationHelper = RegistrationViewModelHelper()
     @StateObject private var navigatorHelper = NavigatorHelper()
 
     @State private var path = NavigationPath()
 
     var body: some View {
         NavigationStack(path: $path) {
-            // Root: Login view
-            LoginView(
-                viewModel: loginHelper.loginViewModel,
-            )
+            LoginView()
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: AuthNavigationPath.self) { destination in
                 switch destination {
                 case .registration:
-                    RegistrationView(
-                        viewModel: registrationHelper.registrationViewModel,
-                    )
-                    .navigationBarBackButtonHidden(true)
+                    RegistrationView()
 
                 case let .countryPicker(countryCode):
-                    NativeCountryPickerView(
-                        selectedCountryCode: countryCode,
-                        onCountrySelected: { country in
-                            loginHelper.onCountrySelected(country: country)
-                            registrationHelper.onCountrySelected(country: country)
-                        }
+                    CountryPickerView(
+                        initialCountryCode: countryCode
                     )
                 }
             }
         }
-        // Lifecycle-aware state collection
         .onAppear {
-            loginHelper.start()
-            registrationHelper.start()
             navigatorHelper.start()
         }
         .onDisappear {
-            loginHelper.stop()
-            registrationHelper.stop()
             navigatorHelper.stop()
         }
         .onChange(of: navigatorHelper.command) { oldCommand, newCommand in
@@ -66,11 +49,6 @@ struct AuthCoordinatorView: View {
                 handleNavigateTo(destination: navigateTo.destination)
 
             case is CoreCommand.NavigateBack:
-                if !path.isEmpty {
-                    path.removeLast()
-                }
-
-            case is CoreCommand.NavigateBackWithResult:
                 if !path.isEmpty {
                     path.removeLast()
                 }
@@ -104,7 +82,7 @@ struct AuthCoordinatorView: View {
             // so you may need to adjust how you handle this or pass more info.
             // For now, we can assume a default target or handle it as needed.
             path.append(AuthNavigationPath.countryPicker(
-                countryCode: countryPickerDest.code ?? "",
+                countryCode: countryPickerDest.code ?? ""
                 ))
         }
         // Add other destination mappings here

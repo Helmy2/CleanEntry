@@ -21,7 +21,7 @@ fun AppNavHost(
     val navController = rememberNavController()
     val navigator = koinInject<AppNavigator>()
 
-    LaunchedEffect(navigator.commands.value) {
+    LaunchedEffect(navigator.commands) {
         navigator.commands.collect { command ->
             when (command) {
                 is Command.NavigateAsRoot -> {
@@ -33,12 +33,7 @@ fun AppNavHost(
                 Command.NavigateBack -> navController.popBackStack()
 
                 is Command.NavigateTo -> navController.navigate(command.destination)
-
-                Command.Idle -> {
-                    // Do nothing
-                }
             }
-            navigator.onCommandConsumed()
         }
     }
 
