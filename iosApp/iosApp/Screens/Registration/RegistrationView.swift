@@ -94,11 +94,5 @@ struct RegistrationView: View {
             .disabled(!viewModel.currentState.isContinueButtonEnabled)
         }
         .padding()
-        .onAppear {
-            viewModel.start()
-        }
-        .onDisappear {
-            viewModel.stop()
-        }
     }
 }

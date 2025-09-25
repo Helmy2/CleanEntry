@@ -15,9 +15,6 @@ class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEve
     init(viewModel: CoreBaseViewModel<State, Event, Effect>, initialState: State) {
         self.viewModel = viewModel
         self.currentState = initialState
-    }
-
-    func start() {
         startObserving(stateFlow: AnyAsyncSequence(viewModel.state), effectFlow: AnyAsyncSequence(viewModel.effect))
     }
 
@@ -72,16 +69,11 @@ class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEve
     }
 
     /// Stops observing
-    func stop() {
+    deinit {
         stateTask?.cancel()
         effectTask?.cancel()
         stateTask = nil
         effectTask = nil
-    }
-
-    deinit {
-        stateTask?.cancel()
-        effectTask?.cancel()
     }
 }
 

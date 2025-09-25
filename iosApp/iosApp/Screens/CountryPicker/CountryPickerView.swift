@@ -37,11 +37,7 @@ struct CountryPickerView: View {
         }
         .navigationTitle("Select Country")
         .onAppear {
-            viewModel.start()
             viewModel.handleEvent(event: AuthCountryCodePickerReducerEventInitCountrySelectedCode(code: _initialCountryCode))
-        }
-        .onDisappear {
-            viewModel.stop()
         }
     }
 }
