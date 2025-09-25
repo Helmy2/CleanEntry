@@ -21,7 +21,7 @@ class FeedViewModel(
         handleEvent(Event.LoadImages)
     }
 
-    override fun handleEvent(event: FeedReducer.Event) {
+    override fun handleEvent(event: Event) {
         when (event) {
             Event.LoadImages -> {
                 setState(event)
