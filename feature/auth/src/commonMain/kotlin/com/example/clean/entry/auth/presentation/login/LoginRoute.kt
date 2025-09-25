@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,24 +27,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cleanentry.feature.auth.generated.resources.Res
 import cleanentry.feature.auth.generated.resources.continue_label
 import cleanentry.feature.auth.generated.resources.create_account
+import cleanentry.feature.auth.generated.resources.email_label
+import cleanentry.feature.auth.generated.resources.email_placeholder
 import cleanentry.feature.auth.generated.resources.login
 import cleanentry.feature.auth.generated.resources.password_label
 import cleanentry.feature.auth.generated.resources.password_placeholder
 import cleanentry.feature.auth.generated.resources.phone_placeholder
 import cleanentry.feature.auth.generated.resources.please_fill_the_details_and_log_in
 import cleanentry.feature.auth.generated.resources.you_don_t_have_an_account
+import com.example.clean.entry.auth.domain.model.AuthMethod
 import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.core.components.AppButton
+import com.example.clean.entry.core.components.AppTextField
+import com.example.clean.entry.core.components.OtpTextField
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
 import com.example.clean.entry.core.design_system.spacing
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-/**
- * The stateful "Route" for the Login screen.
- * This composable is responsible for connecting to the ViewModel and handling side effects.
- */
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = koinViewModel(),
@@ -98,41 +101,95 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.padding(MaterialTheme.spacing.medium))
 
+            TabRow(selectedTabIndex = state.authMethod.ordinal) {
+                AuthMethod.values().forEach { method ->
+                    Tab(
+                        selected = state.authMethod == method,
+                        onClick = { onEvent(LoginReducer.Event.AuthMethodChanged(method)) },
+                        text = {
+                            Text(
+                                method.name.replace("_", " ").lowercase()
+                                    .replaceFirstChar { it.uppercase() })
+                        },
+                        enabled = state.verificationId == null
+                    )
+                }
+            }
 
-            PhoneTextField(
-                value = state.phone,
-                onValueChange = { onEvent(LoginReducer.Event.PhoneChanged(it)) },
-                onCountryCodeClick = { onEvent(LoginReducer.Event.CountryButtonClick) },
-                countryCode = state.selectedCountry.dialCode,
-                countryFlag = state.selectedCountry.flagEmoji,
-                isError = state.phoneError != null,
-                supportingText = state.phoneError,
-                placeholderText = stringResource(Res.string.phone_placeholder),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next
+            if (state.verificationId == null) {
+                when (state.authMethod) {
+                    AuthMethod.EMAIL_PASSWORD -> {
+                        AppTextField(
+                            value = state.email,
+                            onValueChange = { onEvent(LoginReducer.Event.EmailChanged(it)) },
+                            labelText = stringResource(Res.string.email_label),
+                            isError = state.emailError != null,
+                            supportingText = state.emailError,
+                            placeholderText = stringResource(Res.string.email_placeholder),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
+
+                        PasswordTextField(
+                            value = state.password,
+                            onValueChange = { onEvent(LoginReducer.Event.PasswordChanged(it)) },
+                            labelText = stringResource(Res.string.password_label),
+                            isVisible = state.isPasswordVisible,
+                            onVisibilityToggle = { onEvent(LoginReducer.Event.TogglePasswordVisibility) },
+                            isError = state.passwordError != null,
+                            supportingText = state.passwordError,
+                            placeholderText = stringResource(Res.string.password_placeholder),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
+                            )
+                        )
+                    }
+
+                    AuthMethod.PHONE -> {
+                        PhoneTextField(
+                            value = state.phone,
+                            onValueChange = { onEvent(LoginReducer.Event.PhoneChanged(it)) },
+                            onCountryCodeClick = { onEvent(LoginReducer.Event.CountryButtonClick) },
+                            countryCode = state.selectedCountry.dialCode,
+                            countryFlag = state.selectedCountry.flagEmoji,
+                            isError = state.phoneError != null,
+                            supportingText = state.phoneError,
+                            placeholderText = stringResource(Res.string.phone_placeholder),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
+                            )
+                        )
+                    }
+                }
+            } else {
+                OtpTextField(
+                    otpText = state.otp,
+                    onOtpTextChange = { otp, _ -> onEvent(LoginReducer.Event.OtpChanged(otp)) },
+                    otpCount = state.otpCount
                 )
-            )
+            }
 
-            Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
-
-            PasswordTextField(
-                value = state.password,
-                onValueChange = { onEvent(LoginReducer.Event.PasswordChanged(it)) },
-                labelText = stringResource(Res.string.password_label),
-                isVisible = state.isPasswordVisible,
-                onVisibilityToggle = { onEvent(LoginReducer.Event.TogglePasswordVisibility) },
-                isError = state.passwordError != null,
-                supportingText = state.passwordError,
-                placeholderText = stringResource(Res.string.password_placeholder),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
+            if (state.error != null) {
+                Text(
+                    text = state.error,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.small)
                 )
-            )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
+            val buttonText = when {
+                state.verificationId != null -> "Verify OTP"
+                state.authMethod == AuthMethod.PHONE -> "Send OTP"
+                else -> stringResource(Res.string.continue_label)
+            }
+
             AppButton(
-                text = stringResource(Res.string.continue_label),
+                text = buttonText,
                 onClick = { onEvent(LoginReducer.Event.LoginClicked) },
                 enabled = state.isLoginButtonEnabled,
                 isLoading = state.isLoading,
