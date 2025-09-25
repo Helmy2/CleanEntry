@@ -7,7 +7,7 @@ struct iOSApp: App {
     // Immutable dependencies helper to avoid accidental reassignment.
     static let dependenciesHelper = DependenciesHelper()
 
-    @State private var isAuthenticated: Bool = true
+    @State private var isAuthenticated: Bool = false
 
     init() {
         // Initialize shared Koin container from Kotlin Multiplatform
