@@ -78,12 +78,6 @@ struct LoginView: View {
             }
         }
         .padding()
-        .onAppear {
-            helper.start()
-        }
-        .onDisappear {
-            helper.stop()
-        }
     }
 }
 
