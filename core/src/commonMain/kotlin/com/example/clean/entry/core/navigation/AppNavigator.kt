@@ -3,7 +3,6 @@ package com.example.clean.entry.core.navigation
 import kotlinx.coroutines.flow.Flow
 
 interface AppNavigator {
-    val startDestination: AppDestination
     val commands: Flow<Command>
 
     fun navigateAsRoot(destination: AppDestination)

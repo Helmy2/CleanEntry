@@ -20,6 +20,7 @@ kotlinxCoroutines = "1.10.2"
 sqldelight = "2.1.0"
 ktor = "3.3.0"
 coil3 = "3.3.0"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -57,6 +58,7 @@ ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
 [bundles]
 coil = ["coil-compose", "coil-compose-core", "coil-network-ktor3"]

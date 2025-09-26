@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.libphonenumber.android)
             implementation(libs.koin.android)
+            implementation(libs.androidx.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(project(":core"))

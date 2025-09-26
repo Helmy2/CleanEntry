@@ -16,6 +16,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost(
+    startDestination: AppDestination,
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
@@ -39,7 +40,7 @@ fun AppNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = navigator.startDestination,
+        startDestination = startDestination,
         modifier = modifier,
     ) {
         authNavBuilder()

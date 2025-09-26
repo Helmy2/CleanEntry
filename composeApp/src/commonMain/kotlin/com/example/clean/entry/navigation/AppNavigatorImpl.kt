@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 
 class AppNavigatorImpl(
-    override val startDestination: AppDestination,
     private val scope: CoroutineScope
 ) : AppNavigator {
 
