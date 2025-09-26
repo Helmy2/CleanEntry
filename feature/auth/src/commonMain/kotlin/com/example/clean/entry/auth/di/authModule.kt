@@ -28,7 +28,7 @@ expect val authPlatformModule: Module
 val authModule = module {
     includes(authPlatformModule)
 
-    factory { get<AppDatabase>().countryEntityQueries }
+    single { get<AppDatabase>().countryEntityQueries }
 
     single {
         ApolloClient.Builder()

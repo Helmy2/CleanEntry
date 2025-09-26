@@ -33,7 +33,7 @@ class AuthRemoteDataSource(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun signInWithPhoneAuth(verificationId: String, code: String): Result<Unit> =
+    suspend fun signInWithPhoneNumber(verificationId: String, code: String): Result<String> =
         runCatchingOnIO {
             val response: HttpResponse = httpClient.post {
                 url("$firebaseBaseUrl:signInWithPhoneNumber?key=$apiKey")
@@ -42,15 +42,14 @@ class AuthRemoteDataSource(private val httpClient: HttpClient) {
             }
 
             if (response.status.isSuccess()) {
-                response.body<SignInWithPhoneNumberResponse>()
-                Unit
+                response.body<SignInWithPhoneNumberResponse>().idToken
             } else {
                 val errorResponse = response.body<FirebaseErrorResponse>()
                 throw Exception(errorResponse.error.message)
             }
         }
 
-    suspend fun registerWithEmailAndPassword(email: String, password: String): Result<Unit> =
+    suspend fun registerWithEmailAndPassword(email: String, password: String): Result<String> =
         runCatchingOnIO {
             val response: HttpResponse = httpClient.post {
                 url("$firebaseBaseUrl:signUp?key=$apiKey")
@@ -65,15 +64,15 @@ class AuthRemoteDataSource(private val httpClient: HttpClient) {
             }
 
             if (response.status.isSuccess()) {
-                response.body<EmailPasswordResponse>()
-                Unit
+                response.body<EmailPasswordResponse>().idToken
+                    ?: throw Exception("Auth token not received")
             } else {
                 val errorResponse = response.body<FirebaseErrorResponse>()
                 throw Exception(errorResponse.error.message)
             }
         }
 
-    suspend fun loginWithEmailAndPassword(email: String, password: String): Result<Unit> =
+    suspend fun loginWithEmailAndPassword(email: String, password: String): Result<String> =
         runCatchingOnIO {
             val response: HttpResponse = httpClient.post {
                 url("$firebaseBaseUrl:signInWithPassword?key=$apiKey")
@@ -88,8 +87,8 @@ class AuthRemoteDataSource(private val httpClient: HttpClient) {
             }
 
             if (response.status.isSuccess()) {
-                response.body<EmailPasswordResponse>()
-                Unit
+                response.body<EmailPasswordResponse>().idToken
+                    ?: throw Exception("Auth token not received")
             } else {
                 val errorResponse = response.body<FirebaseErrorResponse>()
                 throw Exception(errorResponse.error.message)
