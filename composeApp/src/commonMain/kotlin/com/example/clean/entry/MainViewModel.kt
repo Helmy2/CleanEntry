@@ -1,4 +1,4 @@
-package com.example.clean.entry.shared
+package com.example.clean.entry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
