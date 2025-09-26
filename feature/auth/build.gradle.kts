@@ -92,6 +92,10 @@ kotlin {
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
         }
+        nonJsMain.dependencies {
+            implementation(libs.koin.core)
+            implementation(libs.androidx.datastore.preferences)
+        }
     }
 }
 

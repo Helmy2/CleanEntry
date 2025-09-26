@@ -33,6 +33,13 @@ class LoginViewModel(
                     }
                 }
         }
+        viewModelScope.launch {
+            authRepository.isAuthenticated.collect {
+                if (it) {
+                    navigator.navigateAsRoot(AppDestination.Dashboard)
+                }
+            }
+        }
     }
 
     override fun handleEvent(event: LoginReducer.Event) {
@@ -73,7 +80,7 @@ class LoginViewModel(
             }
 
             is LoginReducer.Event.LoginSuccess -> {
-                navigator.navigateAsRoot(AppDestination.Dashboard)
+                // No need to navigate here, as isAuthenticated flow will handle it
             }
 
             else -> setState(event)
