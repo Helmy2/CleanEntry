@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clean.entry.core.design_system.CleanEntryTheme
-import com.example.clean.entry.shared.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -23,15 +22,12 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         val viewModel by viewModel<MainViewModel>()
 
-
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.startDestination.value == null
+        }
 
         setContent {
             val state by viewModel.startDestination.collectAsStateWithLifecycle()
-
-            splashScreen.setKeepOnScreenCondition {
-                state == null
-            }
-
             CleanEntryTheme {
                 state?.let {
                     it.onSuccess {
