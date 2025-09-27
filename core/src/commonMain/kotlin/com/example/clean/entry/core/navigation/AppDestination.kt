@@ -4,7 +4,10 @@ import kotlinx.serialization.Serializable
 
 sealed class AppDestination {
     @Serializable
-    object Dashboard : AppDestination()
+    object Feed : AppDestination()
+
+    @Serializable
+    object Profile : AppDestination()
 
     @Serializable
     object Auth : AppDestination()
@@ -18,4 +21,3 @@ sealed class AppDestination {
     @Serializable
     data class CountryCodePicker(val code: String?) : AppDestination()
 }
-

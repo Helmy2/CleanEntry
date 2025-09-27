@@ -1,4 +1,5 @@
 [versions]
+adaptive = "1.2.0-alpha06"
 agp = "8.13.0"
 android-compileSdk = "36"
 android-minSdk = "28"
@@ -23,6 +24,7 @@ coil3 = "3.3.0"
 coreSplashscreen = "1.0.1"
 
 [libraries]
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
