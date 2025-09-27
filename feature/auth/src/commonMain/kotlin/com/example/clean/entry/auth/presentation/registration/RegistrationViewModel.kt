@@ -76,7 +76,7 @@ class RegistrationViewModel(
             }
 
             is RegistrationReducer.Event.RegistrationSuccess -> {
-                navigator.navigateAsRoot(AppDestination.Dashboard)
+                navigator.navigateAsRoot(AppDestination.Feed)
             }
 
             else -> setState(event)

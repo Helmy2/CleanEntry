@@ -36,7 +36,7 @@ class LoginViewModel(
         viewModelScope.launch {
             authRepository.isAuthenticated.collect {
                 if (it) {
-                    navigator.navigateAsRoot(AppDestination.Dashboard)
+                    navigator.navigateAsRoot(AppDestination.Feed)
                 }
             }
         }

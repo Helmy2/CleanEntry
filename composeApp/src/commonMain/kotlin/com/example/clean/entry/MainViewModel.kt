@@ -21,7 +21,7 @@ class MainViewModel(
         viewModelScope.launch {
             val isAuthenticated = authRepository.isAuthenticated.first()
             _startDestination.value = if (isAuthenticated) {
-                Result.success(AppDestination.Dashboard)
+                Result.success(AppDestination.Feed)
             } else {
                 Result.success(AppDestination.Auth)
             }

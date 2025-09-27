@@ -11,6 +11,7 @@ import com.example.clean.entry.auth.domain.usecase.ValidatePasswordUseCase
 import com.example.clean.entry.auth.domain.usecase.ValidatePhoneUseCase
 import com.example.clean.entry.auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.auth.presentation.login.LoginViewModel
+import com.example.clean.entry.auth.presentation.profile.ProfileViewModel
 import com.example.clean.entry.auth.presentation.registration.RegistrationViewModel
 import com.example.clean.entry.db.AppDatabase
 import io.ktor.client.HttpClient
@@ -62,4 +63,5 @@ val authModule = module {
     viewModelOf(::RegistrationViewModel)
     viewModelOf(::LoginViewModel)
     viewModelOf(::CountryCodePickerViewModel)
+    viewModelOf(::ProfileViewModel)
 }
