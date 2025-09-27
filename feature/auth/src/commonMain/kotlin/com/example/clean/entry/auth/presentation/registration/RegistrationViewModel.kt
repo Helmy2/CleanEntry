@@ -35,6 +35,13 @@ class RegistrationViewModel(
                     }
                 }
         }
+        viewModelScope.launch {
+            authRepository.isAuthenticated.collect {
+                if (it) {
+                    navigator.navigateAsRoot(AppDestination.Feed)
+                }
+            }
+        }
     }
 
     override fun handleEvent(event: RegistrationReducer.Event) {
@@ -73,10 +80,6 @@ class RegistrationViewModel(
                 navigator.navigate(
                     AppDestination.CountryCodePicker(state.value.selectedCountry.code)
                 )
-            }
-
-            is RegistrationReducer.Event.RegistrationSuccess -> {
-                navigator.navigateAsRoot(AppDestination.Feed)
             }
 
             else -> setState(event)

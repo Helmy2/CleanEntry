@@ -81,7 +81,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
             is Event.TogglePasswordVisibility -> previousState.copy(isPasswordVisible = !previousState.isPasswordVisible) to null
             is Event.CountrySelected -> previousState.copy(selectedCountry = event.country) to null
             is Event.LoginClicked -> previousState.copy(isLoading = true, error = null) to null
-            is Event.LoginSuccess -> previousState.copy(isLoading = false) to null
+            is Event.LoginSuccess -> State() to null
             is Event.LoginFailed -> previousState.copy(
                 isLoading = false,
                 error = event.error,

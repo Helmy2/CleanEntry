@@ -79,10 +79,6 @@ class LoginViewModel(
                 )
             }
 
-            is LoginReducer.Event.LoginSuccess -> {
-                // No need to navigate here, as isAuthenticated flow will handle it
-            }
-
             else -> setState(event)
         }
     }

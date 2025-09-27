@@ -22,11 +22,9 @@ class ProfileViewModel(
             is ProfileReducer.Event.OnLogoutClicked -> {
                 performLogout()
             }
-
             is ProfileReducer.Event.LogoutSucceeded -> {
                 navigator.navigateAsRoot(AppDestination.Login)
             }
-
             is ProfileReducer.Event.LogoutFailed -> {
             }
         }

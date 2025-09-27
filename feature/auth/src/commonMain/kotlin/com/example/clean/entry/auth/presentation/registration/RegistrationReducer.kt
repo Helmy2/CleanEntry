@@ -86,7 +86,7 @@ object RegistrationReducer :
 
             is Event.CountrySelected -> previousState.copy(selectedCountry = event.country) to null
             is Event.Submit -> previousState.copy(isLoading = true, error = null) to null
-            is Event.RegistrationSuccess -> previousState.copy(isLoading = false) to null
+            is Event.RegistrationSuccess -> State() to null
             is Event.RegistrationFailed -> previousState.copy(
                 isLoading = false,
                 error = event.error,
