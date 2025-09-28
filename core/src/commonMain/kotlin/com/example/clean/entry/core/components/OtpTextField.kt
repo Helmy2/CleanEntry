@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,14 +45,17 @@ fun OtpTextField(
                 onOtpTextChange(value, value.length == otpCount)
             }
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.NumberPassword,
+            imeAction = ImeAction.Done
+        ),
         decorationBox = {
             Row(horizontalArrangement = Arrangement.Center) {
                 repeat(otpCount) { index ->
                     val char = otpText.getOrNull(index)?.toString() ?: ""
                     Box(
                         modifier = Modifier
-                            .size(50.dp)
+                            .size(45.dp)
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),

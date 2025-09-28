@@ -73,7 +73,11 @@ class RegistrationViewModel(
             }
 
             is RegistrationReducer.Event.BackButtonClicked -> {
-                navigator.navigateBack()
+                if (state.value.verificationId == null) {
+                    navigator.navigateBack()
+                } else {
+                    setState(RegistrationReducer.Event.VerificationCodeSent(null))
+                }
             }
 
             is RegistrationReducer.Event.CountryButtonClick -> {
@@ -90,7 +94,7 @@ class RegistrationViewModel(
         viewModelScope.launch {
             val state = state.value
             when (state.authMethod) {
-                AuthMethod.EMAIL_PASSWORD -> {
+                AuthMethod.EMAIL -> {
                     authRepository.registerWithEmailAndPassword(state.email, state.password)
                         .onSuccess {
                             handleEvent(RegistrationReducer.Event.RegistrationSuccess)

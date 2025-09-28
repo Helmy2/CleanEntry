@@ -20,7 +20,7 @@ object RegistrationReducer :
         val isLoading: Boolean = false,
         val error: String? = null,
         val selectedCountry: Country = Country.Egypt,
-        val authMethod: AuthMethod = AuthMethod.EMAIL_PASSWORD,
+        val authMethod: AuthMethod = AuthMethod.PHONE,
         val verificationId: String? = null,
         val otp: String = "",
         val otpCount: Int = 6
@@ -28,7 +28,7 @@ object RegistrationReducer :
         val isContinueButtonEnabled
             get() = when {
                 verificationId != null -> otp.length == otpCount && !isLoading
-                authMethod == AuthMethod.EMAIL_PASSWORD -> email.isNotBlank() && emailError == null &&
+                authMethod == AuthMethod.EMAIL -> email.isNotBlank() && emailError == null &&
                         password.isNotBlank() && passwordError == null &&
                         confirmPassword.isNotBlank() && confirmPasswordError == null && !isLoading
 
@@ -51,7 +51,7 @@ object RegistrationReducer :
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
         data class PasswordUpdated(val value: String, val result: ValidationResult) : Event
         data class ConfirmPasswordUpdated(val value: String, val result: ValidationResult) : Event
-        data class VerificationCodeSent(val verificationId: String) : Event
+        data class VerificationCodeSent(val verificationId: String?) : Event
 
         data object RegistrationSuccess : Event
         data class RegistrationFailed(val error: String) : Event
