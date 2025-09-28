@@ -1,4 +1,4 @@
-package com.example.clean.entry.auth.presentation.components
+package com.example.clean.entry.core.components
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
@@ -11,8 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cleanentry.feature.auth.generated.resources.Res
-import cleanentry.feature.auth.generated.resources.back
+import cleanentry.core.generated.resources.Res
+import cleanentry.core.generated.resources.back
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)

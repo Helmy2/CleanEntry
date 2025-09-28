@@ -1,4 +1,4 @@
-package com.example.clean.entry.feed.data.models
+package com.example.clean.entry.shared.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

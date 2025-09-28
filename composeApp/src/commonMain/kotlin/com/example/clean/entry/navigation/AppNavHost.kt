@@ -27,14 +27,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import androidx.window.core.layout.WindowSizeClass
 import com.example.clean.entry.auth.navigation.authNavBuilder
 import com.example.clean.entry.auth.presentation.profile.ProfileRoute
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
+import com.example.clean.entry.details.presentation.ImageDetailsScreen
 import com.example.clean.entry.feed.presentation.FeedRoute
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 private sealed class BottomNavItem(
     val destination: AppDestination,
@@ -209,6 +213,10 @@ private fun AppNavHostContent(
         }
         composable<AppDestination.Profile> {
             ProfileRoute()
+        }
+        composable<AppDestination.ImageDetails> { backStackEntry ->
+            val routeArgs = backStackEntry.toRoute<AppDestination.ImageDetails>()
+            ImageDetailsScreen(viewModel = koinViewModel { parametersOf(routeArgs.imageId) })
         }
     }
 }
