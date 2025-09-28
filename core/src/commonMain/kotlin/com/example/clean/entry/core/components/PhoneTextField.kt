@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -52,6 +53,7 @@ fun PhoneTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     supportingText: String? = null,
 ) {
     AppTextField(
@@ -61,6 +63,7 @@ fun PhoneTextField(
         isError = isError,
         supportingText = supportingText,
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         placeholderText = placeholderText,
         leadingIcon = {
             Row(

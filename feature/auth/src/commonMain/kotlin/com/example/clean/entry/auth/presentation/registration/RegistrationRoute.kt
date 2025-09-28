@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -147,7 +148,8 @@ fun RegistrationScreen(
                             visualTransformation = PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions.Default.copy(
                                 keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
-                            )
+                            ),
+                            keyboardActions = KeyboardActions(onDone = { onEvent(RegistrationReducer.Event.Submit) })
                         )
                     }
 
@@ -163,7 +165,8 @@ fun RegistrationScreen(
                             placeholderText = stringResource(Res.string.phone_placeholder),
                             keyboardOptions = KeyboardOptions.Default.copy(
                                 keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
-                            )
+                            ),
+                            keyboardActions = KeyboardActions(onDone = { onEvent(RegistrationReducer.Event.Submit) })
                         )
                     }
                 }

@@ -19,7 +19,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -40,6 +41,10 @@ private sealed class BottomNavItem(
     val label: String,
     val icon: ImageVector
 ) {
+    companion object {
+        val allItems = listOf(Feed, Profile)
+    }
+
     data object Feed : BottomNavItem(AppDestination.Feed, "Feed", Icons.Default.Home)
     data object Profile :
         BottomNavItem(AppDestination.Profile, "Profile", Icons.Default.AccountCircle)
@@ -61,18 +66,18 @@ fun AppNavHost(
                         popUpTo(0)
                     }
                 }
+
                 Command.NavigateBack -> navController.popBackStack()
                 is Command.NavigateTo -> navController.navigate(command.destination)
             }
         }
     }
 
-    val bottomNavItems = listOf(BottomNavItem.Feed, BottomNavItem.Profile)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val showNavigationUi = currentDestination?.route == AppDestination.Feed::class.qualifiedName ||
-            currentDestination?.route == AppDestination.Profile::class.qualifiedName
+    val showNavigationUi =
+        BottomNavItem.allItems.any { currentDestination?.hasRoute(it.destination::class) == true }
 
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val isWidthAtLeastBreakpoint =
@@ -82,19 +87,23 @@ fun AppNavHost(
         ExpandedAppLayout(
             modifier = modifier,
             navController = navController,
-            bottomNavItems = bottomNavItems,
-            currentDestination = currentDestination,
+            bottomNavItems = BottomNavItem.allItems,
             startDestination = startDestination,
-            showNavigationRail = showNavigationUi
+            showNavigationRail = showNavigationUi,
+            isItemSelected = { item ->
+                navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(item.destination::class) } == true
+            }
         )
     } else {
         CompactAppLayout(
             modifier = modifier,
             navController = navController,
-            bottomNavItems = bottomNavItems,
-            currentDestination = currentDestination,
+            bottomNavItems = BottomNavItem.allItems,
             startDestination = startDestination,
-            showBottomBar = showNavigationUi
+            showBottomBar = showNavigationUi,
+            isItemSelected = { item ->
+                navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(item.destination::class) } == true
+            }
         )
     }
 }
@@ -104,9 +113,9 @@ private fun CompactAppLayout(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     bottomNavItems: List<BottomNavItem>,
-    currentDestination: NavDestination?,
     startDestination: AppDestination,
-    showBottomBar: Boolean
+    showBottomBar: Boolean,
+    isItemSelected: (BottomNavItem) -> Boolean
 ) {
     Scaffold(
         modifier = modifier,
@@ -115,7 +124,7 @@ private fun CompactAppLayout(
                 NavigationBar {
                     bottomNavItems.forEach { item ->
                         NavigationBarItem(
-                            selected = currentDestination?.route == item.destination::class.qualifiedName,
+                            selected = isItemSelected(item),
                             onClick = {
                                 navController.navigate(item.destination) {
                                     popUpTo(navController.graph.findStartDestination().id) {
@@ -142,9 +151,9 @@ private fun ExpandedAppLayout(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     bottomNavItems: List<BottomNavItem>,
-    currentDestination: NavDestination?,
     startDestination: AppDestination,
-    showNavigationRail: Boolean
+    showNavigationRail: Boolean,
+    isItemSelected: (BottomNavItem) -> Boolean
 ) {
     Scaffold(modifier = modifier) { scaffoldPadding ->
         Row(
@@ -156,7 +165,7 @@ private fun ExpandedAppLayout(
                 NavigationRail {
                     bottomNavItems.forEach { item ->
                         NavigationRailItem(
-                            selected = currentDestination?.route == item.destination::class.qualifiedName,
+                            selected = isItemSelected(item),
                             onClick = {
                                 navController.navigate(item.destination) {
                                     popUpTo(navController.graph.findStartDestination().id) {
