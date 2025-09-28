@@ -8,12 +8,12 @@ struct RegistrationView: View {
         VStack(spacing: 16) {
             if viewModel.currentState.verificationId == nil {
                 Picker("Auth Method", selection: $viewModel.authMethod) {
-                    Text("Email").tag(AuthAuthMethod.emailPassword)
+                    Text("Email").tag(AuthAuthMethod.email)
                     Text("Phone").tag(AuthAuthMethod.phone)
                 }
                 .pickerStyle(SegmentedPickerStyle())
 
-                if viewModel.authMethod == .emailPassword {
+                if viewModel.authMethod == .email {
                     VStack(alignment: .leading) {
                         TextField("Email", text: $viewModel.email)
                             .keyboardType(.emailAddress)

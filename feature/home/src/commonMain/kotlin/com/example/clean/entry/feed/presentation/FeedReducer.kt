@@ -1,7 +1,7 @@
 package com.example.clean.entry.feed.presentation
 
 import com.example.clean.entry.core.mvi.Reducer
-import com.example.clean.entry.feed.domain.model.Image
+import com.example.clean.entry.shared.domain.model.Image
 import org.jetbrains.compose.resources.StringResource
 
 class FeedReducer : Reducer<FeedReducer.State, FeedReducer.Event, FeedReducer.Effect> {
@@ -22,6 +22,8 @@ class FeedReducer : Reducer<FeedReducer.State, FeedReducer.Event, FeedReducer.Ef
                 isLoading = false,
                 error = event.error
             ) to null
+
+            else -> previousState to null
         }
     }
 
@@ -29,6 +31,7 @@ class FeedReducer : Reducer<FeedReducer.State, FeedReducer.Event, FeedReducer.Ef
         data object LoadImages : Event()
         data class LoadImagesSuccess(val images: List<Image>) : Event()
         data class LoadImagesFailure(val error: StringResource) : Event()
+        data class ImageClicked(val imageId: Long) : Event()
     }
 
     data class State(

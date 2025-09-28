@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import cleanentry.feature.home.generated.resources.Res
 import cleanentry.feature.home.generated.resources.error_loading_images
 import com.example.clean.entry.core.mvi.BaseViewModel
+import com.example.clean.entry.core.navigation.AppDestination
+import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.feed.domain.usecase.GetImagesUseCase
 import com.example.clean.entry.feed.presentation.FeedReducer.Effect
 import com.example.clean.entry.feed.presentation.FeedReducer.Event
@@ -11,7 +13,8 @@ import com.example.clean.entry.feed.presentation.FeedReducer.State
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val getImagesUseCase: GetImagesUseCase
+    private val getImagesUseCase: GetImagesUseCase,
+    private val navigator: AppNavigator
 ) : BaseViewModel<State, Event, Effect>(
     reducer = FeedReducer(),
     initialState = State()
@@ -33,6 +36,10 @@ class FeedViewModel(
                         setState(Event.LoadImagesFailure(Res.string.error_loading_images))
                     }
                 }
+            }
+
+            is Event.ImageClicked -> {
+                navigator.navigate(AppDestination.ImageDetails(event.imageId))
             }
 
             else -> setState(event)

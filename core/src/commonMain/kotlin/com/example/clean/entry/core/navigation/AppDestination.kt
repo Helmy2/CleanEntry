@@ -20,4 +20,7 @@ sealed class AppDestination {
 
     @Serializable
     data class CountryCodePicker(val code: String?) : AppDestination()
+
+    @Serializable
+    data class ImageDetails(val imageId: Long) : AppDestination()
 }

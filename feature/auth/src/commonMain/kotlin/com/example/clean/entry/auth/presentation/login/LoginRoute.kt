@@ -39,13 +39,13 @@ import cleanentry.feature.auth.generated.resources.sign_up
 import cleanentry.feature.auth.generated.resources.you_don_t_have_an_account
 import com.example.clean.entry.auth.domain.model.AuthMethod
 import com.example.clean.entry.auth.domain.model.Country
-import com.example.clean.entry.auth.presentation.components.TopBar
-import com.example.clean.entry.auth.presentation.components.TopBarWithBackNavigation
 import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.OtpTextField
 import com.example.clean.entry.core.components.PasswordTextField
 import com.example.clean.entry.core.components.PhoneTextField
+import com.example.clean.entry.core.components.TopBar
+import com.example.clean.entry.core.components.TopBarWithBackNavigation
 import com.example.clean.entry.core.design_system.spacing
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
