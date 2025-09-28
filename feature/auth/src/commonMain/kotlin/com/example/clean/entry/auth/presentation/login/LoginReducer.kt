@@ -18,7 +18,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         val isLoading: Boolean = false,
         val error: String? = null,
         val selectedCountry: Country = Country.Egypt,
-        val authMethod: AuthMethod = AuthMethod.EMAIL_PASSWORD,
+        val authMethod: AuthMethod = AuthMethod.PHONE,
         val verificationId: String? = null,
         val otp: String = "",
         val otpCount: Int = 6
@@ -26,7 +26,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         val isLoginButtonEnabled
             get() = when {
                 verificationId != null -> otp.length == otpCount && !isLoading
-                authMethod == AuthMethod.EMAIL_PASSWORD -> email.isNotBlank() && emailError == null &&
+                authMethod == AuthMethod.EMAIL -> email.isNotBlank() && emailError == null &&
                         password.isNotBlank() && passwordError == null && !isLoading
 
                 authMethod == AuthMethod.PHONE -> phone.isNotBlank() && phoneError == null && !isLoading
@@ -40,14 +40,14 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
         data class PasswordChanged(val value: String) : Event
         data class OtpChanged(val value: String) : Event
         data object TogglePasswordVisibility : Event
-        data object LoginClicked : Event
+        data object Submit : Event
         data class CountrySelected(val country: Country) : Event
         data class AuthMethodChanged(val method: AuthMethod) : Event
 
         data class EmailUpdated(val value: String, val result: ValidationResult) : Event
         data class PhoneUpdated(val value: String, val result: ValidationResult) : Event
         data class PasswordUpdated(val value: String, val result: ValidationResult) : Event
-        data class VerificationCodeSent(val verificationId: String) : Event
+        data class VerificationCodeSent(val verificationId: String?) : Event
         data object LoginSuccess : Event
         data class LoginFailed(val error: String) : Event
 
@@ -80,7 +80,7 @@ object LoginReducer : Reducer<LoginReducer.State, LoginReducer.Event, LoginReduc
 
             is Event.TogglePasswordVisibility -> previousState.copy(isPasswordVisible = !previousState.isPasswordVisible) to null
             is Event.CountrySelected -> previousState.copy(selectedCountry = event.country) to null
-            is Event.LoginClicked -> previousState.copy(isLoading = true, error = null) to null
+            is Event.Submit -> previousState.copy(isLoading = true, error = null) to null
             is Event.LoginSuccess -> State() to null
             is Event.LoginFailed -> previousState.copy(
                 isLoading = false,

@@ -100,22 +100,12 @@ class LoginReducerTest {
 
     @Test
     fun `given LoginClicked event when reduce then state isLoading is true`() {
-        val event = LoginReducer.Event.LoginClicked
+        val event = LoginReducer.Event.Submit
 
         val (newState, effect) = LoginReducer.reduce(initialState, event)
 
         assertTrue(newState.isLoading)
         assertNull(effect)
-    }
-
-    @Test
-    fun `given LoginFinished event when reduce then state isLoading is false and LoginSuccess effect is emitted`() {
-        val loadingState = initialState.copy(isLoading = true)
-        val event = LoginReducer.Event.LoginFinished
-
-        val (newState, _) = LoginReducer.reduce(loadingState, event)
-
-        assertFalse(newState.isLoading)
     }
 
     @Test

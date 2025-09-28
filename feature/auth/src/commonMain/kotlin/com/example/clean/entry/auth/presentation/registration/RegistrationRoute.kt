@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -66,6 +67,7 @@ fun RegistrationScreen(
     state: RegistrationReducer.State,
     onEvent: (RegistrationReducer.Event) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = {
             TopBarWithBackNavigation(
@@ -73,7 +75,6 @@ fun RegistrationScreen(
                 onBackClick = {
                     onEvent(RegistrationReducer.Event.BackButtonClicked)
                 },
-                modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
         }) { padding ->
         Column(
@@ -92,7 +93,7 @@ fun RegistrationScreen(
 
             if (state.verificationId == null) {
                 TabRow(selectedTabIndex = state.authMethod.ordinal) {
-                    AuthMethod.values().forEach { method ->
+                    AuthMethod.entries.forEach { method ->
                         Tab(
                             selected = state.authMethod == method,
                             onClick = { onEvent(RegistrationReducer.Event.AuthMethodChanged(method)) },
@@ -101,13 +102,12 @@ fun RegistrationScreen(
                                     method.name.replace("_", " ").lowercase()
                                         .replaceFirstChar { it.uppercase() })
                             },
-                            enabled = state.verificationId == null
                         )
                     }
                 }
 
                 when (state.authMethod) {
-                    AuthMethod.EMAIL_PASSWORD -> {
+                    AuthMethod.EMAIL -> {
                         AppTextField(
                             value = state.email,
                             onValueChange = { onEvent(RegistrationReducer.Event.EmailChanged(it)) },
@@ -170,7 +170,13 @@ fun RegistrationScreen(
             } else {
                 OtpTextField(
                     otpText = state.otp,
-                    onOtpTextChange = { otp, _ -> onEvent(RegistrationReducer.Event.OtpChanged(otp)) },
+                    onOtpTextChange = { otp, isComplete ->
+                        onEvent(RegistrationReducer.Event.OtpChanged(otp))
+                        if (isComplete) {
+                            focusManager.clearFocus()
+                            onEvent(RegistrationReducer.Event.Submit)
+                        }
+                    },
                     otpCount = state.otpCount
                 )
             }

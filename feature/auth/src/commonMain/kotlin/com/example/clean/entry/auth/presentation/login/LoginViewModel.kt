@@ -60,13 +60,13 @@ class LoginViewModel(
                 setState(LoginReducer.Event.PasswordUpdated(event.value, result))
             }
 
-            is LoginReducer.Event.LoginClicked -> {
+            is LoginReducer.Event.Submit -> {
                 submitLogin()
                 setState(event)
             }
 
             is LoginReducer.Event.BackButtonClicked -> {
-                navigator.navigateBack()
+                setState(LoginReducer.Event.VerificationCodeSent(verificationId = null))
             }
 
             is LoginReducer.Event.CreateAccountClicked -> {
@@ -87,7 +87,7 @@ class LoginViewModel(
         viewModelScope.launch {
             val state = state.value
             when (state.authMethod) {
-                AuthMethod.EMAIL_PASSWORD -> {
+                AuthMethod.EMAIL -> {
                     authRepository.loginWithEmailAndPassword(state.email, state.password)
                         .onSuccess {
                             handleEvent(LoginReducer.Event.LoginSuccess)

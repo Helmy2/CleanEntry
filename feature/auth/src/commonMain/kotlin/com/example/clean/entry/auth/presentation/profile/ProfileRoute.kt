@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.clean.entry.auth.presentation.components.TopBar
 import com.example.clean.entry.core.design_system.spacing
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -37,10 +38,8 @@ fun ProfileScreen(
 ) {
     Scaffold(
         topBar = {
-            Text(
-                text = "Profile",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            TopBar(
+                title = "Profile"
             )
         }
     ) { paddingValues ->

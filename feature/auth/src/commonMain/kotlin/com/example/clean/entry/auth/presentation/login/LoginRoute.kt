@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,10 +34,12 @@ import cleanentry.feature.auth.generated.resources.login
 import cleanentry.feature.auth.generated.resources.password_label
 import cleanentry.feature.auth.generated.resources.password_placeholder
 import cleanentry.feature.auth.generated.resources.phone_placeholder
-import cleanentry.feature.auth.generated.resources.please_fill_the_details_and_log_in
+import cleanentry.feature.auth.generated.resources.sign_up
 import cleanentry.feature.auth.generated.resources.you_don_t_have_an_account
 import com.example.clean.entry.auth.domain.model.AuthMethod
 import com.example.clean.entry.auth.domain.model.Country
+import com.example.clean.entry.auth.presentation.components.TopBar
+import com.example.clean.entry.auth.presentation.components.TopBarWithBackNavigation
 import com.example.clean.entry.core.components.AppButton
 import com.example.clean.entry.core.components.AppTextField
 import com.example.clean.entry.core.components.OtpTextField
@@ -48,8 +51,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginRoute(
-    viewModel: LoginViewModel = koinViewModel(),
-    countryResult: Country?
+    viewModel: LoginViewModel = koinViewModel(), countryResult: Country?
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -70,55 +72,42 @@ fun LoginScreen(
     state: LoginReducer.State,
     onEvent: (LoginReducer.Event) -> Unit,
 ) {
-
+    val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = {
-            Text(
-                text = stringResource(Res.string.login),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MaterialTheme.spacing.medium)
+            if (state.verificationId == null) TopBar(
+                title = stringResource(Res.string.login)
+            ) else TopBarWithBackNavigation(
+                title = stringResource(Res.string.sign_up),
+                onBackClick = { onEvent(LoginReducer.Event.BackButtonClicked) },
             )
-        }
-    ) { padding ->
+        }) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(
-                    start = MaterialTheme.spacing.medium,
-                    end = MaterialTheme.spacing.medium,
-                    bottom = MaterialTheme.spacing.medium
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize().padding(padding).padding(
+                start = MaterialTheme.spacing.medium,
+                end = MaterialTheme.spacing.medium,
+                bottom = MaterialTheme.spacing.medium
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-            Text(
-                text = stringResource(Res.string.please_fill_the_details_and_log_in),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.align(Alignment.Start)
-            )
-
-            Spacer(modifier = Modifier.padding(MaterialTheme.spacing.medium))
-
-            TabRow(selectedTabIndex = state.authMethod.ordinal) {
-                AuthMethod.values().forEach { method ->
-                    Tab(
-                        selected = state.authMethod == method,
-                        onClick = { onEvent(LoginReducer.Event.AuthMethodChanged(method)) },
-                        text = {
-                            Text(
-                                method.name.replace("_", " ").lowercase()
-                                    .replaceFirstChar { it.uppercase() })
-                        },
-                        enabled = state.verificationId == null
-                    )
-                }
-            }
-
             if (state.verificationId == null) {
+                TabRow(selectedTabIndex = state.authMethod.ordinal) {
+                    AuthMethod.entries.forEach { method ->
+                        Tab(
+                            selected = state.authMethod == method,
+                            onClick = { onEvent(LoginReducer.Event.AuthMethodChanged(method)) },
+                            text = {
+                                Text(
+                                    method.name.replace("_", " ").lowercase()
+                                        .replaceFirstChar { it.uppercase() })
+                            },
+                        )
+                    }
+                }
+
                 when (state.authMethod) {
-                    AuthMethod.EMAIL_PASSWORD -> {
+                    AuthMethod.EMAIL -> {
                         AppTextField(
                             value = state.email,
                             onValueChange = { onEvent(LoginReducer.Event.EmailChanged(it)) },
@@ -130,8 +119,6 @@ fun LoginScreen(
                                 keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
                             )
                         )
-
-                        Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
 
                         PasswordTextField(
                             value = state.password,
@@ -167,8 +154,14 @@ fun LoginScreen(
             } else {
                 OtpTextField(
                     otpText = state.otp,
-                    onOtpTextChange = { otp, _ -> onEvent(LoginReducer.Event.OtpChanged(otp)) },
-                    otpCount = state.otpCount
+                    onOtpTextChange = { otp, isComplete ->
+                        onEvent(LoginReducer.Event.OtpChanged(otp))
+                        if (isComplete) {
+                            focusManager.clearFocus()
+                            onEvent(LoginReducer.Event.Submit)
+                        }
+                    },
+                    otpCount = state.otpCount,
                 )
             }
 
@@ -190,16 +183,14 @@ fun LoginScreen(
 
             AppButton(
                 text = buttonText,
-                onClick = { onEvent(LoginReducer.Event.LoginClicked) },
+                onClick = { onEvent(LoginReducer.Event.Submit) },
                 enabled = state.isLoginButtonEnabled,
                 isLoading = state.isLoading,
                 modifier = Modifier.testTag("login_button")
             )
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MaterialTheme.spacing.medium),
+                modifier = Modifier.fillMaxWidth().padding(MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
