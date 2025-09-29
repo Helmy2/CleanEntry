@@ -2,7 +2,7 @@ package com.example.clean.entry.shared.di
 
 import com.example.clean.entry.details.domain.usecase.GetImageDetailsUseCase
 import com.example.clean.entry.details.domain.usecase.GetSimilarImagesUseCase
-import com.example.clean.entry.details.presentation.ImageDetailsViewModel
+import com.example.clean.entry.details.presentation.DetailsViewModel
 import com.example.clean.entry.feed.domain.usecase.GetImagesUseCase
 import com.example.clean.entry.feed.presentation.FeedViewModel
 import com.example.clean.entry.shared.data.ImageRepository
@@ -20,5 +20,5 @@ val homeModule = module {
 
     factoryOf(::GetImageDetailsUseCase)
     factoryOf(::GetSimilarImagesUseCase)
-    viewModelOf(::ImageDetailsViewModel)
+    viewModelOf(::DetailsViewModel)
 }

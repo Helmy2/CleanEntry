@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
+    val countryCode: String? = null,
     val countryRepository: CountryRepository,
     private val navigator: AppNavigator,
 ) : BaseViewModel<CountryCodePickerReducer.State, CountryCodePickerReducer.Event, CountryCodePickerReducer.Effect>(
@@ -35,6 +36,10 @@ class CountryCodePickerViewModel(
         }
 
     override suspend fun initialDataLoad() {
+        super.initialDataLoad()
+        countryCode?.let {
+            handleEvent(CountryCodePickerReducer.Event.InitCountrySelectedCode(it))
+        }
         countryFlow.collect {
             handleEvent(CountryCodePickerReducer.Event.LoadCountriesListSuccess(it))
         }
