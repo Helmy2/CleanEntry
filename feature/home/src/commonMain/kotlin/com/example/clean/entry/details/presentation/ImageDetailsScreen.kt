@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.clean.entry.core.components.TopBarWithBackNavigation
+import com.example.clean.entry.details.platform.StartImageDownload
 import com.example.clean.entry.shared.domain.model.Image
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -87,10 +89,29 @@ fun ImageDetailsScreen(
                             )
                         )
                     },
+                    onDownloadClick = { // New event handler
+                        viewModel.handleEvent(ImageDetailsReducer.Event.DownloadImageClicked)
+                    },
                     modifier = Modifier.verticalScroll(
                         rememberScrollState()
                     )
                 )
+
+                if (state.shouldDownloadImage) {
+                    val imageToDownload = state.currentImage!!
+                    val title = imageToDownload.alt.takeIf { it.isNotBlank() }
+                        ?: "Image_${imageToDownload.id}"
+                    val description = "Downloading image by ${imageToDownload.photographer}"
+
+                    StartImageDownload(
+                        imageUrl = imageToDownload.large,
+                        title = title,
+                        description = description
+                    )
+                    LaunchedEffect(Unit) {
+                        viewModel.handleEvent(ImageDetailsReducer.Event.DismissDownload)
+                    }
+                }
             }
 
             else -> {
@@ -120,6 +141,7 @@ fun ImageDetailsContent(
     similarImages: List<Image>,
     isLoadingSimilar: Boolean,
     onSimilarImageClick: (Long) -> Unit,
+    onDownloadClick: () -> Unit, // New parameter
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -133,7 +155,7 @@ fun ImageDetailsContent(
             contentScale = ContentScale.Crop
         )
 
-        image.photographer.takeIf { it.isNotEmpty() }.let {
+        image.photographer.takeIf { it.isNotEmpty() }?.let {
             Text(
                 "Photographer: $it",
                 style = MaterialTheme.typography.titleMedium,
@@ -141,12 +163,21 @@ fun ImageDetailsContent(
             )
         }
 
-        image.alt.takeIf { it.isNotEmpty() }.let {
+        image.alt.takeIf { it.isNotEmpty() }?.let {
             Text(
                 "Description: $it",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+        }
+
+        Button(
+            onClick = onDownloadClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Text("Download Image")
         }
 
         Text(
