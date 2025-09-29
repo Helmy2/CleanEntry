@@ -17,7 +17,20 @@ class NavigatorHelper: ObservableObject {
 
 
     init() {
-        Task<Void, Never> {
+        start()
+    }
+
+    deinit {
+        task?.cancel()
+        task = nil
+    }
+
+    /// Begins observing navigation commands.
+    private func start() {
+        guard task == nil else {
+            return
+        }
+        task = Task {
             do {
                 let isUserAuthenticated = try await iOSApp.dependenciesHelper.isUserAuthenticated().boolValue
                 if isUserAuthenticated == true {
@@ -28,9 +41,18 @@ class NavigatorHelper: ObservableObject {
             } catch {
                 print("Error in isUserAuthenticated: \(error)")
             }
+            for await cmd in navigator.commands {
+                // When a new command is emitted, publish it.
+                self.command = getCommand(kmpCommand: cmd)
+
+                if Task.isCancelled {
+                    break
+                }
+            }
         }
     }
 
+    
     func handleNavigationCommand(_ command: AppCommand?) {
         switch command {
         case .navigateBack:
@@ -58,29 +80,6 @@ class NavigatorHelper: ObservableObject {
         }
     }
 
-    /// Begins observing navigation commands.
-    func start() {
-        guard task == nil else {
-            return
-        }
-        task = Task {
-            for await cmd in navigator.commands {
-                // When a new command is emitted, publish it.
-                self.command = getCommand(kmpCommand: cmd)
-
-                if Task.isCancelled {
-                    break
-                }
-            }
-        }
-    }
-
-    /// Stops observing navigation commands.
-    func stop() {
-        task?.cancel()
-        task = nil
-    }
-
     private func getDestination(kmpDestination: shared.CoreAppDestination) -> AppDestination {
         switch kmpDestination {
         case is CoreAppDestination.Feed:
@@ -95,6 +94,8 @@ class NavigatorHelper: ObservableObject {
             return .registration
         case let countryPicker as CoreAppDestination.CountryCodePicker:
             return .countryCodePicker(selectedCountryCode: countryPicker.code)
+        case let imageDetails as CoreAppDestination.ImageDetails:
+            return .details(imageId: imageDetails.imageId)
         default:
             return .login
         }

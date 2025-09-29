@@ -35,7 +35,7 @@ struct StaggeredGrid<Content: View, T: Identifiable>: View where T: Hashable {
     var body: some View {
         ScrollView(.vertical, showsIndicators: showsIndicators) {
             HStack(alignment: .top, spacing: spacing) {
-                ForEach(setUpList(), id: \.self) { columnData in
+                ForEach(Array(setUpList().enumerated()), id: \.offset) { index, columnData in
                     LazyVStack(spacing: spacing) {
                         ForEach(columnData) { object in
                             content(object)

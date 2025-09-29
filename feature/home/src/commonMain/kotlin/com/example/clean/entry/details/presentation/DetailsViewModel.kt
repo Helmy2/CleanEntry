@@ -8,7 +8,7 @@ import com.example.clean.entry.details.domain.usecase.GetImageDetailsUseCase
 import com.example.clean.entry.details.domain.usecase.GetSimilarImagesUseCase
 import kotlinx.coroutines.launch
 
-class ImageDetailsViewModel(
+class DetailsViewModel(
     private val imageId: Long,
     private val getImageDetailsUseCase: GetImageDetailsUseCase,
     private val getSimilarImagesUseCase: GetSimilarImagesUseCase,
@@ -18,7 +18,8 @@ class ImageDetailsViewModel(
     initialState = ImageDetailsReducer.State()
 ) {
 
-    init {
+    override suspend fun initialDataLoad() {
+        super.initialDataLoad()
         handleEvent(ImageDetailsReducer.Event.ScreenOpened(this.imageId))
     }
 

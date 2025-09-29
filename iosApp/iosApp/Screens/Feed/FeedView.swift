@@ -24,9 +24,12 @@ struct FeedView: View {
 
             } else {
                 StaggeredGrid(columns: 2, list: viewModel.currentState.images) { image in
-                    ImageCard(image: image)
+                    ImageCard(image: image).onTapGesture {
+                        viewModel.handleEvent(event: HomeFeedReducerEventImageClicked(imageId: image.id))
+                    }
                 }
                 .padding(.horizontal)
+
             }
         }
         .navigationTitle("Feed")
@@ -47,7 +50,7 @@ struct ImageCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            AsyncImage(url: URL(string: image.imageUrl)) { phase in
+            AsyncImage(url: URL(string: image.medium)) { phase in
                 switch phase {
                 case .empty:
                     Rectangle()

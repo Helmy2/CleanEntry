@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,19 +28,16 @@ import com.example.clean.entry.core.components.ErrorScreen
 import com.example.clean.entry.core.design_system.spacing
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CountryCodePickerRoute(
-    viewModel: CountryCodePickerViewModel = koinViewModel(),
     countryCode: String?,
+    viewModel: CountryCodePickerViewModel = koinViewModel {
+        parametersOf(countryCode)
+    },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(countryCode) {
-        countryCode?.let {
-            viewModel.handleEvent(CountryCodePickerReducer.Event.InitCountrySelectedCode(it))
-        }
-    }
 
     CountryCodePickerScreen(
         state = state,

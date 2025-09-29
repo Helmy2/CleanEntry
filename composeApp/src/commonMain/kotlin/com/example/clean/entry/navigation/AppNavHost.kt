@@ -37,8 +37,6 @@ import com.example.clean.entry.core.navigation.Command
 import com.example.clean.entry.details.presentation.ImageDetailsScreen
 import com.example.clean.entry.feed.presentation.FeedRoute
 import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 private sealed class BottomNavItem(
     val destination: AppDestination,
@@ -216,7 +214,7 @@ private fun AppNavHostContent(
         }
         composable<AppDestination.ImageDetails> { backStackEntry ->
             val routeArgs = backStackEntry.toRoute<AppDestination.ImageDetails>()
-            ImageDetailsScreen(viewModel = koinViewModel { parametersOf(routeArgs.imageId) })
+            ImageDetailsScreen(routeArgs.imageId)
         }
     }
 }

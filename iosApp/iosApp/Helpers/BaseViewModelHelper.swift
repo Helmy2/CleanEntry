@@ -23,6 +23,9 @@ class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEve
         stateFlow: AnyAsyncSequence<State>,
         effectFlow: AnyAsyncSequence<Effect>? = nil
     ) {
+        stateTask?.cancel()
+        effectTask?.cancel()
+        
         guard stateTask == nil, effectTask == nil else {
             return
         }
@@ -34,7 +37,7 @@ class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEve
                     guard !Task.isCancelled else {
                         break
                     }
-                    self.currentState = state
+                    currentState = state
                 }
             } catch {
                 print("Error in state flow: \(error)")
@@ -49,8 +52,8 @@ class BaseViewModelHelper<State: CoreReducerViewState, Event: CoreReducerViewEve
                         guard !Task.isCancelled else {
                             break
                         }
-                        self.latestEffect = effect
-                        self.handleEffect(effect)
+                        latestEffect = effect
+                        handleEffect(effect)
                     }
                 } catch {
                     print("Error in effect flow: \(error)")

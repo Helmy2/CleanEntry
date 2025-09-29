@@ -2,13 +2,9 @@ import SwiftUI
 import shared
 
 struct CountryPickerView: View {
-    @StateObject var viewModel: CountryPickerViewModelHelper = CountryPickerViewModelHelper()
+    @StateObject var helper: CountryPickerViewModelHelper
     @State private var searchText = ""
-    private let _initialCountryCode: String
 
-    init(initialCountryCode: String) {
-        _initialCountryCode = initialCountryCode
-    }
 
     var body: some View {
         VStack {
@@ -17,25 +13,22 @@ struct CountryPickerView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .onChange(of: searchText) { _, newValue in
-                    viewModel.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: newValue))
+                    helper.handleEvent(event: AuthCountryCodePickerReducerEventSearchQueryChanged(query: newValue))
                 }
 
-            if viewModel.currentState.errorMessage != nil {
+            if helper.currentState.errorMessage != nil {
                 Text("Error").foregroundColor(.red)
             } else {
                 List {
-                    ForEach(viewModel.currentState.countries, id: \.self.code) { country in
-                        CountryRow(country: country, isSelected: country.code == _initialCountryCode) {
-                            viewModel.handleEvent(event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code))
+                    ForEach(helper.currentState.countries, id: \.self.code) { country in
+                        CountryRow(country: country, isSelected: country.code == helper.currentState.selectedCountryCode) {
+                            helper.handleEvent(event: AuthCountryCodePickerReducerEventCountrySelectedCode(code: country.code))
                         }
                     }
                 }
             }
         }
         .navigationTitle("Select Country")
-        .onAppear {
-            viewModel.handleEvent(event: AuthCountryCodePickerReducerEventInitCountrySelectedCode(code: _initialCountryCode))
-        }
     }
 }
 

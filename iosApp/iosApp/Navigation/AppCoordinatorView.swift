@@ -19,20 +19,16 @@ struct AppCoordinatorView: View {
                 case .registration:
                     RegistrationView()
                 case .countryCodePicker(let code):
-                    CountryPickerView(initialCountryCode: code ?? "eg")
+                    CountryPickerView(helper: CountryPickerViewModelHelper(code))
+                case .details(let imageId):
+                    DetailsView(helper: DetailsViewModelHelper(imageId))
                 default:
-                    EmptyView() // tabs handled separately
+                    EmptyView()
                 }
             }
         }
         .onReceive(navigatorHelper.$command) { command in
             navigatorHelper.handleNavigationCommand(command)
-        }
-        .onAppear {
-            navigatorHelper.start()
-        }
-        .onDisappear {
-            navigatorHelper.stop()
         }
     }
 }

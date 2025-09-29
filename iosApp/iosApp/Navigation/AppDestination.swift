@@ -10,6 +10,7 @@ enum AppDestination: Hashable {
     case login
     case registration
     case countryCodePicker(selectedCountryCode: String?)
+    case details(imageId: Int64)
 }
 
 enum AppCommand: Hashable {

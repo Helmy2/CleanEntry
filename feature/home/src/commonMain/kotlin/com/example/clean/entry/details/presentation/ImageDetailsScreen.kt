@@ -31,10 +31,15 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.clean.entry.core.components.TopBarWithBackNavigation
 import com.example.clean.entry.shared.domain.model.Image
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ImageDetailsScreen(
-    viewModel: ImageDetailsViewModel
+    imageId: Long,
+    viewModel: DetailsViewModel = koinViewModel {
+        parametersOf(imageId)
+    }
 ) {
     val state by viewModel.state.collectAsState()
 
