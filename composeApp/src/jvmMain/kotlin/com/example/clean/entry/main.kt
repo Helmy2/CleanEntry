@@ -2,10 +2,17 @@ package com.example.clean.entry
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.example.clean.entry.shared.di.initKoin
+import com.example.clean.entry.auth.presentation.country_code_picker.CountryCodePickerViewModel
+import com.example.clean.entry.core.util.PhoneNumberVerifier
+import com.example.clean.entry.di.initKoin
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 fun main() {
-    initKoin()
+    initKoin(platformModule = platformModule)
     application {
         Window(
             onCloseRequest = ::exitApplication,
@@ -14,4 +21,10 @@ fun main() {
             App()
         }
     }
+}
+
+val platformModule: Module = module {
+    single { com.google.i18n.phonenumbers.PhoneNumberUtil.getInstance() }
+    singleOf(::PhoneNumberVerifierImpl).bind<PhoneNumberVerifier>()
+    viewModelOf(::CountryCodePickerViewModel)
 }

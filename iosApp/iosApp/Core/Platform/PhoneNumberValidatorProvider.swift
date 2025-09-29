@@ -2,7 +2,7 @@ import Foundation
 import PhoneNumberKit
 import shared
 
-class IosPhoneNumberValidatorProvider : PhoneNumberValidatorProvider {
+class IosPhoneNumberValidatorProvider: CorePhoneNumberVerifier {
     private let phoneNumberUtility = PhoneNumberUtility()
 
     func isValidNumber(phone: String, regionCode: String) -> Bool {

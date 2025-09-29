@@ -1,4 +1,4 @@
-package com.example.clean.entry.shared.util
+package com.example.clean.entry
 
 import com.example.clean.entry.core.util.PhoneNumberVerifier
 
@@ -18,9 +18,9 @@ external object GooglePhoneNumberModule {
     val PhoneNumberUtil: JsPhoneNumberUtilCompanion
 }
 
-actual class PhoneNumberVerifierImpl : PhoneNumberVerifier {
+class PhoneNumberVerifierImpl : PhoneNumberVerifier {
     private val phoneUtil = GooglePhoneNumberModule.PhoneNumberUtil.getInstance()
-    actual override fun isValidNumber(phone: String, regionCode: String): Boolean {
+    override fun isValidNumber(phone: String, regionCode: String): Boolean {
         return try {
             val phoneNumber = phoneUtil.parseAndKeepRawInput(phone, regionCode)
             phoneUtil.isValidNumber(phoneNumber)

@@ -1,4 +1,4 @@
-package com.example.clean.entry.shared.di
+package com.example.clean.entry.di
 
 import com.example.clean.entry.MainViewModel
 import com.example.clean.entry.core.navigation.AppNavigator
