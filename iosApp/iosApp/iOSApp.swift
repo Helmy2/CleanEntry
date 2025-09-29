@@ -5,7 +5,9 @@ import shared
 struct iOSApp: App {
 
     // Immutable dependencies helper to avoid accidental reassignment.
-    static let dependenciesHelper = DependenciesHelper(phoneNumberValidator: IosPhoneNumberValidatorProvider())
+    static let dependenciesHelper = DependenciesHelper(
+        phoneNumberValidator: IosPhoneNumberValidatorProvider()
+    )
 
     var body: some Scene {
         WindowGroup {

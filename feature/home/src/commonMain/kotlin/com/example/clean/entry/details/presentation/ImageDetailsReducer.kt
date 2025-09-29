@@ -12,15 +12,17 @@ class ImageDetailsReducer :
         val similarImages: List<Image> = emptyList(),
         val isLoading: Boolean = false,
         val isLoadingSimilar: Boolean = false,
-        val error: String? = null
+        val error: String? = null,
+        val shouldDownloadImage: Boolean = false
     ) : Reducer.ViewState
 
     sealed interface Event : Reducer.ViewEvent {
         data class ScreenOpened(val imageId: Long?) : Event
         data object RetryLoadDetails : Event
-
         data object BackButtonClicked : Event
         data class SimilarImageClicked(val imageId: Long) : Event
+        data object DownloadImageClicked : Event
+        data object DismissDownload : Event
         data class ImageDetailsLoaded(val image: Image) : Event
         data class SimilarImagesLoaded(val images: List<Image>) : Event
         data class LoadFailed(val errorMessage: String) : Event
@@ -65,7 +67,17 @@ class ImageDetailsReducer :
                     isLoading = true,
                     error = null,
                     isLoadingSimilar = true
-                ) to null // Assuming retry reloads both
+                ) to null
+            }
+
+            Event.DownloadImageClicked -> {
+                previousState.currentImage?.large?.takeIf { it.isNotEmpty() }?.let { imageUrl ->
+                    previousState.copy(shouldDownloadImage = true) to null
+                } ?: (previousState to null)
+            }
+
+            Event.DismissDownload -> {
+                previousState.copy(shouldDownloadImage = false) to null
             }
 
             else -> {
