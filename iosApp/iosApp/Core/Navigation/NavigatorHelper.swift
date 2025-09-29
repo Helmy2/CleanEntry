@@ -52,7 +52,7 @@ class NavigatorHelper: ObservableObject {
         }
     }
 
-    
+
     func handleNavigationCommand(_ command: AppCommand?) {
         switch command {
         case .navigateBack:
