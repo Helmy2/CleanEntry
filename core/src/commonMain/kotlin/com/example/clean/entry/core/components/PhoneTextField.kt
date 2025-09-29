@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import cleanentry.core.generated.resources.Res
 import cleanentry.core.generated.resources.select_country_code
+import com.example.clean.entry.core.design_system.emojiLarge
 import com.example.clean.entry.core.design_system.spacing
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -51,6 +53,7 @@ fun PhoneTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     supportingText: String? = null,
 ) {
     AppTextField(
@@ -60,6 +63,7 @@ fun PhoneTextField(
         isError = isError,
         supportingText = supportingText,
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         placeholderText = placeholderText,
         leadingIcon = {
             Row(
@@ -71,7 +75,8 @@ fun PhoneTextField(
             ) {
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Text(
-                    text = countryFlag, style = MaterialTheme.typography.bodyLarge
+                    text = countryFlag,
+                    style = MaterialTheme.typography.emojiLarge,
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Text(

@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.android.application)
@@ -6,10 +8,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.apollo)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
     alias(libs.plugins.skie)
     alias(libs.plugins.composeHotReload)
 }
@@ -22,6 +20,26 @@ kotlin {
     }
 
     jvm()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName.set("composeApp")
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+        binaries.executable()
+    }
     
     listOf(
         iosX64(),
@@ -29,7 +47,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "shared"
             isStatic = true
             freeCompilerArgs += "-Xbinary=bundleId=com.example.clean.entry"
         }
@@ -41,41 +59,30 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.libphonenumber.android)
             implementation(libs.koin.android)
-            implementation(libs.androidx.paging.runtime.ktx)
-            implementation(libs.androidx.paging.compose)
+            implementation(libs.androidx.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(project(":core"))
+            implementation(project(":feature:auth"))
+            implementation(project(":feature:home"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
-            implementation(compose.ui)
             implementation(compose.materialIconsExtended)
+            implementation(libs.adaptive)
+            implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.androidx.navigation.composee)
-
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
-
-            implementation(libs.apollo.runtime)
-
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
-            implementation(libs.room.paging)
-
-            implementation(libs.libphonenumber.jvm)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-            implementation(libs.turbine)
-            implementation(libs.coroutines.test)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.libphonenumber.jvm)
+        }
+        wasmJsMain.dependencies {
+            implementation(npm("google-libphonenumber", "3.2.42"))
         }
     }
 }
@@ -108,23 +115,5 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.room.compiler)
-    add("kspAndroid", libs.room.compiler)
-
-    add("kspJvm", libs.room.compiler)
-
-    add("kspIosX64", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
-    add("kspIosSimulatorArm64", libs.room.compiler)
     debugImplementation(compose.uiTooling)
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
-apollo {
-    service("service") {
-        packageName.set("com.example.clean.entry")
-    }
 }

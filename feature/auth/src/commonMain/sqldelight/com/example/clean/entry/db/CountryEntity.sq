@@ -1,0 +1,25 @@
+CREATE TABLE CountryEntity (
+    code TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    dialCode TEXT NOT NULL,
+    flagEmoji TEXT NOT NULL
+);
+
+-- Initial data for specific countries
+-- Add Egypt (EG)
+INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
+VALUES ('EG', 'Egypt', '+20', '🇪🇬');
+
+-- Add Saudi Arabia (SA)
+INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
+VALUES ('SA', 'Saudi Arabia', '+966', '🇸🇦');
+
+insert:
+INSERT OR REPLACE INTO CountryEntity(code, name, dialCode, flagEmoji)
+VALUES ?;
+
+searchByName:
+SELECT * FROM CountryEntity WHERE name LIKE '%' || :name || '%' ORDER BY name ASC;
+
+selectByCode:
+SELECT * FROM CountryEntity WHERE code == :code;

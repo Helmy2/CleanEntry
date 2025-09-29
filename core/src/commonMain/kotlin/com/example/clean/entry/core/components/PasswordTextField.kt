@@ -1,5 +1,6 @@
 package com.example.clean.entry.core.components
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -44,6 +45,7 @@ fun PasswordTextField(
     supportingText: String? = null,
     placeholderText: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     AppTextField(
         value = value,
@@ -55,14 +57,16 @@ fun PasswordTextField(
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
         placeholderText = placeholderText,
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         trailingIcon = {
             val image = if (isVisible)
                 Icons.Filled.Visibility
             else Icons.Filled.VisibilityOff
 
-            val description = if (isVisible) stringResource(Res.string.hide_password) else stringResource(
-                Res.string.show_password
-            )
+            val description =
+                if (isVisible) stringResource(Res.string.hide_password) else stringResource(
+                    Res.string.show_password
+                )
 
             IconButton(onClick = onVisibilityToggle) {
                 Icon(imageVector = image, contentDescription = description)

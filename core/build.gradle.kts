@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,7 +8,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -23,10 +23,23 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+        iosTarget.compilations.getByName("main") {
+            val interop by cinterops.creating {
+                definitionFile.set(project.file("src/nativeInterop/cinterop/Secrets.def"))
+                includeDirs(project.file("src/nativeInterop/cinterop"))
+            }
         }
+
+        iosTarget.binaries.all {
+            // Linker options required to link to the library.
+            linkerOpts("-L/path/to/library/binaries", "-lbinaryname")
+        }
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     jvm()
@@ -55,7 +68,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.clean.entry"
+    namespace = "com.example.clean.entry.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -74,6 +87,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 }
 

@@ -1,19 +1,17 @@
 import SwiftUI
-import ComposeApp
+import shared
 
 @main
 struct iOSApp: App {
 
-    static var dependenciesHelper = DependenciesHelper()
-    
-    init() {
-        InitKoinKt.doInitKoin()
-        PhoneNumberUtil_iosKt.phoneNumberValidatorProvider = IosPhoneNumberValidatorProvider()
-    }
-    
+    // Immutable dependencies helper to avoid accidental reassignment.
+    static let dependenciesHelper = DependenciesHelper(
+        phoneNumberValidator: IosPhoneNumberValidatorProvider()
+    )
+
     var body: some Scene {
         WindowGroup {
-            AuthCoordinatorView()
+            AppCoordinatorView()
         }
     }
 }

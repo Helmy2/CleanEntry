@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.clean.entry.core.design_system.spacing
-import com.example.clean.entry.core.domain.model.StringResource
-import com.example.clean.entry.core.domain.model.stringResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * A general-purpose composable for displaying a full-screen error message with a retry button.
