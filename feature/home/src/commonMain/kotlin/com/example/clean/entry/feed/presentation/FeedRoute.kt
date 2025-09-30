@@ -15,12 +15,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
@@ -114,7 +116,10 @@ fun ImageCard(
     Card(
         modifier = modifier
             .animateContentSize()
-            .clickable(onClick = onImageClick)
+            .clickable(onClick = onImageClick),
+        colors = CardDefaults.cardColors(
+            containerColor = image.avgColor ?: Color.Unspecified,
+        )
     ) {
         SubcomposeAsyncImage(
             model = image.medium,

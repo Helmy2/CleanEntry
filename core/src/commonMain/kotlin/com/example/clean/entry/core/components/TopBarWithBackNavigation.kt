@@ -9,8 +9,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import cleanentry.core.generated.resources.Res
 import cleanentry.core.generated.resources.back
 import org.jetbrains.compose.resources.stringResource
@@ -20,9 +22,13 @@ import org.jetbrains.compose.resources.stringResource
 fun TopBarWithBackNavigation(
     title: String,
     onBackClick: () -> Unit,
+    containerColor: Color = Color.Unspecified,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = containerColor
+        ),
         windowInsets = WindowInsets(),
         modifier = modifier,
         title = {
