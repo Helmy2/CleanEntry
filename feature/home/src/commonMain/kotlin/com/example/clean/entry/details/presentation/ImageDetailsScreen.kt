@@ -1,5 +1,6 @@
 package com.example.clean.entry.details.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -46,14 +48,6 @@ fun ImageDetailsScreen(
     val state by viewModel.state.collectAsState()
 
     Scaffold(
-        topBar = {
-            TopBarWithBackNavigation(
-                title = "Image Details",
-                onBackClick = {
-                    viewModel.handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
-                },
-            )
-        },
         modifier = Modifier.fillMaxSize(),
     ) {
         when {
@@ -78,38 +72,54 @@ fun ImageDetailsScreen(
             }
 
             state.currentImage != null -> {
-                ImageDetailsContent(
-                    image = state.currentImage!!,
-                    similarImages = state.similarImages,
-                    isLoadingSimilar = state.isLoadingSimilar,
-                    onSimilarImageClick = { similarImageId ->
-                        viewModel.handleEvent(
-                            ImageDetailsReducer.Event.SimilarImageClicked(
-                                similarImageId
+                Column(
+                    modifier = Modifier.fillMaxSize().background(
+                        state.currentImage?.avgColor?.copy(alpha = .3f)
+                            ?: MaterialTheme.colorScheme.background
+                    )
+                ) {
+                    TopBarWithBackNavigation(
+                        containerColor = state.currentImage?.avgColor
+                            ?: MaterialTheme.colorScheme.surface,
+                        title = "Image Details",
+                        onBackClick = {
+                            viewModel.handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
+                        },
+                    )
+
+                    ImageDetailsContent(
+                        image = state.currentImage!!,
+                        similarImages = state.similarImages,
+                        isLoadingSimilar = state.isLoadingSimilar,
+                        onSimilarImageClick = { similarImageId ->
+                            viewModel.handleEvent(
+                                ImageDetailsReducer.Event.SimilarImageClicked(
+                                    similarImageId
+                                )
                             )
+                        },
+                        onDownloadClick = {
+                            viewModel.handleEvent(ImageDetailsReducer.Event.DownloadImageClicked)
+                        },
+                        modifier = Modifier.verticalScroll(
+                            rememberScrollState()
                         )
-                    },
-                    onDownloadClick = { // New event handler
-                        viewModel.handleEvent(ImageDetailsReducer.Event.DownloadImageClicked)
-                    },
-                    modifier = Modifier.verticalScroll(
-                        rememberScrollState()
                     )
-                )
 
-                if (state.shouldDownloadImage) {
-                    val imageToDownload = state.currentImage!!
-                    val title = imageToDownload.alt.takeIf { it.isNotBlank() }
-                        ?: "Image_${imageToDownload.id}"
-                    val description = "Downloading image by ${imageToDownload.photographer}"
+                    if (state.shouldDownloadImage) {
+                        val imageToDownload = state.currentImage!!
+                        val title = imageToDownload.alt.takeIf { it.isNotBlank() }
+                            ?: "Image_${imageToDownload.id}"
+                        val description = "Downloading image by ${imageToDownload.photographer}"
 
-                    StartImageDownload(
-                        imageUrl = imageToDownload.large,
-                        title = title,
-                        description = description
-                    )
-                    LaunchedEffect(Unit) {
-                        viewModel.handleEvent(ImageDetailsReducer.Event.DismissDownload)
+                        StartImageDownload(
+                            imageUrl = imageToDownload.large,
+                            title = title,
+                            description = description
+                        )
+                        LaunchedEffect(Unit) {
+                            viewModel.handleEvent(ImageDetailsReducer.Event.DismissDownload)
+                        }
                     }
                 }
             }
@@ -141,17 +151,18 @@ fun ImageDetailsContent(
     similarImages: List<Image>,
     isLoadingSimilar: Boolean,
     onSimilarImageClick: (Long) -> Unit,
-    onDownloadClick: () -> Unit, // New parameter
+    onDownloadClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = image.large,
             contentDescription = image.alt,
-            modifier = Modifier.aspectRatio(image.aspectRatio),
+            modifier = Modifier.sizeIn(maxWidth = 600.dp).aspectRatio(image.aspectRatio),
             contentScale = ContentScale.Crop
         )
 
