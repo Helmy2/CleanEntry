@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-@OptIn(FlowPreview::class)
 class CountryCodePickerViewModel(
     val countryCode: String? = null,
     val countryRepository: CountryRepository,
@@ -24,7 +23,7 @@ class CountryCodePickerViewModel(
     reducer = CountryCodePickerReducer, initialState = CountryCodePickerReducer.State()
 ) {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val countryFlow = state
         .debounce(300L)
         .map { it.searchQuery }

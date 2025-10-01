@@ -10,13 +10,15 @@ libphonenumberAndroid = "9.0.12"
 libphonenumberJvm = "9.0.14"
 activityCompose = "1.11.0"
 koin = "4.1.1"
+napier = "2.7.1"
+slf4jSimple = "2.0.17"
 turbine = "1.2.1"
 apollo = "4.3.3"
 composeMultiplatform = "1.9.0"
 androidxLifecycle = "2.9.4"
 androidxNavigation = "2.9.0"
 skie = "0.10.6"
-composeHotReload = "1.0.0-beta07"
+composeHotReload = "1.0.0-beta08"
 kotlinxCoroutines = "1.10.2"
 sqldelight = "2.1.0"
 ktor = "3.3.0"
@@ -32,12 +34,15 @@ coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 libphonenumber-android = { module = "io.michaelrocks:libphonenumber-android", version.ref = "libphonenumberAndroid" }
 libphonenumber-jvm = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumberJvm" }
 
 apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
 
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 

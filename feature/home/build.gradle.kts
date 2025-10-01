@@ -66,6 +66,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
 
             implementation(libs.bundles.coil)
+            implementation(libs.napier)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
