@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -34,6 +35,7 @@ import com.example.clean.entry.auth.presentation.profile.ProfileRoute
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
+import com.example.clean.entry.core.util.ObserveEffect
 import com.example.clean.entry.details.presentation.ImageDetailsScreen
 import com.example.clean.entry.feed.presentation.FeedRoute
 import org.koin.compose.koinInject
@@ -55,12 +57,13 @@ private sealed class BottomNavItem(
 @Composable
 fun AppNavHost(
     startDestination: AppDestination,
+    onNavHostReady: suspend (NavController) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
     val navigator = koinInject<AppNavigator>()
 
-    LaunchedEffect(navigator.commands) {
+    ObserveEffect(navigator.commands) {
         navigator.commands.collect { command ->
             when (command) {
                 is Command.NavigateAsRoot -> {
@@ -107,6 +110,9 @@ fun AppNavHost(
                 navBackStackEntry?.destination?.hierarchy?.any { it.hasRoute(item.destination::class) } == true
             }
         )
+    }
+    LaunchedEffect(navController) {
+        onNavHostReady(navController)
     }
 }
 

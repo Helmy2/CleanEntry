@@ -14,10 +14,6 @@ import com.example.clean.entry.auth.presentation.login.LoginViewModel
 import com.example.clean.entry.auth.presentation.profile.ProfileViewModel
 import com.example.clean.entry.auth.presentation.registration.RegistrationViewModel
 import com.example.clean.entry.db.AppDatabase
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
@@ -35,18 +31,6 @@ val authModule = module {
         ApolloClient.Builder()
             .serverUrl("https://countries.trevorblades.com/graphql")
             .build()
-    }
-
-    single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    prettyPrint = true
-                    isLenient = true
-                })
-            }
-        }
     }
 
     factoryOf(::CountryRemoteDataSource)

@@ -1,4 +1,4 @@
-package com.example.clean.entry.core.ui
+package com.example.clean.entry.core.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
