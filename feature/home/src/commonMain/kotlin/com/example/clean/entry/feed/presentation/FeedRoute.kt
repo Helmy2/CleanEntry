@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -54,7 +55,7 @@ fun FeedScreen(
     error: StringResource?,
     handleEvent: (FeedReducer.Event) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box {
         when {
             error != null -> {
                 ErrorScreen(
@@ -66,38 +67,45 @@ fun FeedScreen(
             }
 
             else -> {
-                BoxWithConstraints {
-                    val columns = if (maxWidth > 600.dp) {
-                        StaggeredGridCells.Fixed(3)
-                    } else {
-                        StaggeredGridCells.Fixed(2)
-                    }
-
-                    LazyVerticalStaggeredGrid(
-                        columns = columns,
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalItemSpacing = 16.dp
+                Scaffold {
+                    BoxWithConstraints(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = it.calculateTopPadding()),
+                        contentAlignment = Alignment.Center
                     ) {
-                        if (isLoading) {
-                            items(20) {
-                                Card {
-                                    Box(
-                                        modifier = Modifier.fillMaxWidth()
-                                            .height(Random.nextInt(100, 300).dp)
-                                            .animateContentSize().shimmer()
+                        val columns = if (maxWidth > 600.dp) {
+                            StaggeredGridCells.Fixed(3)
+                        } else {
+                            StaggeredGridCells.Fixed(2)
+                        }
+
+                        LazyVerticalStaggeredGrid(
+                            columns = columns,
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalItemSpacing = 16.dp
+                        ) {
+                            if (isLoading) {
+                                items(20) {
+                                    Card {
+                                        Box(
+                                            modifier = Modifier.fillMaxWidth()
+                                                .height(Random.nextInt(100, 300).dp)
+                                                .animateContentSize().shimmer()
+                                        )
+                                    }
+                                }
+                            } else {
+                                items(images) { image ->
+                                    ImageCard(
+                                        image = image,
+                                        onImageClick = {
+                                            handleEvent(FeedReducer.Event.ImageClicked(image.id))
+                                        }
                                     )
                                 }
-                            }
-                        } else {
-                            items(images) { image ->
-                                ImageCard(
-                                    image = image,
-                                    onImageClick = {
-                                        handleEvent(FeedReducer.Event.ImageClicked(image.id))
-                                    }
-                                )
                             }
                         }
                     }

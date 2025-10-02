@@ -1,7 +1,9 @@
 package com.example.clean.entry.navigation
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -127,6 +129,7 @@ private fun CompactAppLayout(
 ) {
     Scaffold(
         modifier = modifier,
+        contentWindowInsets = WindowInsets.navigationBars,
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {
@@ -149,8 +152,11 @@ private fun CompactAppLayout(
                 }
             }
         }
-    ) { innerPadding ->
-        AppNavHostContent(navController, startDestination, Modifier.padding(innerPadding))
+    ) {
+        AppNavHostContent(
+            navController, startDestination,
+            modifier = if (showBottomBar) Modifier.padding(it) else Modifier
+        )
     }
 }
 
@@ -163,11 +169,9 @@ private fun ExpandedAppLayout(
     showNavigationRail: Boolean,
     isItemSelected: (BottomNavItem) -> Boolean
 ) {
-    Scaffold(modifier = modifier) { scaffoldPadding ->
+    Scaffold(modifier = modifier) {
         Row(
-            Modifier
-                .fillMaxSize()
-                .padding(scaffoldPadding)
+            Modifier.fillMaxSize()
         ) {
             if (showNavigationRail) {
                 NavigationRail {
