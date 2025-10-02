@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -47,12 +48,13 @@ fun ImageDetailsScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    Box {
         when {
             state.isLoading -> {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     CircularProgressIndicator()
                 }
             }
@@ -72,21 +74,21 @@ fun ImageDetailsScreen(
             }
 
             state.currentImage != null -> {
-                Column(
+                Scaffold(
                     modifier = Modifier.fillMaxSize().background(
                         state.currentImage?.avgColor?.copy(alpha = .3f)
                             ?: MaterialTheme.colorScheme.background
-                    )
+                    ),
+                    topBar = {
+                        TopBarWithBackNavigation(
+                            containerColor = Color.Transparent,
+                            title = "Image Details",
+                            onBackClick = {
+                                viewModel.handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
+                            },
+                        )
+                    }
                 ) {
-                    TopBarWithBackNavigation(
-                        containerColor = state.currentImage?.avgColor
-                            ?: MaterialTheme.colorScheme.surface,
-                        title = "Image Details",
-                        onBackClick = {
-                            viewModel.handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
-                        },
-                    )
-
                     ImageDetailsContent(
                         image = state.currentImage!!,
                         similarImages = state.similarImages,
@@ -103,7 +105,7 @@ fun ImageDetailsScreen(
                         },
                         modifier = Modifier.verticalScroll(
                             rememberScrollState()
-                        )
+                        ).padding(it)
                     )
 
                     if (state.shouldDownloadImage) {

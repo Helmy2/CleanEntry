@@ -1,6 +1,5 @@
 package com.example.clean.entry.core.components
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +28,6 @@ fun TopBarWithBackNavigation(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = containerColor
         ),
-        windowInsets = WindowInsets(),
         modifier = modifier,
         title = {
             Text(
@@ -65,6 +63,5 @@ fun TopBar(
                 style = MaterialTheme.typography.titleLarge
             )
         },
-        windowInsets = WindowInsets()
     )
 }
