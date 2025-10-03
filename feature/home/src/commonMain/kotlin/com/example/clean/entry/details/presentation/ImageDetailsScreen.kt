@@ -1,6 +1,5 @@
 package com.example.clean.entry.details.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -75,10 +74,8 @@ fun ImageDetailsScreen(
 
             state.currentImage != null -> {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize().background(
-                        state.currentImage?.avgColor?.copy(alpha = .3f)
-                            ?: MaterialTheme.colorScheme.background
-                    ),
+                    containerColor = state.currentImage?.avgColor?.copy(alpha = .3f)
+                        ?: MaterialTheme.colorScheme.background,
                     topBar = {
                         TopBarWithBackNavigation(
                             containerColor = Color.Transparent,
