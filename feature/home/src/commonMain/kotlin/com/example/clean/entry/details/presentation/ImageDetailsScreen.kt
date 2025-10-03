@@ -39,7 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun ImageDetailsScreen(
+fun ImageDetailsRoute(
     imageId: Long,
     viewModel: DetailsViewModel = koinViewModel {
         parametersOf(imageId)
@@ -47,6 +47,17 @@ fun ImageDetailsScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+    ImageDetailsScreen(
+        state = state,
+        handleEvent = viewModel::handleEvent,
+    )
+}
+
+@Composable
+fun ImageDetailsScreen(
+    state: ImageDetailsReducer.State,
+    handleEvent: (ImageDetailsReducer.Event) -> Unit,
+) {
     Box {
         when {
             state.isLoading -> {
@@ -66,7 +77,7 @@ fun ImageDetailsScreen(
                 ) {
                     Text("Error: ${state.error}", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { viewModel.handleEvent(ImageDetailsReducer.Event.RetryLoadDetails) }) {
+                    Button(onClick = { handleEvent(ImageDetailsReducer.Event.RetryLoadDetails) }) {
                         Text("Retry")
                     }
                 }
@@ -74,31 +85,31 @@ fun ImageDetailsScreen(
 
             state.currentImage != null -> {
                 Scaffold(
-                    containerColor = state.currentImage?.avgColor?.copy(alpha = .3f)
+                    containerColor = state.currentImage.avgColor?.copy(alpha = .3f)
                         ?: MaterialTheme.colorScheme.background,
                     topBar = {
                         TopBarWithBackNavigation(
                             containerColor = Color.Transparent,
                             title = "Image Details",
                             onBackClick = {
-                                viewModel.handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
+                                handleEvent(ImageDetailsReducer.Event.BackButtonClicked)
                             },
                         )
                     }
                 ) {
                     ImageDetailsContent(
-                        image = state.currentImage!!,
+                        image = state.currentImage,
                         similarImages = state.similarImages,
                         isLoadingSimilar = state.isLoadingSimilar,
                         onSimilarImageClick = { similarImageId ->
-                            viewModel.handleEvent(
+                            handleEvent(
                                 ImageDetailsReducer.Event.SimilarImageClicked(
                                     similarImageId
                                 )
                             )
                         },
                         onDownloadClick = {
-                            viewModel.handleEvent(ImageDetailsReducer.Event.DownloadImageClicked)
+                            handleEvent(ImageDetailsReducer.Event.DownloadImageClicked)
                         },
                         modifier = Modifier.verticalScroll(
                             rememberScrollState()
@@ -106,7 +117,7 @@ fun ImageDetailsScreen(
                     )
 
                     if (state.shouldDownloadImage) {
-                        val imageToDownload = state.currentImage!!
+                        val imageToDownload = state.currentImage
                         val title = imageToDownload.alt.takeIf { it.isNotBlank() }
                             ?: "Image_${imageToDownload.id}"
                         val description = "Downloading image by ${imageToDownload.photographer}"
@@ -117,7 +128,7 @@ fun ImageDetailsScreen(
                             description = description
                         )
                         LaunchedEffect(Unit) {
-                            viewModel.handleEvent(ImageDetailsReducer.Event.DismissDownload)
+                            handleEvent(ImageDetailsReducer.Event.DismissDownload)
                         }
                     }
                 }
@@ -130,7 +141,7 @@ fun ImageDetailsScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Button(onClick = {
-                        viewModel.handleEvent(
+                        handleEvent(
                             ImageDetailsReducer.Event.ScreenOpened(
                                 state.imageId
                             )

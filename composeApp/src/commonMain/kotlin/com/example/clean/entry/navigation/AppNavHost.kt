@@ -20,18 +20,14 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.clean.entry.auth.navigation.authNavBuilder
-import com.example.clean.entry.auth.presentation.profile.ProfileRoute
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
 import com.example.clean.entry.core.util.ObserveEffect
-import com.example.clean.entry.details.presentation.ImageDetailsScreen
-import com.example.clean.entry.feed.presentation.FeedRoute
+import com.example.clean.entry.shared.navigation.homeNavBuilder
 import org.koin.compose.koinInject
 
 private sealed class BottomNavItem(
@@ -128,16 +124,6 @@ private fun AppNavHostContent(
         modifier = modifier,
     ) {
         authNavBuilder()
-
-        composable<AppDestination.Feed> {
-            FeedRoute()
-        }
-        composable<AppDestination.Profile> {
-            ProfileRoute()
-        }
-        composable<AppDestination.ImageDetails> { backStackEntry ->
-            val routeArgs = backStackEntry.toRoute<AppDestination.ImageDetails>()
-            ImageDetailsScreen(routeArgs.imageId)
-        }
+        homeNavBuilder()
     }
 }
