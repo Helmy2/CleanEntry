@@ -1,5 +1,6 @@
 package com.example.clean.entry.navigation
 
+import com.example.clean.entry.auth.domain.repository.AuthRepository
 import com.example.clean.entry.core.navigation.AppDestination
 import com.example.clean.entry.core.navigation.AppNavigator
 import com.example.clean.entry.core.navigation.Command
@@ -16,9 +17,15 @@ import kotlinx.coroutines.launch
 
 
 class AppNavigatorImpl(
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    val authRepository: AuthRepository
 ) : AppNavigator {
 
+    override val initialDestination: Flow<AppDestination>
+        get() = authRepository.isAuthenticated
+            .map { isAuthenticated ->
+                if (isAuthenticated) AppDestination.Feed else AppDestination.Auth
+            }
     private val savedResults = MutableStateFlow<Map<String, NavigationSavedResult>>(
         emptyMap()
     )
