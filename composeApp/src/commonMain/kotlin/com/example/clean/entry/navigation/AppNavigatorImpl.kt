@@ -24,7 +24,7 @@ class AppNavigatorImpl(
     override val initialDestination: Flow<AppDestination>
         get() = authRepository.isAuthenticated
             .map { isAuthenticated ->
-                if (isAuthenticated) AppDestination.Feed else AppDestination.Auth
+                if (isAuthenticated) AppDestination.Feed else AppDestination.Login
             }
     private val savedResults = MutableStateFlow<Map<String, NavigationSavedResult>>(
         emptyMap()

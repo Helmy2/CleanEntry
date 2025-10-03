@@ -86,8 +86,6 @@ class NavigatorHelper: ObservableObject {
             return .feed
         case is CoreAppDestination.Profile:
             return .profile
-        case is CoreAppDestination.Auth:
-            return .login
         case is CoreAppDestination.Login:
             return .login
         case is CoreAppDestination.Registration:

@@ -7,7 +7,7 @@ import com.example.clean.entry.navigation.AppNavHost
 
 @Composable
 fun App(
-    startDestination: AppDestination = AppDestination.Auth,
+    startDestination: AppDestination,
     onNavHostReady: suspend (NavController) -> Unit = {},
 ) {
     AppNavHost(
