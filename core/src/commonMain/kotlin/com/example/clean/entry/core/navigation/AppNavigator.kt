@@ -13,4 +13,5 @@ interface AppNavigator {
 
     fun <T : NavigationSavedResult> getResultValue(key: String): Flow<T?>
     fun navigateBackWithResult(returnResult: NavigationSavedResult)
+    val initialDestination: Flow<AppDestination>
 }
