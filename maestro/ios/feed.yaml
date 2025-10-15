@@ -1,0 +1,12 @@
+appId: com.example.clean.entry.CleanEntry
+---
+- runFlow:
+    file: "login.yaml"
+- assertVisible: Feed
+- assertVisible: Profile
+- doubleTapOn:
+    point: 4%,9%
+- assertVisible: Download Image
+- tapOn: Download Image
+- tapOn: OK
+- tapOn: Back

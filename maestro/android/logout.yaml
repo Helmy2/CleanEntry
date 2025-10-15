@@ -1,0 +1,10 @@
+appId: com.example.clean.entry
+---
+- runFlow:
+    file: "login.yaml"
+- assertVisible: Feed
+- tapOn: Profile
+- tapOn: Profile
+- tapOn: Logout
+- assertVisible: Login
+
