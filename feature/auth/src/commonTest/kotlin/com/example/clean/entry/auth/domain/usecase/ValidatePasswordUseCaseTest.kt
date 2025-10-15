@@ -13,7 +13,7 @@ class ValidatePasswordUseCaseTest {
 
     @BeforeTest
     fun setUp() {
-        validatePasswordUseCase = ValidatePasswordUseCase()
+        validatePasswordUseCase = ValidatePasswordUseCaseImpl()
     }
 
     @Test
@@ -54,7 +54,7 @@ class ValidatePasswordUseCaseTest {
         assertFalse(result.isSuccessful)
         assertEquals(
             "Password must be at least 6 characters long.",
-            result.errorMessage?.toString()
+            result.errorMessage
         )
     }
 
