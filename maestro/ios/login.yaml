@@ -1,0 +1,11 @@
+appId: com.example.clean.entry.CleanEntry
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: Phone
+    index: 1
+- inputText: "01159031482"
+- tapOn: "Send OTP"
+- inputText: "111111"
+- tapOn: Verify OTP
