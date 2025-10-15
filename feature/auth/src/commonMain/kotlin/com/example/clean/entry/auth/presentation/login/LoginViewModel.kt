@@ -61,8 +61,8 @@ class LoginViewModel(
             }
 
             is LoginReducer.Event.Submit -> {
-                submitLogin()
                 setState(event)
+                submitLogin()
             }
 
             is LoginReducer.Event.BackButtonClicked -> {
