@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.apollo)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {

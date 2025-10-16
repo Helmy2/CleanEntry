@@ -13,7 +13,7 @@ class ValidateEmailUseCaseTest {
 
     @BeforeTest
     fun setUp() {
-        validateEmailUseCase = ValidateEmailUseCase()
+        validateEmailUseCase = ValidateEmailUseCaseImpl()
     }
 
     @Test
@@ -38,7 +38,7 @@ class ValidateEmailUseCaseTest {
         assertFalse(result.isSuccessful)
         assertEquals(
             "Email cannot be empty.",
-            result.errorMessage?.toString()
+            result.errorMessage
         )
     }
 
