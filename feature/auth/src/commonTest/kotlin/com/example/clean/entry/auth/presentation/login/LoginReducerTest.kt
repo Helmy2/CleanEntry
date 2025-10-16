@@ -1,5 +1,6 @@
 package com.example.clean.entry.auth.presentation.login
 
+import com.example.clean.entry.auth.domain.model.AuthMethod
 import com.example.clean.entry.auth.domain.model.Country
 import com.example.clean.entry.core.domain.model.ValidationResult
 import kotlin.test.Test
@@ -10,183 +11,212 @@ import kotlin.test.assertTrue
 
 class LoginReducerTest {
 
+    private val reducer = LoginReducer
     private val initialState = LoginReducer.State()
 
     @Test
-    fun `given PhoneUpdated event when reduce then state phone and phoneError are updated`() {
-        val testPhone = "123456789"
-        val validationSuccess = ValidationResult(isSuccessful = true)
-        val event = LoginReducer.Event.PhoneUpdated(testPhone, validationSuccess)
+    fun `given EmailUpdated event with success then state is updated correctly`() {
+        // Arrange
+        val email = "test@example.com"
+        val validationResult = ValidationResult(isSuccessful = true)
+        val event = LoginReducer.Event.EmailUpdated(email, validationResult)
 
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
 
-        assertEquals(testPhone, newState.phone)
-        assertNull(newState.phoneError)
-        assertNull(effect)
+        // Assert
+        assertEquals(email, newState.email)
+        assertNull(newState.emailError)
     }
 
     @Test
-    fun `given PhoneUpdated event with error when reduce then state phone and phoneError are updated with error`() {
-        val testPhone = "123"
-        val errorMsg = "Invalid phone"
-        val validationError = ValidationResult(
-            isSuccessful = false,
-            errorMessage = errorMsg
-        )
-        val event = LoginReducer.Event.PhoneUpdated(testPhone, validationError)
+    fun `given PhoneUpdated event with error then state is updated with error`() {
+        // Arrange
+        val phone = "123"
+        val errorMessage = "Invalid phone"
+        val validationResult = ValidationResult(isSuccessful = false, errorMessage = errorMessage)
+        val event = LoginReducer.Event.PhoneUpdated(phone, validationResult)
 
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
 
-        assertEquals(testPhone, newState.phone)
-        assertEquals(validationError.errorMessage, newState.phoneError)
-        assertNull(effect)
+        // Assert
+        assertEquals(phone, newState.phone)
+        assertEquals(errorMessage, newState.phoneError)
     }
 
     @Test
-    fun `given PasswordUpdated event when reduce then state password and passwordError are updated`() {
-        val testPassword = "password123"
-        val validationSuccess = ValidationResult(isSuccessful = true)
-        val event = LoginReducer.Event.PasswordUpdated(testPassword, validationSuccess)
+    fun `given PasswordUpdated event with success then state is updated correctly`() {
+        // Arrange
+        val password = "password123"
+        val validationResult = ValidationResult(isSuccessful = true)
+        val event = LoginReducer.Event.PasswordUpdated(password, validationResult)
 
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
 
-        assertEquals(testPassword, newState.password)
+        // Assert
+        assertEquals(password, newState.password)
         assertNull(newState.passwordError)
-        assertNull(effect)
     }
 
     @Test
-    fun `given PasswordUpdated event with error when reduce then state password and passwordError are updated with error`() {
-        val testPassword = "123"
-        val errorMsg = "Password too short"
-        val validationError = ValidationResult(
-            isSuccessful = false,
-            errorMessage = errorMsg
+    fun `given TogglePasswordVisibility event then isPasswordVisible is toggled`() {
+        // Act
+        val (stateAfterFirstToggle, _) = reducer.reduce(
+            initialState,
+            LoginReducer.Event.TogglePasswordVisibility
         )
-        val event = LoginReducer.Event.PasswordUpdated(testPassword, validationError)
-
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
-
-        assertEquals(testPassword, newState.password)
-        assertEquals(validationError.errorMessage, newState.passwordError)
-        assertNull(effect)
-    }
-
-    @Test
-    fun `given TogglePasswordVisibility event when reduce then isPasswordVisible is toggled`() {
-        val (newState, effect) = LoginReducer.reduce(initialState, LoginReducer.Event.TogglePasswordVisibility)
-
-        assertTrue(newState.isPasswordVisible)
-        assertNull(effect)
-    }
-
-    @Test
-    fun `given CountrySelected event when reduce then state selected country details are updated`() {
-        val selectedCountry = Country(
-            name = "United States",
-            dialCode = "+1",
-            code = "US",
-            flagEmoji = "🇺🇸"
+        val (stateAfterSecondToggle, _) = reducer.reduce(
+            stateAfterFirstToggle,
+            LoginReducer.Event.TogglePasswordVisibility
         )
-        val event = LoginReducer.Event.CountrySelected(selectedCountry)
 
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
-
-        assertEquals(selectedCountry.code, newState.selectedCountry.code)
-        assertEquals(selectedCountry.dialCode, newState.selectedCountry.dialCode)
-        assertEquals(selectedCountry.flagEmoji, newState.selectedCountry.flagEmoji)
-        assertNull(effect)
+        // Assert
+        assertTrue(stateAfterFirstToggle.isPasswordVisible)
+        assertFalse(stateAfterSecondToggle.isPasswordVisible)
     }
 
     @Test
-    fun `given LoginClicked event when reduce then state isLoading is true`() {
-        val event = LoginReducer.Event.Submit
+    fun `given CountrySelected event then state is updated with new country`() {
+        // Arrange
+        val country = Country.Egypt
+        val event = LoginReducer.Event.CountrySelected(country)
 
-        val (newState, effect) = LoginReducer.reduce(initialState, event)
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
 
+        // Assert
+        assertEquals(country, newState.selectedCountry)
+    }
+
+    @Test
+    fun `given Submit event then state isLoading is true`() {
+        // Act
+        val (newState, _) = reducer.reduce(initialState, LoginReducer.Event.Submit)
+
+        // Assert
         assertTrue(newState.isLoading)
-        assertNull(effect)
+        assertNull(newState.error)
     }
 
     @Test
-    fun `given unhandled event when reduce then previous state is returned with no effect`() {
-         val unhandledEvent = LoginReducer.Event.PhoneChanged("some phone")
+    fun `given LoginSuccess event then state is reset`() {
+        // Arrange
+        val previousState =
+            LoginReducer.State(email = "test@test.com", isLoading = true, error = "error")
 
-        val (newState, effect) = LoginReducer.reduce(initialState, unhandledEvent)
+        // Act
+        val (newState, _) = reducer.reduce(previousState, LoginReducer.Event.LoginSuccess)
 
+        // Assert
         assertEquals(initialState, newState)
-        assertNull(effect)
     }
 
     @Test
-    fun `isLoginButtonEnabled should be true when phone and password are valid and not loading`() {
+    fun `given LoginFailed event then state is updated with error and isLoading is false`() {
+        // Arrange
+        val previousState = LoginReducer.State(isLoading = true)
+        val errorMessage = "Login failed"
+        val event = LoginReducer.Event.LoginFailed(errorMessage)
+
+        // Act
+        val (newState, _) = reducer.reduce(previousState, event)
+
+        // Assert
+        assertFalse(newState.isLoading)
+        assertEquals(errorMessage, newState.error)
+        assertEquals("", newState.otp)
+    }
+
+    @Test
+    fun `given AuthMethodChanged event then state is updated with new auth method`() {
+        // Arrange
+        val authMethod = AuthMethod.EMAIL
+        val event = LoginReducer.Event.AuthMethodChanged(authMethod)
+
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
+
+        // Assert
+        assertEquals(authMethod, newState.authMethod)
+        assertNull(newState.error)
+    }
+
+    @Test
+    fun `given VerificationCodeSent event then state is updated with verificationId`() {
+        // Arrange
+        val previousState = LoginReducer.State(isLoading = true)
+        val verificationId = "test-verification-id"
+        val event = LoginReducer.Event.VerificationCodeSent(verificationId)
+
+        // Act
+        val (newState, _) = reducer.reduce(previousState, event)
+
+        // Assert
+        assertFalse(newState.isLoading)
+        assertEquals(verificationId, newState.verificationId)
+    }
+
+    @Test
+    fun `given OtpChanged event then state is updated with new otp`() {
+        // Arrange
+        val otp = "123456"
+        val event = LoginReducer.Event.OtpChanged(otp)
+
+        // Act
+        val (newState, _) = reducer.reduce(initialState, event)
+
+        // Assert
+        assertEquals(otp, newState.otp)
+    }
+
+    @Test
+    fun `isLoginButtonEnabled should be true for valid phone and password`() {
         val state = LoginReducer.State(
-            phone = "123456789",
-            phoneError = null,
+            phone = "1234567890",
             password = "password123",
-            passwordError = null,
-            isLoading = false
+            authMethod = AuthMethod.PHONE
         )
         assertTrue(state.isLoginButtonEnabled)
     }
 
     @Test
-    fun `isLoginButtonEnabled should be false if phone is blank`() {
+    fun `isLoginButtonEnabled should be true for valid email and password`() {
         val state = LoginReducer.State(
-            phone = "",
-            phoneError = null,
+            email = "test@test.com",
             password = "password123",
-            passwordError = null,
-            isLoading = false
+            authMethod = AuthMethod.EMAIL
         )
+        assertTrue(state.isLoginButtonEnabled)
+    }
+
+    @Test
+    fun `isLoginButtonEnabled should be true for complete OTP`() {
+        val state = LoginReducer.State(verificationId = "id", otp = "123456", otpCount = 6)
+        assertTrue(state.isLoginButtonEnabled)
+    }
+
+    @Test
+    fun `isLoginButtonEnabled should be false when loading`() {
+        val state = LoginReducer.State(isLoading = true)
         assertFalse(state.isLoginButtonEnabled)
     }
 
     @Test
-    fun `isLoginButtonEnabled should be false if phone has error`() {
+    fun `isLoginButtonEnabled should be false for invalid phone`() {
         val state = LoginReducer.State(
-            phone = "123",
-            phoneError = "Error",
+            phone = "1",
+            phoneError = "error",
             password = "password123",
-            passwordError = null,
-            isLoading = false
+            authMethod = AuthMethod.PHONE
         )
         assertFalse(state.isLoginButtonEnabled)
     }
 
     @Test
-    fun `isLoginButtonEnabled should be false if password is blank`() {
-        val state = LoginReducer.State(
-            phone = "123456789",
-            phoneError = null,
-            password = "",
-            passwordError = null,
-            isLoading = false
-        )
-        assertFalse(state.isLoginButtonEnabled)
-    }
-
-    @Test
-    fun `isLoginButtonEnabled should be false if password has error`() {
-        val state = LoginReducer.State(
-            phone = "123456789",
-            phoneError = null,
-            password = "123",
-            passwordError = "Error",
-            isLoading = false
-        )
-        assertFalse(state.isLoginButtonEnabled)
-    }
-
-    @Test
-    fun `isLoginButtonEnabled should be false if isLoading is true`() {
-        val state = LoginReducer.State(
-            phone = "123456789",
-            phoneError = null,
-            password = "password123",
-            passwordError = null,
-            isLoading = true
-        )
+    fun `isLoginButtonEnabled should be false for incomplete OTP`() {
+        val state = LoginReducer.State(verificationId = "id", otp = "123", otpCount = 6)
         assertFalse(state.isLoginButtonEnabled)
     }
 }

@@ -6,9 +6,13 @@ import com.example.clean.entry.auth.data.source.remote.AuthRemoteDataSource
 import com.example.clean.entry.auth.data.source.remote.CountryRemoteDataSource
 import com.example.clean.entry.auth.domain.repository.AuthRepository
 import com.example.clean.entry.auth.domain.usecase.ValidateConfirmPasswordUseCase
+import com.example.clean.entry.auth.domain.usecase.ValidateConfirmPasswordUseCaseImpl
 import com.example.clean.entry.auth.domain.usecase.ValidateEmailUseCase
+import com.example.clean.entry.auth.domain.usecase.ValidateEmailUseCaseImpl
 import com.example.clean.entry.auth.domain.usecase.ValidatePasswordUseCase
+import com.example.clean.entry.auth.domain.usecase.ValidatePasswordUseCaseImpl
 import com.example.clean.entry.auth.domain.usecase.ValidatePhoneUseCase
+import com.example.clean.entry.auth.domain.usecase.ValidatePhoneUseCaseImpl
 import com.example.clean.entry.auth.presentation.country_code_picker.CountryCodePickerViewModel
 import com.example.clean.entry.auth.presentation.login.LoginViewModel
 import com.example.clean.entry.auth.presentation.profile.ProfileViewModel
@@ -18,6 +22,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 expect val authPlatformModule: Module
@@ -38,10 +43,10 @@ val authModule = module {
     factoryOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
 
     // --- DOMAIN LAYER ---
-    factoryOf(::ValidateEmailUseCase)
-    factoryOf(::ValidatePhoneUseCase)
-    factoryOf(::ValidatePasswordUseCase)
-    factoryOf(::ValidateConfirmPasswordUseCase)
+    factoryOf(::ValidateEmailUseCaseImpl).bind<ValidateEmailUseCase>()
+    factoryOf(::ValidatePhoneUseCaseImpl).bind<ValidatePhoneUseCase>()
+    factoryOf(::ValidatePasswordUseCaseImpl).bind<ValidatePasswordUseCase>()
+    factoryOf(::ValidateConfirmPasswordUseCaseImpl).bind<ValidateConfirmPasswordUseCase>()
 
     // --- PRESENTATION LAYER ---
     viewModelOf(::RegistrationViewModel)
