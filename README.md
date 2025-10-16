@@ -32,7 +32,8 @@ The project features a complete user authentication flow, including:
   are managed using `expect`/`actual` and native code.
 - [**Dependency Injection with Koin**](documentation/Dependency_Injection_Koin.md): An overview of
   how Koin is used for DI across the project.
-- [**Maestro UI Tests**](docs/MAESTRO_UI_TESTS.md): An overview of the Maestro UI tests and how to
+- [**Maestro UI Tests**](documentation/MAESTRO_UI_TESTS.md): An overview of the Maestro UI tests and
+  how to
   run them.
 
 ## 📸 Screenshots
