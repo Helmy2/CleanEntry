@@ -6,7 +6,7 @@ import com.example.clean.entry.shared.domain.model.Image
 class GetSimilarImagesUseCase(
     private val imageRepository: ImageRepository
 ) {
-    suspend operator fun invoke(query: String, perPage: Int = 5): Result<List<Image>> {
+    suspend operator fun invoke(query: String, perPage: Int = 20): Result<List<Image>> {
         if (query.isBlank()) {
             return Result.success(emptyList())
         }

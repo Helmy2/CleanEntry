@@ -10,9 +10,6 @@ sealed class AppDestination {
     object Profile : AppDestination()
 
     @Serializable
-    object Auth : AppDestination()
-
-    @Serializable
     object Login : AppDestination()
 
     @Serializable

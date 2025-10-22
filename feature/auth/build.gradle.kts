@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.apollo)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -59,9 +60,6 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.androidx.navigation.composee)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
@@ -69,9 +67,9 @@ kotlin {
             implementation(libs.apollo.runtime)
 
             implementation(libs.coroutines.extensions)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.bundles.ktor)
+            implementation(libs.napier)
+            implementation(libs.bundles.composeLifecycle)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -92,7 +90,6 @@ kotlin {
             implementation(libs.ktor.client.js)
         }
         nonJsMain.dependencies {
-            implementation(libs.koin.core)
             implementation(libs.androidx.datastore.preferences)
         }
     }

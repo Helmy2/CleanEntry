@@ -57,8 +57,11 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.napier)
+            implementation(libs.koin.core)
+            implementation(libs.bundles.ktor)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.bundles.composeLifecycle)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

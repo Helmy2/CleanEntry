@@ -69,17 +69,22 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
-            implementation(libs.adaptive)
             implementation(compose.ui)
+            implementation(compose.material3AdaptiveNavigationSuite)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.adaptive)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.bundles.composeLifecycle)
+            implementation(libs.napier)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.libphonenumber.jvm)
+            implementation(libs.slf4j.simple)
+
         }
         wasmJsMain.dependencies {
             implementation(npm("google-libphonenumber", "3.2.42"))
